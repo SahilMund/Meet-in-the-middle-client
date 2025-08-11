@@ -1,9 +1,13 @@
-import React from 'react'
 
-const App = () => {
+// import "./App.css";
+import OtpInput from "./components/OtpInput.jsx";
+
+function App() {
   return (
-    <div>App</div>
-  )
+    <>
+      <OtpInput size={4} onSubmit={(otp) => console.log(otp)}></OtpInput>
+    </>
+  );
 }
 
 export default App
