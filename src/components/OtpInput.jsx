@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import "./App.css";
 
 const OtpBox = React.memo(({ id, value, onKeyUp, inputRef }) => {
   return (
@@ -7,7 +6,7 @@ const OtpBox = React.memo(({ id, value, onKeyUp, inputRef }) => {
       id={id}
       ref={inputRef}
       value={value}
-      className="input-box"
+      className="w-[50px] h-[50px] text-2xl text-center rounded-lg border-2 border-gray-400 focus:outline-none focus:border-blue-500"
       onKeyUp={onKeyUp}
       maxLength={1}
     />
@@ -105,7 +104,7 @@ const OtpInput = ({ size, onSubmit }) => {
   }, [inputValues, onSubmit]);
 
   return (
-    <div className="otp-inputs-contianer">
+    <div className="flex justify-center border-2 border-red-500 gap-2.5 p-5">
       {inputValues.map((val, idx) => (
         <OtpBox
           key={idx}
