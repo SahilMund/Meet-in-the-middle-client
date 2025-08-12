@@ -91,7 +91,7 @@ const Login = () => {
             type="submit"
             className="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300"
           >
-            Sign Up
+            Sign In
           </button>
         </form>
         <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
