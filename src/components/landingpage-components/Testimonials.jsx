@@ -1,37 +1,38 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "John Doe",
-      designation: "Product Manager",
-      review: "This tool saved us hours of planning and made our meetings stress-free!",
+      name: 'John Doe',
+      designation: 'Product Manager',
+      review:
+        'This tool saved us hours of planning and made our meetings stress-free!',
       rating: 5,
     },
     {
-      name: "Sarah Smith",
-      designation: "Team Lead",
-      review: "Super easy to use and very accurate in finding meeting points.",
+      name: 'Sarah Smith',
+      designation: 'Team Lead',
+      review: 'Super easy to use and very accurate in finding meeting points.',
       rating: 4,
     },
     {
-      name: "Michael Brown",
-      designation: "Software Engineer",
-      review: "The design is intuitive and the algorithm is spot on!",
+      name: 'Michael Brown',
+      designation: 'Software Engineer',
+      review: 'The design is intuitive and the algorithm is spot on!',
       rating: 5,
     },
     {
-      name: "Emily Davis",
-      designation: "Marketing Specialist",
-      review: "Helped our remote team meet halfway without endless debates.",
+      name: 'Emily Davis',
+      designation: 'Marketing Specialist',
+      review: 'Helped our remote team meet halfway without endless debates.',
       rating: 4,
     },
     {
-      name: "David Wilson",
-      designation: "Business Analyst",
-      review: "Fast, reliable, and easy to share with the team.",
+      name: 'David Wilson',
+      designation: 'Business Analyst',
+      review: 'Fast, reliable, and easy to share with the team.',
       rating: 5,
     },
   ];
@@ -40,11 +41,15 @@ const Testimonials = () => {
   const visibleCount = 3;
 
   const handlePrev = () => {
-    setIndex((prev) => (prev === 0 ? testimonials.length - visibleCount : prev - 1));
+    setIndex((prev) =>
+      prev === 0 ? testimonials.length - visibleCount : prev - 1
+    );
   };
 
   const handleNext = () => {
-    setIndex((prev) => (prev + 1 > testimonials.length - visibleCount ? 0 : prev + 1));
+    setIndex((prev) =>
+      prev + 1 > testimonials.length - visibleCount ? 0 : prev + 1
+    );
   };
 
   return (
@@ -53,7 +58,8 @@ const Testimonials = () => {
       <div className="text-center mb-12">
         <h1 className="text-3xl font-semibold">What Our Users Say</h1>
         <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-          Hear from people who have used Meet in Middle to simplify their meetings.
+          Hear from people who have used Meet in Middle to simplify their
+          meetings.
         </p>
       </div>
 
@@ -79,7 +85,7 @@ const Testimonials = () => {
               <motion.div
                 key={i}
                 whileHover={{ scale: 1.05 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                transition={{ type: 'spring', stiffness: 300 }}
                 className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center"
                 style={{ width: `${100 / visibleCount}%` }}
               >
@@ -97,9 +103,9 @@ const Testimonials = () => {
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#FF4C61] text-white font-bold">
                     {t.name
-                      .split(" ")
+                      .split(' ')
                       .map((n) => n[0])
-                      .join("")}
+                      .join('')}
                   </div>
                   <div className="text-left">
                     <h3 className="font-semibold">{t.name}</h3>

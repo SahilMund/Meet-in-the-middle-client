@@ -13,7 +13,7 @@ const Footer = () => {
 
   {/* Right section */}
   <h2 className="text-sm md:text-base">
-    ©Meet in Middle. All rights reserved.
+    © {new Date().getFullYear()} Meet in Middle. All rights reserved.
   </h2>
 </div>
 

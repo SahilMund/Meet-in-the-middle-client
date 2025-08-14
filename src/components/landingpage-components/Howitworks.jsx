@@ -1,33 +1,32 @@
-import React from 'react'
-import {motion} from 'framer-motion'
-import { FaRegCheckCircle } from "react-icons/fa";
-import { LuTarget } from "react-icons/lu";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import { FaArrowRight } from "react-icons/fa";
-
+import React from 'react';
+import { motion } from 'framer-motion';
+import { FaRegCheckCircle } from 'react-icons/fa';
+import { LuTarget } from 'react-icons/lu';
+import { FaRegCalendarAlt } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 
 const Howitworks = () => {
-    const steps = [
+  const steps = [
     {
-      icon: <FaRegCalendarAlt/>,
-      step:"1",
-      title: "Enter Your Locations",
+      icon: <FaRegCalendarAlt />,
+      step: '1',
+      title: 'Enter Your Locations',
       description:
         "Simply add your location and your friends' locations into our tool.",
     },
     {
-      icon: <LuTarget/>,
-       step:"2",
-      title: "Find the Middle Point",
+      icon: <LuTarget />,
+      step: '2',
+      title: 'Find the Middle Point',
       description:
-        "We calculate the perfect meeting spot that is fair for everyone.",
+        'We calculate the perfect meeting spot that is fair for everyone.',
     },
     {
-      icon:<FaRegCheckCircle/>,
-       step:"3",
-      title: "Meet & Enjoy",
+      icon: <FaRegCheckCircle />,
+      step: '3',
+      title: 'Meet & Enjoy',
       description:
-        "Head to the suggested location and have a great time together.",
+        'Head to the suggested location and have a great time together.',
     },
   ];
   return (
@@ -54,33 +53,28 @@ const Howitworks = () => {
             {/* Step Number */}
             <div className="w-14 h-14 flex items-center justify-center bg-[#FF4C61] text-white rounded-full text-xl font-bold mb-4">
               {item.icon}
-              
             </div>
-            <h2 className='text-lg font-semibold' >{item.step}</h2>
+            <h2 className="text-lg font-semibold">{item.step}</h2>
             <h2 className="text-lg font-semibold">{item.title}</h2>
             <p className="text-gray-600 mt-2">{item.description}</p>
           </motion.div>
         ))}
       </div>
-        {/* {card Section} */}
+      {/* {card Section} */}
 
-     
-        <div className=" max-w-5xl mx-auto bg-[#FF4C61] text-white rounded-2xl p-8 md:p-12 flex flex-col items-center text-center shadow-lg mt-12">
-  <h1 className="text-2xl md:text-4xl font-bold mb-4">
-    Ready To Start Planning Better Meetings?
-  </h1>
-  <h3 className="text-base md:text-lg mb-6">
-    Join thousands of teams who have simplified their meeting coordination
-  </h3>
-  <button className="flex items-center gap-2 bg-white cursor-pointer text-[#FF4C61] font-semibold px-6 py-3 rounded-full shadow-md hover:bg-gray-100 transition-all duration-300">
-    Get Started Free <FaArrowRight />
-  </button>
-</div>
-
-
-
+      <div className=" max-w-5xl mx-auto bg-[#FF4C61] text-white rounded-2xl p-8 md:p-12 flex flex-col items-center text-center shadow-lg mt-12">
+        <h1 className="text-2xl md:text-4xl font-bold mb-4">
+          Ready To Start Planning Better Meetings?
+        </h1>
+        <h3 className="text-base md:text-lg mb-6">
+          Join thousands of teams who have simplified their meeting coordination
+        </h3>
+        <button className="flex items-center gap-2 bg-white cursor-pointer text-[#FF4C61] font-semibold px-6 py-3 rounded-full shadow-md hover:bg-gray-100 transition-all duration-300">
+          Get Started Free <FaArrowRight />
+        </button>
+      </div>
     </div>
   );
-}
+};
 
-export default Howitworks
+export default Howitworks;
