@@ -25,10 +25,14 @@ const Login = () => {
   });
 
   const onSubmit = (data) => {
-    
     console.log('Form Data:', data);
   };
-
+  const handleGoogleOauth = () => {
+    window.location.href = ' http://localhost:8000/api/user/auth/google';
+  };
+  const handleFaceBookOauth = () => {
+    window.location.href = ' http://localhost:8000/api/user/auth/facebook';
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-lg transition-all duration-300 transform scale-100 opacity-100">
@@ -116,13 +120,19 @@ const Login = () => {
         </div>
         <div className="space-y-4">
           {/* Google Button */}
-          <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <button
+            onClick={handleGoogleOauth}
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+          >
             <FcGoogle size={20} />
             <span>Continue with Google</span>
           </button>
 
           {/* Facebook Button */}
-          <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <button
+            onClick={handleFaceBookOauth}
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+          >
             <FaFacebook size={20} className="text-blue-600" />
             <span>Continue with Facebook</span>
           </button>
