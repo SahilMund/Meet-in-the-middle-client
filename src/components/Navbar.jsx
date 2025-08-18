@@ -8,6 +8,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { PiSignOutBold } from "react-icons/pi";
 import { IoMdMenu } from "react-icons/io";
 
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

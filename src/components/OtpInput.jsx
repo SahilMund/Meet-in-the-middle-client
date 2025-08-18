@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const OtpBox = React.memo(({ id, value, onKeyUp, inputRef }) => {
   return (
@@ -15,7 +15,7 @@ const OtpBox = React.memo(({ id, value, onKeyUp, inputRef }) => {
 
 const OtpInput = ({ size, onSubmit }) => {
   const [inputValues, setInputValues] = useState(() =>
-    new Array(size).fill("")
+    new Array(size).fill('')
   );
   const inputRefs = useRef([]);
 
@@ -75,13 +75,13 @@ const OtpInput = ({ size, onSubmit }) => {
 
   const handleBackSpace = useCallback(
     (event) => {
-      if (event.key !== "Backspace") return;
+      if (event.key !== 'Backspace') return;
       const inputIndex = Number(event.target.id);
 
       setInputValues((prev) => {
-        if (prev[inputIndex] === "") return prev;
+        if (prev[inputIndex] === '') return prev;
         const newValues = [...prev];
-        newValues[inputIndex] = "";
+        newValues[inputIndex] = '';
         return newValues;
       });
 
@@ -99,8 +99,8 @@ const OtpInput = ({ size, onSubmit }) => {
   );
 
   useEffect(() => {
-    if (inputValues.includes("")) return;
-    onSubmit(Number(inputValues.join("")));
+    if (inputValues.includes('')) return;
+    onSubmit(Number(inputValues.join('')));
   }, [inputValues, onSubmit]);
 
   return (

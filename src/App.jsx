@@ -1,4 +1,3 @@
-
 // import "./App.css";
 import Navbar from './components/Navbar.jsx';
 import OtpInput from './components/OtpInput.jsx';
@@ -20,4 +19,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
