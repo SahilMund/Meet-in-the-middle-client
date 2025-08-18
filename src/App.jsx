@@ -1,4 +1,3 @@
-
 // import "./App.css";
 import OtpInput from './components/OtpInput.jsx';
 import Login from './pages/Login.jsx';
@@ -14,4 +13,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
