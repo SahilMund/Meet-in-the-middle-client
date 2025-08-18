@@ -1,0 +1,101 @@
+import React, { useState } from 'react';
+import locationimage from '../../assets/locationimage.png';
+import { Moon, Menu, X } from 'lucide-react';
+import { motion } from 'framer-motion';
+const HeroSection = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <div className="min-h-[90vh] flex flex-col p-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        {/* Logo + Title */}
+        <div className="flex gap-2 items-center">
+          <img src={locationimage} height={40} width={50} alt="logo" />
+          <h1 className="font-semibold text-xl sm:text-2xl">Meet In Middle</h1>
+        </div>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-4">
+          {/* <button className="p-2 rounded-full cursor-pointer hover:bg-gray-100">
+            <Moon size={20} />
+          </button> */}
+          <button className="text-gray-700 cursor-pointer hover:text-[#FF4C61] font-medium">
+            Sign In
+          </button>
+          <button className="bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition">
+            Get Started
+          </button>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      {menuOpen && (
+        <div className="flex flex-col gap-3 mt-4 md:hidden">
+          {/* <button className="p-2 rounded-full hover:bg-[#FF4C61] w-fit">
+            <Moon size={20} />
+          </button> */}
+          <button className="text-gray-700 hover:text-[#FF4C61] font-medium">
+            Sign In
+          </button>
+          <button className="bg-[#FF4C61] hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition w-fit">
+            Get Started
+          </button>
+        </div>
+      )}
+
+      {/* Hero Content */}
+      <div className="flex flex-col justify-center items-center text-center flex-1 px-4">
+        <motion.h1
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800"
+        >
+          Find The Perfect
+        </motion.h1>
+        <motion.h1
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#FF4C61]"
+        >
+          Meeting Location
+        </motion.h1>
+        <motion.h2
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="text-lg sm:text-xl mt-3 max-w-3xl text-gray-700"
+        >
+          Meet in Middle helps you find the ideal location equidistant from all
+          participants. No more complicated discussions about where to meet.
+        </motion.h2>
+        <motion.button
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{
+            type: 'spring',
+            stiffness: 200,
+            damping: 10,
+            delay: 0.6,
+          }}
+          whileHover={{ scale: 1.05 }}
+          className="mt-6 bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-8 py-3 rounded-lg text-lg font-medium shadow-md transition"
+        >
+          Start Meeting Plan
+        </motion.button>
+      </div>
+    </div>
+  );
+};
+
+export default HeroSection;
