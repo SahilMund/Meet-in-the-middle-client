@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MeetingCard from '../components/MeetingCard'
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaRegCheckCircle } from "react-icons/fa";
@@ -113,9 +113,9 @@ const Dashboard = () => {
 
 
   return (
-    <div>
+    <div className='w-screen'>
        
-       <div className='px-20 py-10'>
+       <div className='px-5 sm:px-20 py-10'>
          <h1 className='text-4xl  font-extrabold'>Welcome Back! 👋</h1>
         <p className=''>Here's What happening With your meetings today</p>
 
@@ -134,11 +134,11 @@ const Dashboard = () => {
               transition: { duration: 0.3 },
             }}
           style={{ backgroundColor: elem.color }}
-          className={` p-4 rounded-lg shadow-md flex items-center justify-between`}
+          className={`p-1 sm:p-4 rounded-lg shadow-md flex items-center justify-between`}
         >
           {/* Left section - title and number inline */}
           <div className="flex flex-col items-center gap-2 text-white">
-            <h3 className="text-lg font-bold">{elem.title}</h3>
+            <h3 className="text-md sm:text-lg font-bold">{elem.title}</h3>
             <p className="text-xl font-extrabold">{elem.number}</p>
           </div>
 
@@ -185,11 +185,11 @@ const Dashboard = () => {
               transition: { duration: 0.3 },
             }}
           style={{ backgroundColor:elem.color}}
-          className={`bg-amber-300 p-4 rounded-lg shadow-md flex items-center justify-between`}
+          className={`bg-amber-300  p-2 sm:p-4 rounded-lg shadow-md flex sm:flex-row flex-col items-center justify-between`}
         >
           {/* Left section - title and number inline */}
-          <div className="flex flex-col text-white items-center gap-2">
-            <h3 className="text-lg font-extrabold ">{elem.title}</h3>
+          <div className="flex flex-col px-2 text-white items-center gap-2">
+            <h3 className="text-lg sm:font-extrabold font-light">{" "}{elem.title}</h3>
             <p className="text-xl font-bold">{elem.number}</p>
           </div>
 
