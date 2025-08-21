@@ -2,6 +2,7 @@
 import Navbar from './components/Navbar.jsx';
 import OtpInput from './components/OtpInput.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import Invitations from './pages/Invitations.jsx';
 import Landingpage from './pages/Landingpage.jsx';
 import Login from './pages/Login.jsx';
 import SignUp from './pages/SignUp.jsx';
@@ -15,6 +16,7 @@ function App() {
       <Landingpage/>
       <Navbar/>
       <Dashboard/>
+      <Invitations/>
     </>
   );
 }

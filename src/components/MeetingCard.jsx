@@ -4,54 +4,14 @@ import { CiFilter, CiSearch } from "react-icons/ci";
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import { IoMdGrid, IoMdTime } from "react-icons/io";
 import { TfiMenuAlt } from "react-icons/tfi";
+import { myMeetings } from "../MyMeetings";
 
 export default function MeetingList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isGrid, setIsGrid] = useState(false);
 
-  const myMeetings = [
-    {
-      title: "Team Meet",
-      description: "Weekly Team Meeting",
-      date: "Today",
-      time: "10:00 Am",
-      duration: "1 hour",
-      Place: "Starbucks, 5th Avenue",
-      people: ["Virat Kholi", "Salman Khan", "Dhoni Bhai", "Some One", "Some Thing", "Kushal Deep"],
-      status: "Confirmed",
-    },
-    {
-      title: "Project Review",
-      description: "Discuss ongoing sprint",
-      date: "Tomorrow",
-      time: "2:00 PM",
-      duration: "2 hours",
-      Place: "Zoom",
-      people: ["Virat Kholi", "Salman Khan", "Dhoni Bhai"],
-      status: "Pending",
-    },
-    {
-      title: "Feature Voting",
-      description: "Vote for Q3 features",
-      date: "Friday",
-      time: "11:00 AM",
-      duration: "1.5 hours",
-      Place: "Google Meet",
-      people: ["Virat Kholi", "Salman Khan", "Dhoni Bhai", "Some One", "Some Thing"],
-      status: "Voting",
-    },
-    {
-      title: "Client Call",
-      description: "Monthly update with client",
-      date: "Monday",
-      time: "9:00 AM",
-      duration: "45 mins",
-      Place: "Microsoft Teams",
-      people: ["Virat Kholi", "Salman Khan"],
-      status: "Confirmed",
-    },
-  ];
+  
 
   const filteredMeetings = myMeetings.filter((meeting) => {
     const matchesSearch = meeting.title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -103,7 +63,7 @@ export default function MeetingList() {
               <option value="All">Filter</option>
               <option value="Confirmed">Confirmed</option>
               <option value="Pending">Pending</option>
-              <option value="Voting">Voting</option>
+              
             </select>
           </div>
 

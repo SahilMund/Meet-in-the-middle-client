@@ -8,6 +8,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { MdHistory } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
 import { AiOutlineStock } from 'react-icons/ai';
+import InfoCard from '../components/InfoCard';
 
 
 const Dashboard = () => {
@@ -35,12 +36,6 @@ const Dashboard = () => {
     ]
 
        const updates2=[
-        {
-            title:"Total Meetings",
-            number:5,
-            icon:<FaCalendarAlt/>,
-            color:"#50cc5c"
-        },
          {
             title:"This Week",
             number:5,
@@ -81,34 +76,9 @@ const Dashboard = () => {
             }
         ]
             // pending invitations dummy data
-        const pendingInvitations=[
-            {
-                title:"Marketing Stratergy session",
-                name:"Kushal Deep",
-                Description:"Lets discuss Q1 marketing plans and budget allocation.",
-                people:8,
-                date:"Aug 15",
-                time:"3:00PM"
-            },
-              
-            {
-                title:"Just Chill",
-                name:"Kushal Deep",
-                Description:"Lets hangout and go for a weekend ride.",
-                people:4,
-                date:"Aug 24",
-                time:"6:00AM"
-            }
-        ]
+       
 
-        const getInitials = (name) => {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-};
-
+      
 
 
 
@@ -119,34 +89,7 @@ const Dashboard = () => {
          <h1 className='text-4xl  font-extrabold'>Welcome Back! 👋</h1>
         <p className=''>Here's What happening With your meetings today</p>
 
-        {/* {card components} */}
-         <div className="grid grid-cols-3 gap-4 mt-5">
-      {updates1.map((elem, index) => (
-        <motion.div
-          key={index}
-          initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ delay: index * 0.2, duration: 0.6 }}
-            whileHover={{
-              scale: 1.03,
-              boxShadow: '0px 8px 24px rgba(0,0,0,0.1)',
-              transition: { duration: 0.3 },
-            }}
-          style={{ backgroundColor: elem.color }}
-          className={` p-4 rounded-lg shadow-md flex items-center justify-between`}
-        >
-          {/* Left section - title and number inline */}
-          <div className="flex flex-col items-center gap-2 text-white">
-            <h3 className="text-lg font-bold">{elem.title}</h3>
-            <p className="text-xl font-extrabold">{elem.number}</p>
-          </div>
-
-          {/* Right section - icon */}
-          <div className="text-2xl text-white">{elem.icon}</div>
-        </motion.div>
-      ))}
-    </div>
+       <InfoCard updates={updates1}/>
 
        
 
@@ -171,33 +114,9 @@ const Dashboard = () => {
         </div>
 
         {/* {cards again} */}
-         <div className="grid grid-cols-4 gap-4 mt-7">
-      {updates2.map((elem, index) => (
-        <motion.div
-          key={index}
-          initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ delay: index * 0.2, duration: 0.6 }}
-            whileHover={{
-              scale: 1.03,
-              boxShadow: '0px 8px 24px rgba(0,0,0,0.1)',
-              transition: { duration: 0.3 },
-            }}
-          style={{ backgroundColor:elem.color}}
-          className={`bg-amber-300 p-4 rounded-lg shadow-md flex items-center justify-between`}
-        >
-          {/* Left section - title and number inline */}
-          <div className="flex flex-col text-white items-center gap-2">
-            <h3 className="text-lg font-extrabold ">{elem.title}</h3>
-            <p className="text-xl font-bold">{elem.number}</p>
-          </div>
-
-          {/* Right section - icon */}
-          <div className="text-2xl text-white">{elem.icon}</div>
-        </motion.div>
-      ))}
-    </div>
+        <InfoCard updates={updates2}/>
+       
+       
 
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
       {/* Upcoming Meetings */}
@@ -272,55 +191,7 @@ const Dashboard = () => {
 
     {/* {pending Invitations } */}
 
-             <div className="p-4 mt-4">
-      <h2 className="text-xl font-bold mb-4">Pending Invitations (2)</h2>
-
-      {/* Grid for responsiveness */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {pendingInvitations.map((invite, index) => (
-          <div
-            key={index}
-            className="relative bg-white shadow-md rounded-xl p-4  hover:shadow-lg transition-all"
-          >
-            {/* Date at top right */}
-            <div className="absolute top-2 right-2 text-sm font-semibold text-gray-500">
-              <div>{invite.date}</div>
-              <div className="text-xs">{invite.time}</div>
-            </div>
-
-            {/* Header with initials and title */}
-            <div className="flex items-center mb-2">
-              <div className="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg font-bold mr-3">
-                {getInitials(invite.name)}
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">{invite.title}</h3>
-                <p className="text-sm text-gray-500">by {invite.name}</p>
-              </div>
-            </div>
-
-            {/* Description */}
-            <p className="text-gray-600 mb-3">{invite.Description}</p>
-
-            {/* People count */}
-            <div className="flex items-center text-gray-500 text-sm mb-4">
-              <FaUsers className="mr-2" />
-              {invite.people} people
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-3">
-              <button className="flex-1 cursor-pointer bg-blue-500 text-white py-1.5 rounded-lg hover:bg-green-600">
-                Accept
-              </button>
-              <button className="flex-1  cursor-pointer py-1.5 rounded-lg hover:bg-red-600 hover:text-white">
-                Decline
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+            
 
     {/* My Meetings section */}
   
