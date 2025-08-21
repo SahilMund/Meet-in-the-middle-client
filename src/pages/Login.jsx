@@ -1,20 +1,25 @@
-import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import '../index.css';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { loginUser } from '../services/authentication';
+import { toast } from 'react-toastify';
+import '../index.css';
 
+// ✅ Schema: only email + password
 const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -24,19 +29,30 @@ const Login = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    
-    console.log('Form Data:', data);
+  const onSubmit = async (data, e) => {
+    e.preventDefault(); // ✅ explicitly stop page refresh
+    setIsLoading(true);
+    try {
+      await loginUser(data);
+      toast.success('Login successful!');
+      setTimeout(()=>{navigate('/home')},3000)
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.response?.data?.message || 'Login failed');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-lg transition-all duration-300 transform scale-100 opacity-100">
+      <div className="bg-white dark:bg-gray-800 p-8 sm:p-10 rounded-2xl shadow-xl w-full max-w-lg transition-all duration-300 transform scale-100 opacity-100">
         <h2 className="text-3xl font-extrabold text-center text-gray-900 dark:text-white mb-6">
           Sign in
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Email Field */}
           <div>
             <label
               htmlFor="email"
@@ -57,6 +73,7 @@ const Login = () => {
             )}
           </div>
 
+          {/* Password Field */}
           <div>
             <label
               htmlFor="password"
@@ -72,6 +89,8 @@ const Login = () => {
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all pr-12"
               />
               <span
+                role="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
                 className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 cursor-pointer"
                 onClick={() => setShowPassword((prev) => !prev)}
               >
@@ -88,22 +107,34 @@ const Login = () => {
               </p>
             )}
           </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white font-bold py-2.5 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300"
+            disabled={isLoading}
+            className={`w-full flex gap-3 justify-center bg-indigo-600 text-white font-bold py-2.5 rounded-lg
+              hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300
+              ${isLoading ? 'cursor-not-allowed opacity-70' : ''}`}
           >
             Sign In
+            {isLoading && (
+              <span className="w-6 h-6 rounded-full border-2 border-white border-l-transparent animate-spin" />
+            )}
           </button>
         </form>
+
+        {/* Signup Link */}
         <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
           Don't have an account?
-          <a
-            href="/sign"
+          <Link
+            to="/signup"
             className="ml-1 font-semibold text-indigo-600 hover:text-indigo-500 hover:underline"
           >
-            sign Up
-          </a>
+            Sign Up
+          </Link>
         </p>
+
+        {/* Divider */}
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
@@ -114,28 +145,30 @@ const Login = () => {
             </span>
           </div>
         </div>
+
+        {/* Social Login */}
         <div className="space-y-4">
-          {/* Google Button */}
           <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
             <FcGoogle size={20} />
             <span>Continue with Google</span>
           </button>
 
-          {/* Facebook Button */}
           <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
             <FaFacebook size={20} className="text-blue-600" />
             <span>Continue with Facebook</span>
           </button>
-          <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
-            Forgot Password?
-            <a
-              href="/sign"
-              className="ml-1 font-semibold text-indigo-600 hover:text-indigo-500 hover:underline"
-            >
-              Forgot Password
-            </a>
-          </p>
         </div>
+
+        {/* Forgot Password */}
+        <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+          Forgot Password?
+          <a
+            href="/forgot"
+            className="ml-1 font-semibold text-indigo-600 hover:text-indigo-500 hover:underline"
+          >
+            Reset
+          </a>
+        </p>
       </div>
     </div>
   );

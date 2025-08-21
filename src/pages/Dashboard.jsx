@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MeetingCard from '../components/MeetingCard'
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaRegCheckCircle } from "react-icons/fa";
@@ -83,13 +83,44 @@ const Dashboard = () => {
 
 
   return (
-    <div>
+    <div className='w-screen'>
        
-       <div className='px-20 py-10'>
+       <div className='px-5 sm:px-20 py-10'>
          <h1 className='text-4xl  font-extrabold'>Welcome Back! 👋</h1>
         <p className=''>Here's What happening With your meetings today</p>
 
+
        <InfoCard updates={updates1}/>
+
+        {/* {card components} */}
+         <div className="grid grid-cols-3 gap-4 mt-5">
+      {updates1.map((elem, index) => (
+        <motion.div
+          key={index}
+          initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ delay: index * 0.2, duration: 0.6 }}
+            whileHover={{
+              scale: 1.03,
+              boxShadow: '0px 8px 24px rgba(0,0,0,0.1)',
+              transition: { duration: 0.3 },
+            }}
+          style={{ backgroundColor: elem.color }}
+          className={`p-1 sm:p-4 rounded-lg shadow-md flex items-center justify-between`}
+        >
+          {/* Left section - title and number inline */}
+          <div className="flex flex-col items-center gap-2 text-white">
+            <h3 className="text-md sm:text-lg font-bold">{elem.title}</h3>
+            <p className="text-xl font-extrabold">{elem.number}</p>
+          </div>
+
+          {/* Right section - icon */}
+          <div className="text-2xl text-white">{elem.icon}</div>
+        </motion.div>
+      ))}
+    </div>
+
 
        
 
@@ -114,9 +145,39 @@ const Dashboard = () => {
         </div>
 
         {/* {cards again} */}
+
         <InfoCard updates={updates2}/>
        
        
+
+         <div className="grid grid-cols-4 gap-4 mt-7">
+      {updates2.map((elem, index) => (
+        <motion.div
+          key={index}
+          initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ delay: index * 0.2, duration: 0.6 }}
+            whileHover={{
+              scale: 1.03,
+              boxShadow: '0px 8px 24px rgba(0,0,0,0.1)',
+              transition: { duration: 0.3 },
+            }}
+          style={{ backgroundColor:elem.color}}
+          className={`bg-amber-300  p-2 sm:p-4 rounded-lg shadow-md flex sm:flex-row flex-col items-center justify-between`}
+        >
+          {/* Left section - title and number inline */}
+          <div className="flex flex-col px-2 text-white items-center gap-2">
+            <h3 className="text-lg sm:font-extrabold font-light">{" "}{elem.title}</h3>
+            <p className="text-xl font-bold">{elem.number}</p>
+          </div>
+
+          {/* Right section - icon */}
+          <div className="text-2xl text-white">{elem.icon}</div>
+        </motion.div>
+      ))}
+    </div>
+
 
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
       {/* Upcoming Meetings */}

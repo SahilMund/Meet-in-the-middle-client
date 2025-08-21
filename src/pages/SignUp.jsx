@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import '../index.css';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 
 const schema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -15,6 +16,7 @@ const schema = z.object({
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -25,7 +27,8 @@ const SignUp = () => {
   });
 
   const onSubmit = (data) => {
-    console.log('Form Data:', data);
+    console.log(data)
+    navigate('/otp', { state: {data} });
   };
 
   return (
@@ -114,12 +117,12 @@ const SignUp = () => {
         </form>
         <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
           Already have an account?
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="ml-1 font-semibold text-indigo-600 hover:text-indigo-500 hover:underline"
           >
             Log in
-          </a>
+          </Link>
         </p>
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
