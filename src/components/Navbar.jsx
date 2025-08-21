@@ -36,6 +36,12 @@ const Navbar = () => {
           >
             Dashboard
           </motion.button>
+           <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="px-4 py-2 cursor-pointer hover:bg-[#FF4C61] hover:text-white  rounded-md"
+          >
+            Your Invitations
+          </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
             className="px-4 py-2 cursor-pointer hover:bg-[#FF4C61] hover:text-white rounded-md"

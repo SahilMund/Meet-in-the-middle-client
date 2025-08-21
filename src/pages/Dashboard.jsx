@@ -8,6 +8,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { MdHistory } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
 import { AiOutlineStock } from 'react-icons/ai';
+import InfoCard from '../components/InfoCard';
 
 
 const Dashboard = () => {
@@ -35,12 +36,6 @@ const Dashboard = () => {
     ]
 
        const updates2=[
-        {
-            title:"Total Meetings",
-            number:5,
-            icon:<FaCalendarAlt/>,
-            color:"#50cc5c"
-        },
          {
             title:"This Week",
             number:5,
@@ -81,34 +76,9 @@ const Dashboard = () => {
             }
         ]
             // pending invitations dummy data
-        const pendingInvitations=[
-            {
-                title:"Marketing Stratergy session",
-                name:"Kushal Deep",
-                Description:"Lets discuss Q1 marketing plans and budget allocation.",
-                people:8,
-                date:"Aug 15",
-                time:"3:00PM"
-            },
-              
-            {
-                title:"Just Chill",
-                name:"Kushal Deep",
-                Description:"Lets hangout and go for a weekend ride.",
-                people:4,
-                date:"Aug 24",
-                time:"6:00AM"
-            }
-        ]
+       
 
-        const getInitials = (name) => {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-};
-
+      
 
 
 
@@ -118,6 +88,9 @@ const Dashboard = () => {
        <div className='px-5 sm:px-20 py-10'>
          <h1 className='text-4xl  font-extrabold'>Welcome Back! 👋</h1>
         <p className=''>Here's What happening With your meetings today</p>
+
+
+       <InfoCard updates={updates1}/>
 
         {/* {card components} */}
          <div className="grid grid-cols-3 gap-4 mt-5">
@@ -148,6 +121,7 @@ const Dashboard = () => {
       ))}
     </div>
 
+
        
 
         {/* Long Card */}
@@ -171,6 +145,11 @@ const Dashboard = () => {
         </div>
 
         {/* {cards again} */}
+
+        <InfoCard updates={updates2}/>
+       
+       
+
          <div className="grid grid-cols-4 gap-4 mt-7">
       {updates2.map((elem, index) => (
         <motion.div
@@ -198,6 +177,7 @@ const Dashboard = () => {
         </motion.div>
       ))}
     </div>
+
 
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
       {/* Upcoming Meetings */}
@@ -272,55 +252,7 @@ const Dashboard = () => {
 
     {/* {pending Invitations } */}
 
-             <div className="p-4 mt-4">
-      <h2 className="text-xl font-bold mb-4">Pending Invitations (2)</h2>
-
-      {/* Grid for responsiveness */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {pendingInvitations.map((invite, index) => (
-          <div
-            key={index}
-            className="relative bg-white shadow-md rounded-xl p-4  hover:shadow-lg transition-all"
-          >
-            {/* Date at top right */}
-            <div className="absolute top-2 right-2 text-sm font-semibold text-gray-500">
-              <div>{invite.date}</div>
-              <div className="text-xs">{invite.time}</div>
-            </div>
-
-            {/* Header with initials and title */}
-            <div className="flex items-center mb-2">
-              <div className="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center text-lg font-bold mr-3">
-                {getInitials(invite.name)}
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold">{invite.title}</h3>
-                <p className="text-sm text-gray-500">by {invite.name}</p>
-              </div>
-            </div>
-
-            {/* Description */}
-            <p className="text-gray-600 mb-3">{invite.Description}</p>
-
-            {/* People count */}
-            <div className="flex items-center text-gray-500 text-sm mb-4">
-              <FaUsers className="mr-2" />
-              {invite.people} people
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-3">
-              <button className="flex-1 cursor-pointer bg-blue-500 text-white py-1.5 rounded-lg hover:bg-green-600">
-                Accept
-              </button>
-              <button className="flex-1  cursor-pointer py-1.5 rounded-lg hover:bg-red-600 hover:text-white">
-                Decline
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+            
 
     {/* My Meetings section */}
   

@@ -7,6 +7,16 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
+// import { Provider } from 'react-redux';
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+
+
+
+
 createRoot(document.getElementById('root')).render(
   <>
     <BrowserRouter>
