@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import locationimage from '../../assets/locationimage.png';
-import { Menu, X } from 'lucide-react';
+// import { Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,7 +39,7 @@ const HeroSection = () => {
           className="sm:hidden p-2 rounded-lg hover:bg-gray-100"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {/* {menuOpen ? <X size={24} /> : <Menu size={24} />} */}
         </button>
       </div>
 
