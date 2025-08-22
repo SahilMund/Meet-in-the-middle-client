@@ -5,7 +5,8 @@ import ProfileUpdateForm from '../components/profileSettings-components/profileU
 import MeetingHitoryCompnent from '../components/profileSettings-components/MeetingHitoryCompnent';
 import StatisticsComponent from '../components/profileSettings-components/StatisticsComponent';
 import MeetingCard from '../components/profileSettings-components/MeetingCard';
-import { FaUserAlt } from 'react-icons/fa';
+// import { FaUserAlt } from 'react-icons/fa';
+import { FaRegUser } from 'react-icons/fa';
 import { CiCalendar } from 'react-icons/ci';
 import { FaRegStar } from 'react-icons/fa';
 import { IoCameraSharp } from 'react-icons/io5';
@@ -121,7 +122,8 @@ const ProfileSettingsPage = () => {
             type="button"
             onClick={() => setCurrWindow(0)}
           >
-            <FaUserAlt />
+            {/* <FaUserAlt /> */}
+            <FaRegUser/>
             Profile
           </button>
 

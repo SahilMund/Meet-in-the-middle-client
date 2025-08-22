@@ -6,7 +6,7 @@ import { MdOutlineLocationOn } from 'react-icons/md';
 const MeetingCard = ({ styleMaker, e }) => {
   return (
     <>
-      <div className="w-full dark:bg-slate-400 shadow-xs h-auto sm:h-24 rounded-lg border-2 flex flex-col sm:flex-row justify-between px-4 py-3 sm:py-0 items-start sm:items-center gap-3">
+      <div className="w-full white:bg-slate-400 shadow-xs h-auto sm:h-24 rounded-lg border-2 flex flex-col sm:flex-row justify-between px-4 py-3 sm:py-0 items-start sm:items-center gap-3">
         
         {/* Left side */}
         <div className="flex gap-2 items-start sm:items-center w-full sm:w-auto">

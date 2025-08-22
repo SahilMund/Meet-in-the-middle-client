@@ -1,0 +1,108 @@
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { MdSecurity } from 'react-icons/md';
+const SettingPagePrivacy = () => {
+  const [notification, setNotification] = useState(false);
+
+  const handleToggle = (e) => {
+    setNotification(true);
+    toast.success(
+      `${e.target.dataset.message}` +
+        `${e.target.checked ? 'Enabled' : 'Disabled'}`
+    );
+  };
+
+  return (
+    <div>
+      <br />
+      <div>
+        <div className="p-6 bg-white rounded-2xl shadow-sm space-y-6">
+          <h1 className="text-2xl font-semibold text-gray-800 ">
+            Privacy & security
+          </h1>
+
+          <div className="space-y-4">
+            {/* Location Sharing */}
+            <div className="flex items-center justify-between border-b pb-3">
+              <div>
+                <h2 className="text-lg font-medium text-gray-700">
+                  Location Sharing
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Allow the app to access your location for meeting suggetions
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  data-message={`Location Notification `}
+                  type="checkbox"
+                  className="sr-only peer"
+                  onChange={handleToggle}
+                />
+                <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
+                <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
+              </label>
+            </div>
+
+            {/* Activity Status*/}
+            <div className="flex items-center justify-between border-b pb-3">
+              <div>
+                <h2 className="text-lg font-medium text-gray-700">
+                  Activity Status
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Show when you're online or offline to other users
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  data-message={`Activity Notification `}
+                  type="checkbox"
+                  className="sr-only peer"
+                  onChange={handleToggle}
+                />
+                <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
+                <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
+              </label>
+            </div>
+
+            {/* Searchable Profile*/}
+            <div className="flex items-center justify-between ">
+              <div>
+                <h2 className="text-lg font-medium text-gray-700">
+                  Searchable Profile
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Allow others to fin yoe by email or name
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  data-message={`Searchble Notification `}
+                  type="checkbox"
+                  className="sr-only peer"
+                  onChange={handleToggle}
+                />
+                <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
+                <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
+              </label>
+            </div>
+            <br />
+            <div className="p-6 bg-amber-600 rounded-2xl shadow-sm border space-y-2">
+              <h2 className="flex items-center text-lg font-semibold text-white gap-2">
+                <MdSecurity className="text-xl" />
+                Data Protection
+              </h2>
+              <p className="text-sm text-amber-100 leading-relaxed">
+                We use industry-standard encryption to protect your data. Your
+                location information is only shared with meeting participants.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SettingPagePrivacy;

@@ -1,10 +1,12 @@
 
 // import "./App.css";
+import { ToastContainer } from 'react-toastify';
 import OtpInput from './components/OtpInput.jsx';
 import Landingpage from './pages/Landingpage.jsx';
 import Login from './pages/Login.jsx';
 import ProfileSettingsPage from './pages/ProfileSettingsPage.jsx';
 import SignUp from './pages/SignUp.jsx';
+import SettingsPage from './pages/settingsPage.jsx';
 
 function App() {
   return (
@@ -14,7 +16,10 @@ function App() {
       <Login />
       <Landingpage/> */}
       <ProfileSettingsPage/>
+    {/* <SettingsPage/> */}
+    {/* < ToastContainer/> */}
     </>
+    
   );
 }
 
