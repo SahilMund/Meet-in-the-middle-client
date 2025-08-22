@@ -1,11 +1,9 @@
-
-
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { IoClose } from "react-icons/io5";
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { IoClose } from 'react-icons/io5';
 
 const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [hasConflict, setHasConflict] = useState(false);
   const [showLocationFields, setShowLocationFields] = useState(false);
@@ -19,7 +17,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
         (meeting) =>
           meeting.date === invite.date &&
           meeting.time === invite.time &&
-          meeting.status === "Confirmed"
+          meeting.status === 'Confirmed'
       );
       setHasConflict(confirmedConflict);
 
@@ -28,7 +26,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
         (meeting) =>
           meeting.date === invite.date &&
           meeting.time === invite.time &&
-          meeting.status === "Pending"
+          meeting.status === 'Pending'
       );
       setPendingConflicts(pending);
 
@@ -62,7 +60,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
         );
         const data = await res.json();
-        setQuery(data.display_name || "Current Location");
+        setQuery(data.display_name || 'Current Location');
       });
     }
   };
@@ -94,14 +92,14 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
             </button>
 
             <h2 className="text-lg font-bold mb-4">
-              Accept Invitation {invite?.title ? ` - ${invite.title}` : ""}
+              Accept Invitation {invite?.title ? ` - ${invite.title}` : ''}
             </h2>
 
             {/* Conflict Message (Confirmed Meetings) */}
             {hasConflict && !showLocationFields ? (
               <div className="bg-yellow-100 text-yellow-800 p-3 rounded mb-4">
-                ⚠️ You already have a meeting scheduled at{" "}
-                {invite?.date}, {invite?.time}. Do you want to continue?
+                ⚠️ You already have a meeting scheduled at {invite?.date},{' '}
+                {invite?.time}. Do you want to continue?
                 <div className="flex justify-end gap-3 mt-2">
                   <button
                     onClick={() => setShowLocationFields(true)}
@@ -117,50 +115,53 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
                   </button>
                 </div>
               </div>
-            ) : showLocationFields && (
-              <>
-                {/* Current Location */}
-                <button
-                  onClick={useCurrentLocation}
-                  className="w-full bg-blue-500 text-white py-2 rounded mb-4 hover:bg-blue-600"
-                >
-                  Use My Current Location
-                </button>
+            ) : (
+              showLocationFields && (
+                <>
+                  {/* Current Location */}
+                  <button
+                    onClick={useCurrentLocation}
+                    className="w-full bg-blue-500 text-white py-2 rounded mb-4 hover:bg-blue-600"
+                  >
+                    Use My Current Location
+                  </button>
 
-                {/* Location Search */}
-                <input
-                  type="text"
-                  value={query}
-                  onChange={handleSearch}
-                  placeholder="Enter your location"
-                  className="w-full border p-2 rounded mb-2"
-                />
+                  {/* Location Search */}
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={handleSearch}
+                    placeholder="Enter your location"
+                    className="w-full border p-2 rounded mb-2"
+                  />
 
-                {/* Suggestions */}
-                {suggestions.length > 0 && (
-                  <ul className="border rounded max-h-40 overflow-y-auto">
-                    {suggestions.map((s, i) => (
-                      <li
-                        key={i}
-                        className="p-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => {
-                          setQuery(s.display_name);
-                          setSuggestions([]);
-                        }}
-                      >
-                        {s.display_name}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </>
+                  {/* Suggestions */}
+                  {suggestions.length > 0 && (
+                    <ul className="border rounded max-h-40 overflow-y-auto">
+                      {suggestions.map((s, i) => (
+                        <li
+                          key={i}
+                          className="p-2 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => {
+                            setQuery(s.display_name);
+                            setSuggestions([]);
+                          }}
+                        >
+                          {s.display_name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              )
             )}
 
             {/* Pending Conflicts Section */}
             {pendingConflicts.length > 0 && (
               <div className="mt-4 p-3 border rounded bg-gray-50">
                 <h3 className="font-semibold text-red-600 mb-2">
-                  ⚠️ You also have other meetings at the same time that are still pending:
+                  ⚠️ You also have other meetings at the same time that are
+                  still pending:
                 </h3>
                 <ul className="space-y-2">
                   {pendingConflicts.map((meeting, idx) => (
