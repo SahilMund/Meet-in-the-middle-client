@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { sendOtp, verifyOTP } from '../services/authentication';
+import OtpInput from '../components/OtpInput';
 
 const OtpVerificationPage = () => {
   const location = useLocation();
@@ -9,19 +10,17 @@ const OtpVerificationPage = () => {
 
   // Get data passed from previous page
   const { data } = location.state || {};
-  const [otp, setOtp] = useState('');
+  
 
-  const handleVerify = (e) => {
-    e.preventDefault();
-
+  const handleVerify = (otp) => {
+    console.log(otp.length)
     if (otp.length !== 6) {
       toast.error('Please enter a valid 6-digit OTP');
       return;
     }
-    verifyotp();
+    verifyotp(otp);
   };
-  async function verifyotp() {
-    console.log(otp)
+  async function verifyotp(otp) {
     try {
       const res = await verifyOTP({ ...data, otp });
       toast.success(res.data.message);
@@ -57,8 +56,9 @@ const OtpVerificationPage = () => {
             {data.email || 'your email'}
           </span>
         </p>
+        <OtpInput size={6} onSubmit={(otp)=>handleVerify(otp)}/>
 
-        <form onSubmit={handleVerify} className="mt-6 space-y-4">
+        {/* <form onSubmit={handleVerify} className="mt-6 space-y-4">
           <input
             type="text"
             value={otp}
@@ -74,7 +74,7 @@ const OtpVerificationPage = () => {
           >
             Verify OTP
           </button>
-        </form>
+        </form> */}
 
         <div className="flex justify-between items-center mt-4 text-sm text-gray-400">
           <button

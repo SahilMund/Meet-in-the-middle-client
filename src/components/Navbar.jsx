@@ -1,17 +1,33 @@
-
-import React, { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import locationimage from '../assets/locationimage.png'
-import { MdNotificationsActive } from "react-icons/md";
-import { GoPerson } from "react-icons/go";
-import { IoSettingsOutline } from "react-icons/io5";
-import { PiSignOutBold } from "react-icons/pi";
-import { IoMdMenu } from "react-icons/io";
-
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import locationimage from '../assets/locationimage.png';
+import { MdNotificationsActive } from 'react-icons/md';
+import { GoPerson } from 'react-icons/go';
+import { IoSettingsOutline } from 'react-icons/io5';
+import { PiSignOutBold } from 'react-icons/pi';
+import { IoMdMenu } from 'react-icons/io';
+import { logoutUser } from '../services/authentication';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleSignOut() {
+    try {
+      setIsLogoutLoading(true);
+      const data = await logoutUser();
+      toast.success(data.data.message);
+      setTimeout(()=>navigate('/login'),1000);
+    } catch (error) {
+      toast.error(error.response.message || 'Failed Action');
+    } finally {
+      setIsLogoutLoading(false);
+    }
+  }
 
   return (
     <div className="relative">
@@ -36,7 +52,7 @@ const Navbar = () => {
           >
             Dashboard
           </motion.button>
-           <motion.button
+          <motion.button
             whileHover={{ scale: 1.05 }}
             className="px-4 py-2 cursor-pointer hover:bg-[#FF4C61] hover:text-white  rounded-md"
           >
@@ -96,7 +112,10 @@ const Navbar = () => {
                 <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-5">
                   <IoSettingsOutline /> Settings
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500 flex gap-5">
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500 flex gap-5"
+                  onClick={handleSignOut}
+                >
                   <PiSignOutBold /> Sign Out
                 </li>
               </ul>
@@ -110,13 +129,15 @@ const Navbar = () => {
         {isMobileMenuOpen && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
+            animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="absolute top-full left-0 w-full bg-white shadow-md flex flex-col md:hidden overflow-hidden z-40"
           >
             <button className="px-4 py-2 hover:bg-gray-100">Dashboard</button>
-            <button className="px-4 py-2 hover:bg-gray-100">Create Meeting</button>
+            <button className="px-4 py-2 hover:bg-gray-100">
+              Create Meeting
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
@@ -125,5 +146,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
