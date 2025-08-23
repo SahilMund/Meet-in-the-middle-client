@@ -8,26 +8,43 @@ import { PiSignOutBold } from 'react-icons/pi';
 import { IoMdMenu } from 'react-icons/io';
 import { logoutUser } from '../services/authentication';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // ✅ check current route
 
   async function handleSignOut() {
     try {
       setIsLogoutLoading(true);
       const data = await logoutUser();
       toast.success(data.data.message);
-      setTimeout(()=>navigate('/login'),1000);
+      setTimeout(() => navigate('/login'), 1000);
     } catch (error) {
       toast.error(error.response.message || 'Failed Action');
     } finally {
       setIsLogoutLoading(false);
     }
   }
+
+  // ✅ helper for active styling
+  const getButtonClasses = (path) =>
+    `px-4 py-2 cursor-pointer rounded-md ${
+      location.pathname === path
+        ? 'bg-[#FF4C61] text-white' // active
+        : 'hover:bg-[#FF4C61] hover:text-white'
+    }`;
+  const handleSettingsClick = () => {
+    setOpen(false);
+    navigate('/settings')
+  };
+  const handleProfileClick = () => {
+    setOpen(false);
+    navigate('/profileSettings');
+  };
 
   return (
     <div className="relative">
@@ -48,19 +65,22 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-4">
           <motion.button
             whileHover={{ scale: 1.05 }}
-            className="px-4 py-2 cursor-pointer hover:bg-[#FF4C61] hover:text-white  rounded-md"
+            className={getButtonClasses('/home')}
+            onClick={() => navigate('/home')}
           >
             Dashboard
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
-            className="px-4 py-2 cursor-pointer hover:bg-[#FF4C61] hover:text-white  rounded-md"
+            className={getButtonClasses('/invitations')}
+            onClick={() => navigate('/invitations')}
           >
             Your Invitations
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
-            className="px-4 py-2 cursor-pointer hover:bg-[#FF4C61] hover:text-white rounded-md"
+            className={getButtonClasses('/createmeeting')}
+            onClick={() => navigate('/createmeeting')}
           >
             Create Meeting
           </motion.button>
@@ -106,10 +126,16 @@ const Navbar = () => {
               className="absolute top-full right-6 mt-2 w-45 bg-white shadow-lg rounded-md border z-50"
             >
               <ul className="flex flex-col">
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-5">
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-5"
+                  onClick={handleProfileClick}
+                >
                   <GoPerson /> Profile
                 </li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-5">
+                <li
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-5"
+                  onClick={handleSettingsClick}
+                >
                   <IoSettingsOutline /> Settings
                 </li>
                 <li
@@ -134,8 +160,22 @@ const Navbar = () => {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="absolute top-full left-0 w-full bg-white shadow-md flex flex-col md:hidden overflow-hidden z-40"
           >
-            <button className="px-4 py-2 hover:bg-gray-100">Dashboard</button>
-            <button className="px-4 py-2 hover:bg-gray-100">
+            <button
+              className={getButtonClasses('/home')}
+              onClick={() => navigate('/home')}
+            >
+              Dashboard
+            </button>
+            <button
+              className={getButtonClasses('/invitations')}
+              onClick={() => navigate('/invitations')}
+            >
+              Your Invitations
+            </button>
+            <button
+              className={getButtonClasses('/createmeeting')}
+              onClick={() => navigate('/createmeeting')}
+            >
               Create Meeting
             </button>
           </motion.div>

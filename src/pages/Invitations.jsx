@@ -59,8 +59,6 @@ const [selectedInvite, setSelectedInvite] = useState(null);
 
   return (
     <div>
-      <Navbar />
-
       <div className="p-4 mt-4">
         <h2 className="text-xl font-bold mb-4">
           Pending Invitations ({pendingInvitations.length})

@@ -1,48 +1,45 @@
-// import "./App.css";
-import { ToastContainer } from 'react-toastify';
-import Navbar from './components/Navbar.jsx';
-import WithAuth from './hoc/WithAuth.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import Invitations from './pages/Invitations.jsx';
-import Landingpage from './pages/Landingpage.jsx';
-import Login from './pages/Login.jsx';
-import OtpVerificationPage from './pages/OtpVerificarionPage.jsx';
-import SignUp from './pages/SignUp.jsx';
-import { MeetingForm } from './pages/MeetingForm.jsx';
-import { Route, Routes } from 'react-router-dom';
+import Navbar from "./components/Navbar.jsx";
+import WithAuth from "./hoc/WithAuth.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Invitations from "./pages/Invitations.jsx";
+import Landingpage from "./pages/Landingpage.jsx";
+import Login from "./pages/Login.jsx";
+import OtpVerificationPage from "./pages/OtpVerificarionPage.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import { MeetingForm } from "./pages/MeetingForm.jsx";
+
+import { Routes, Route, Outlet } from "react-router-dom";
+import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
+import SettingsPage from "./pages/SettingsPage.jsx";
+
+function ProtectedLayout() {
+  return (
+    <WithAuth>
+      <Navbar />
+      <Outlet /> {/* All protected pages will render here */}
+    </WithAuth>
+  );
+}
 
 function App() {
   return (
     <>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Landingpage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/invitations" element={<Invitations />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/otp" element={<OtpVerificationPage />} />
-        <Route path="/createmeeting" element={<MeetingForm />} />
-        <Route
-          path="/home"
-          element={
-            <WithAuth>
-              <Navbar />
-              <Dashboard />
-            </WithAuth>
-          }
-        />
+
+        {/* Protected routes with Navbar */}
+        <Route element={<ProtectedLayout />}>
+          <Route path="/home" element={<Dashboard />} />
+          <Route path="/invitations" element={<Invitations />} />
+          <Route path="/createmeeting" element={<MeetingForm />} />
+          <Route path="/profileSettings" element={<ProfileSettingsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Route>
       </Routes>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={true}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored" // "light", "dark", or "colored"
-      />
     </>
   );
 }
