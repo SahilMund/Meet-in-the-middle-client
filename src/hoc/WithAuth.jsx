@@ -1,26 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { getUserData } from "../services/authentication";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { getUserData } from '../services/authentication';
+import { useNavigate } from 'react-router-dom';
+import { setAuthenticated } from '../toolkit/authenticationSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const WithAuth = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [authenticated, setAuthenticated] = useState(false);
+  const dispatch = useDispatch();
+  const { authenticated } = useSelector((store) => store.authSlice);
 
   useEffect(() => {
     let isMounted = true; // ✅ prevent state updates if component unmounts
-
+    
     const checkAuth = async () => {
       try {
         const user = await getUserData();
         if (isMounted && user) {
-          setAuthenticated(true);
+          dispatch(setAuthenticated(true));
         } else {
-          navigate("/login", { replace: true });
+          navigate('/login', { replace: true });
         }
       } catch (err) {
         if (isMounted) {
-          navigate("/login", { replace: true });
+          navigate('/login', { replace: true });
         }
       } finally {
         if (isMounted) setLoading(false);
