@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import locationimage from '../../assets/locationimage.png';
-import { Moon, Menu, X } from 'lucide-react';
+// import { Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+
 const HeroSection = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigator = useNavigate();
 
   return (
     <div className="min-h-[90vh] flex flex-col p-6">
@@ -16,37 +19,43 @@ const HeroSection = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-4">
-          {/* <button className="p-2 rounded-full cursor-pointer hover:bg-gray-100">
-            <Moon size={20} />
-          </button> */}
-          <button className="text-gray-700 cursor-pointer hover:text-[#FF4C61] font-medium">
+        <div className="hidden sm:flex items-center gap-4">
+          <button
+            className="text-gray-700 cursor-pointer hover:text-[#FF4C61] font-medium"
+            onClick={() => navigator('/login')}
+          >
             Sign In
           </button>
-          <button className="bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition">
+          <button
+            className="bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
+            onClick={() => navigator('/home')}
+          >
             Get Started
           </button>
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+          className="sm:hidden p-2 rounded-lg hover:bg-gray-100"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {/* {menuOpen ? <X size={24} /> : <Menu size={24} />} */}
         </button>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {menuOpen && (
-        <div className="flex flex-col gap-3 mt-4 md:hidden">
-          {/* <button className="p-2 rounded-full hover:bg-[#FF4C61] w-fit">
-            <Moon size={20} />
-          </button> */}
-          <button className="text-gray-700 hover:text-[#FF4C61] font-medium">
+        <div className="flex flex-col gap-3 mt-4 sm:hidden w-full">
+          <button
+            className="w-full text-gray-700 hover:text-[#FF4C61] font-medium border border-gray-300 py-2 rounded-lg transition"
+            onClick={() => navigator('/login')}
+          >
             Sign In
           </button>
-          <button className="bg-[#FF4C61] hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition w-fit">
+          <button
+            className="w-full bg-[#FF4C61] hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
+            onClick={() => navigator('/home')}
+          >
             Get Started
           </button>
         </div>
@@ -90,6 +99,7 @@ const HeroSection = () => {
           }}
           whileHover={{ scale: 1.05 }}
           className="mt-6 bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-8 py-3 rounded-lg text-lg font-medium shadow-md transition"
+          onClick={() => navigator('/home')}
         >
           Start Meeting Plan
         </motion.button>
