@@ -29,7 +29,7 @@ export default function MeetingList() {
   });
 
   const statusColors = {
-    Confirmed: "bg-green-100 text-green-800 border-2 border-green-300",
+    accepted: "bg-green-100 text-green-800 border-2 border-green-300",
     pending: "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
     Voting: "bg-blue-100 text-blue-800 border-2 border-blue-300",
   };
@@ -45,48 +45,55 @@ export default function MeetingList() {
    async function handleGetMyMeetings() {
   try {
     const res = await getMymeetings({ pageNo: 1, items: 10 });
-    setMyMeetings(
-      res.data.data.meetings.map((e) => {
-        const createdDate = new Date(e.scheduledAt);
-        const endsAt = new Date(e.endsAt);
-        const ms = endsAt - createdDate;
+   setMyMeetings(
+  res.data.data.meetings.map((e) => {
+    const createdDate = new Date(e.scheduledAt);
+    const endsAt = new Date(e.endsAt);
+    const ms = endsAt - createdDate;
 
-        // Duration calculation
-        const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+    // Duration calculation
+    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
 
-        // Build duration string (skip 0 values)
-        const parts = [];
-        if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
-        if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
-        if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+    const parts = [];
+    if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+    if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+    if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+    const duration = parts.join(" ") || "0 minutes";
 
-        const duration = parts.join(" ") || "0 minutes";
+    const date = createdDate.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    const time = createdDate.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-        // Nicely formatted date & time
-        const date = createdDate.toLocaleDateString("en-IN", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        });
-        const time = createdDate.toLocaleTimeString("en-IN", {
-          hour: "2-digit",
-          minute: "2-digit",
-        });
+    // ✅ Safely extract participants
+    const people = (e.participants || [])
+      .map((ele) => ele?.user?.name)
+      .filter(Boolean);
 
-        return {
-          title: e.title,
-          description: e.description,
-          date,
-          time,
-          duration,
-          Place: e?.locationSuggestion?.placeName || "Pending",
-          people: e.participants.map((ele)=>(ele.user.name)),
-          status:  e?.participants.filter(ele=>ele.user._id === userId)[0].status,
-        };
-      })
+    const myParticipant = (e.participants || []).find(
+      (ele) => ele?.user?._id === userId
     );
+
+    return {
+      title: e.title,
+      description: e.description,
+      date,
+      time,
+      duration,
+      Place: e?.locationSuggestion?.placeName || "Pending",
+      people,
+      status: myParticipant?.status || "pending", // fallback
+    };
+  })
+);
+
   } catch (error) {
     toast.error(error?.response?.data?.message || "Failed to Fetch");
   }
