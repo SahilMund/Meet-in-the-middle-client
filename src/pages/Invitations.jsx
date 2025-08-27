@@ -1,18 +1,25 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect,useState, lazy, Suspense } from "react";
+
 import { FaUsers } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
 import { IoClose } from "react-icons/io5";
-import ConfirmationModel from "../components/ConfirmationModel";
-import LocationModel from "../components/LocationModel";
+const ConfirmationModel = lazy(() => import("../components/ConfirmationModel"));
+const LocationModel = lazy(() => import("../components/LocationModel"));
+// import ConfirmationModel from "../components/ConfirmationModel";
+// import LocationModel from "../components/LocationModel";
 import { myMeetings } from "../MyMeetings";
+
 import { getPendingMeetings } from "../services/meetings";
 import { toast } from "react-toastify";
+
 
 const Invitations = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedInvite, setSelectedInvite] = useState(null);
+
   const [pendingInvitations, setPendingInvitations] = useState([]);
   
   const getInitials = (name) => {
@@ -22,6 +29,7 @@ const Invitations = () => {
       .join("")
       .toUpperCase();
   };
+
   useEffect(() => {
     async function getPendingMeets() {
       const res = await getPendingMeetings({ pageNo: 1, items: 10 });
@@ -30,6 +38,7 @@ const Invitations = () => {
     }
     getPendingMeets();
   }, []);
+
   return (
     <div>
       <div className="p-4 mt-4">
@@ -94,18 +103,27 @@ const Invitations = () => {
       </div>
 
       {/* Decline Modal */}
-      <ConfirmationModel
-        showDeclineModal={showDeclineModal}
-        setShowDeclineModal={setShowDeclineModal}
-      />
 
-      {/* Accept Modal */}
-      <LocationModel
-        isOpen={showAcceptModal}
-        onClose={() => setShowAcceptModal(false)}
-        invite={selectedInvite}
-        myMeetings={myMeetings}
-      />
+      <Suspense>
+        {showDeclineModal && (
+          <ConfirmationModel
+            showDeclineModal={showDeclineModal}
+            setShowDeclineModal={setShowDeclineModal}
+          />
+        )}
+
+        {/* Accept Modal */}
+        {showAcceptModal && (
+          <LocationModel
+            isOpen={showAcceptModal}
+            onClose={() => setShowAcceptModal(false)}
+            invite={selectedInvite}
+            myMeetings={myMeetings}
+          />
+        )}
+      </Suspense>
+
+
     </div>
   );
 };

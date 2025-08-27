@@ -3,13 +3,15 @@ import MeetingInfo from "../components/meeting-components/MeetingInfo";
 import AddParticipant from "../components/meeting-components/AddParticipant";
 import MeetingSummary from "../components/meeting-components/MeetingSummary";
 import AdminAddress from "../components/meeting-components/AdminAddress";
+
 import { createMeeting } from "../services/meetings";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export const MeetingForm = () => {
+const MeetingForm = () => {
 
   const navigate = useNavigate();
+
   const [meetingData, setMeetingData] = useState({
     info: { title: "", description: "", startDate: "", endDate: "" },
     participants: [],
@@ -167,6 +169,7 @@ export const MeetingForm = () => {
     if (!valid) return;
     setCurrentStep(Math.min(currentStep + 1, items.length));
   };
+
   const handleClick = async (e) => {
     // meetingData
     e.preventDefault(); // ✅ explicitly stop page refresh
@@ -377,3 +380,4 @@ export const MeetingForm = () => {
     </div>
   );
 };
+export default MeetingForm;
