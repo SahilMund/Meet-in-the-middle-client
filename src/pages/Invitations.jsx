@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
@@ -7,46 +6,15 @@ import { IoClose } from "react-icons/io5";
 import ConfirmationModel from "../components/ConfirmationModel";
 import LocationModel from "../components/LocationModel";
 import { myMeetings } from "../MyMeetings";
-
+import { getPendingMeetings } from "../services/meetings";
+import { toast } from "react-toastify";
 
 const Invitations = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
-const [selectedInvite, setSelectedInvite] = useState(null);
-
-
-
+  const [selectedInvite, setSelectedInvite] = useState(null);
+  const [pendingInvitations, setPendingInvitations] = useState([]);
   
-
-  
-
-  const pendingInvitations = [
-    {
-      title: "Marketing Strategy session",
-      name: "Kushal Deep",
-      Description: "Lets discuss Q1 marketing plans and budget allocation.",
-      people: 8,
-      date: "Aug 15",
-      time: "3:00PM",
-    },
-    {
-      title: "Just Chill",
-      name: "Kushal Deep",
-      Description: "Lets hangout and go for a weekend ride.",
-      people: 4,
-      date: "Aug 24",
-      time: "6:00AM",
-    },
-    {
-      title: "Just Chill chill ",
-      name: "Kushal Deep",
-      Description: "Lets hangout and go for a weekend ride.",
-      people: 4,
-      date: "Aug 31",
-      time: "4:00AM",
-    },
-  ];
-
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -54,9 +22,14 @@ const [selectedInvite, setSelectedInvite] = useState(null);
       .join("")
       .toUpperCase();
   };
-
-
-
+  useEffect(() => {
+    async function getPendingMeets() {
+      const res = await getPendingMeetings({ pageNo: 1, items: 10 });
+      toast.success(res.data.message);
+      setPendingInvitations(res.data.data.meetings)
+    }
+    getPendingMeets();
+  }, []);
   return (
     <div>
       <div className="p-4 mt-4">
@@ -102,8 +75,8 @@ const [selectedInvite, setSelectedInvite] = useState(null);
                 <button
                   className="flex-1 cursor-pointer bg-blue-500 text-white py-1.5 rounded-lg hover:bg-green-600"
                   onClick={() => {
-                    setSelectedInvite(invite)
-                    setShowAcceptModal(true)
+                    setSelectedInvite(invite);
+                    setShowAcceptModal(true);
                   }}
                 >
                   Accept
@@ -121,10 +94,18 @@ const [selectedInvite, setSelectedInvite] = useState(null);
       </div>
 
       {/* Decline Modal */}
-     <ConfirmationModel showDeclineModal={showDeclineModal} setShowDeclineModal={setShowDeclineModal}/>
+      <ConfirmationModel
+        showDeclineModal={showDeclineModal}
+        setShowDeclineModal={setShowDeclineModal}
+      />
 
       {/* Accept Modal */}
-     <LocationModel isOpen={showAcceptModal} onClose={()=>setShowAcceptModal(false)} invite={selectedInvite} myMeetings={myMeetings}/>
+      <LocationModel
+        isOpen={showAcceptModal}
+        onClose={() => setShowAcceptModal(false)}
+        invite={selectedInvite}
+        myMeetings={myMeetings}
+      />
     </div>
   );
 };

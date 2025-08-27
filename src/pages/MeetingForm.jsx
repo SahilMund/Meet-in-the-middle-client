@@ -189,7 +189,7 @@ export const MeetingForm = () => {
       toast.success(res.data.message);
       setTimeout(() => {
         navigate("/home");
-      }, 3000);
+      }, 1000);
     } catch (err) {
       console.log(err);
       toast.error(err?.response?.data?.message || "create meeting failed");
@@ -368,7 +368,7 @@ export const MeetingForm = () => {
                     />
                   </svg>
                 )}
-                Schedule Meetingii
+                Schedule Meeting
               </button>
             )}
           </div>

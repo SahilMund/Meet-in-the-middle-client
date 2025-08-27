@@ -10,9 +10,11 @@ import { IoMdGrid, IoMdTime } from "react-icons/io";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { getMymeetings } from "../services/meetings";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 // import { myMeetings } from "../MyMeetings";
 
 export default function MeetingList() {
+  const {userId} = useSelector(store=>store.authSlice)
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isGrid, setIsGrid] = useState(false);
@@ -27,9 +29,9 @@ export default function MeetingList() {
   });
 
   const statusColors = {
-    Confirmed: "bg-green-100 text-green-800",
-    Pending: "bg-yellow-100 text-yellow-800",
-    Voting: "bg-blue-100 text-blue-800",
+    Confirmed: "bg-green-100 text-green-800 border-2 border-green-300",
+    pending: "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
+    Voting: "bg-blue-100 text-blue-800 border-2 border-blue-300",
   };
 
   const getInitials = (name) => {
@@ -81,7 +83,7 @@ export default function MeetingList() {
           duration,
           Place: e?.locationSuggestion?.placeName || "Pending",
           people: e.participants.map((ele)=>(ele.user.name)),
-          status: "Confirmed",
+          status:  e?.participants.filter(ele=>ele.user._id === userId)[0].status,
         };
       })
     );
@@ -166,7 +168,7 @@ export default function MeetingList() {
                   statusColors[meeting.status] || "bg-gray-100 text-gray-800"
                 }`}
               >
-                {meeting.status}
+                {meeting.status[0].toUpperCase()+meeting.status.slice(1)}
               </span>
 
               {/* Title & Description */}

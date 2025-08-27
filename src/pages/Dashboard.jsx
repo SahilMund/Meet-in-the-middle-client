@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import MeetingCard from "../components/MeetingCard";
 import { motion } from "framer-motion";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaCalendarAlt, FaRegCheckCircle } from "react-icons/fa";
 import { IoPersonOutline } from "react-icons/io5";
 import { FaRegStar } from "react-icons/fa";
@@ -9,12 +11,15 @@ import { MdHistory } from "react-icons/md";
 import { FaUsers } from "react-icons/fa";
 import { AiOutlineStock } from "react-icons/ai";
 import InfoCard from "../components/InfoCard";
-import { dashBoardStats } from "../services/meetings";
+import { dashBoardStats, getUpcomingMeetings } from "../services/meetings";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
-  const navigate = useNavigate()
+  const { userId } = useSelector((store) => store.authSlice);
+  const [upcomingMeetings, setUpcomingMeetings] = useState([]);
+  const navigate = useNavigate();
   const [updatesNumbers, setUpdatesNumbers] = useState({
     upcomingmeetings: null,
     pendingInvations: null,
@@ -66,39 +71,51 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    async function fetchDashBoard(){
-     try {
-       const res = await dashBoardStats();
-       console.log(res)
-      toast.success(res.message);
-      setUpdatesNumbers(res.data.data);
-     } catch (error) {
-      toast.error(error?.respose?.data?.message ||"Error Dash Board Fetch")
-     }
-    }
-    fetchDashBoard()
-  }, []);
+    async function fetchDashBoard() {
+      try {
+        const res = await dashBoardStats();
+        const upRes = await getUpcomingMeetings({ items: 5, pageNo: 1 });
 
-  //upcoming Meetings Dummy data
-  const upcomingMeetings = [
-    {
-      title: "Team StandUp",
-      date: "Today",
-      time: "11.18PM",
-      people: 3,
-      status: "confirmed",
-      place: "Central park cafe",
-    },
-    {
-      title: "Team StandUp",
-      date: "Today",
-      time: "11.18PM",
-      people: 3,
-      status: "confirmed",
-      place: "Central park cafe",
-    },
-  ];
-  // pending invitations dummy data
+        setUpcomingMeetings(
+          upRes.data.data.meetings.map((ele) => {
+            const scheduleAt = new Date(ele.scheduledAt);
+
+            // Format date
+            let dateLabel = moment(scheduleAt).isSame(moment(), "day")
+              ? "Today"
+              : moment(scheduleAt).format("DD MMM");
+
+            // Format time
+            const timeLabel = moment(scheduleAt).format("hh:mm A"); // e.g., 11:18 PM
+
+            // People count
+            const peopleCount = ele.participants.length;
+
+            // Status for current user
+            const myStatus =
+              ele.participants.find((itm) => itm.user === userId)?.status ||
+              "Pending";
+
+            return {
+              title: ele.title || "Untitled Meeting",
+              date: dateLabel,
+              time: timeLabel,
+              people: peopleCount,
+              status: myStatus,
+              place: ele.locationSuggestion?.placeName || "Pending",
+            };
+          })
+        );
+
+        toast.success(res.message);
+        setUpdatesNumbers(res.data.data);
+      } catch (error) {
+        toast.error(error?.response?.data?.message || "Error Dash Board Fetch");
+      }
+    }
+
+    fetchDashBoard();
+  }, []);
 
   return (
     <div className="w-screen">
@@ -126,7 +143,7 @@ const Dashboard = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="text-[#0b0626] bg-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-100 transition"
-            onClick={()=>navigate('/createmeeting')}
+            onClick={() => navigate("/createmeeting")}
           >
             + Create Meeting
           </motion.button>
@@ -156,7 +173,8 @@ const Dashboard = () => {
                     </p>
                     <p className="text-sm text-gray-500 flex gap-2">
                       <IoPersonOutline className="mt-1" />
-                      {item.people} • {item.place}
+                      {item.people} <FaMapMarkerAlt className="mt-1" />{" "}
+                      {item.place}
                     </p>
                   </div>
                 </div>
