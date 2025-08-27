@@ -1,25 +1,25 @@
-import { useRef, useState } from 'react';
-import MeetingInfo from '../components/meeting-components/MeetingInfo';
-import AddParticipant from '../components/meeting-components/AddParticipant';
-import MeetingSummary from '../components/meeting-components/MeetingSummary';
-import AdminAddress from '../components/meeting-components/AdminAddress';
+import { useRef, useState } from "react";
+import MeetingInfo from "../components/meeting-components/MeetingInfo";
+import AddParticipant from "../components/meeting-components/AddParticipant";
+import MeetingSummary from "../components/meeting-components/MeetingSummary";
+import AdminAddress from "../components/meeting-components/AdminAddress";
 
-export const MeetingForm = () => {
+const MeetingForm = () => {
   const [meetingData, setMeetingData] = useState({
-    info: { title: '', description: '', startDate: '', endDate: '' },
+    info: { title: "", description: "", startDate: "", endDate: "" },
     participants: [],
-    adminAddress: { coords: [], address: '' },
+    adminAddress: { coords: [], address: "" },
   });
   const [errors, setErrors] = useState({
-    message: '',
+    message: "",
   });
   const meetingInfoRef = useRef();
   const addParticipantRef = useRef();
   const items = [
     {
       id: 1,
-      name: '1',
-      label: 'Meeting Info',
+      name: "1",
+      label: "Meeting Info",
       component: (meetingData, setMeetingData) => (
         <MeetingInfo
           ref={meetingInfoRef}
@@ -46,8 +46,8 @@ export const MeetingForm = () => {
     },
     {
       id: 2,
-      name: '2',
-      label: 'Participants',
+      name: "2",
+      label: "Participants",
       component: (meetingData, setMeetingData) => (
         <AddParticipant
           ref={addParticipantRef}
@@ -74,8 +74,8 @@ export const MeetingForm = () => {
     },
     {
       id: 3,
-      name: '3',
-      label: 'Venue',
+      name: "3",
+      label: "Venue",
       component: (meetingData) => (
         <AdminAddress
           meetingData={meetingData}
@@ -109,8 +109,8 @@ export const MeetingForm = () => {
     },
     {
       id: 4,
-      name: '4',
-      label: 'Summary',
+      name: "4",
+      label: "Summary",
       component: (meetingData) => <MeetingSummary meetingData={meetingData} />,
       icon: (
         <svg
@@ -153,8 +153,8 @@ export const MeetingForm = () => {
         valid = true;
       }
     }
-    if (currentStep === 3 && meetingData.adminAddress.address === '') {
-      setErrors({ message: 'This field is required' });
+    if (currentStep === 3 && meetingData.adminAddress.address === "") {
+      setErrors({ message: "This field is required" });
       valid = false;
     }
 
@@ -162,7 +162,7 @@ export const MeetingForm = () => {
     setCurrentStep(Math.min(currentStep + 1, items.length));
   };
   const handleClick = () => {
-    console.log('the entire data', meetingData);
+    console.log("the entire data", JSON.stringify(meetingData));
   };
 
   return (
@@ -207,9 +207,9 @@ export const MeetingForm = () => {
                 <div
                   className={`flex items-center justify-center w-12 h-12 rounded-full font-bold transition-all duration-300 ${
                     currentStep >= item.id
-                      ? 'bg-blue-600 text-white shadow-lg transform scale-110'
-                      : 'bg-white border-2 border-gray-300 text-gray-400'
-                  } ${currentStep === item.id ? 'ring-4 ring-blue-100' : ''}`}
+                      ? "bg-blue-600 text-white shadow-lg transform scale-110"
+                      : "bg-white border-2 border-gray-300 text-gray-400"
+                  } ${currentStep === item.id ? "ring-4 ring-blue-100" : ""}`}
                 >
                   {currentStep > item.id ? (
                     <svg
@@ -231,8 +231,8 @@ export const MeetingForm = () => {
                 <span
                   className={`mt-3 text-sm font-medium text-center ${
                     currentStep >= item.id
-                      ? 'text-blue-600 font-semibold'
-                      : 'text-gray-500'
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-500"
                   }`}
                 >
                   {item.label}
@@ -339,3 +339,4 @@ export const MeetingForm = () => {
     </div>
   );
 };
+export default MeetingForm;
