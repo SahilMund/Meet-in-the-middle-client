@@ -4,7 +4,14 @@ import AddParticipant from "../components/meeting-components/AddParticipant";
 import MeetingSummary from "../components/meeting-components/MeetingSummary";
 import AdminAddress from "../components/meeting-components/AdminAddress";
 
+import { createMeeting } from "../services/meetings";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 const MeetingForm = () => {
+
+  const navigate = useNavigate();
+
   const [meetingData, setMeetingData] = useState({
     info: { title: "", description: "", startDate: "", endDate: "" },
     participants: [],
@@ -13,6 +20,7 @@ const MeetingForm = () => {
   const [errors, setErrors] = useState({
     message: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
   const meetingInfoRef = useRef();
   const addParticipantRef = useRef();
   const items = [
@@ -161,8 +169,36 @@ const MeetingForm = () => {
     if (!valid) return;
     setCurrentStep(Math.min(currentStep + 1, items.length));
   };
-  const handleClick = () => {
-    console.log("the entire data", JSON.stringify(meetingData));
+
+  const handleClick = async (e) => {
+    // meetingData
+    e.preventDefault(); // ✅ explicitly stop page refresh
+    const data = {
+      title: meetingData.info.title,
+      description: meetingData.info.description,
+      scheduledAt: meetingData.info.startDate,
+      endsAt: meetingData.info.endDate,
+      participants: meetingData.participants,
+      creatorLocation: {
+        lat: meetingData.adminAddress.coords[0],
+        lng: meetingData.adminAddress.coords[1],
+        placeName: meetingData.adminAddress.address,
+      },
+    };
+    setIsLoading(true);
+    try {
+      console.log(data);
+      const res = await createMeeting(data);
+      toast.success(res.data.message);
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.response?.data?.message || "create meeting failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -313,23 +349,28 @@ const MeetingForm = () => {
               </button>
             ) : (
               <button
-                className="px-6 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 shadow-md transition flex items-center gap-2"
+                disabled={isLoading}
+                className="px-6 py-3 rounded-lg bg-green-600  text-white hover:bg-green-700 shadow-md transition flex items-center gap-2"
                 onClick={handleClick}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+                {isLoading ? (
+                  <div className="border-2 border-green-600 border-b-green-300 rounded-full w-4 h-4 animate-spin" />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                )}
                 Schedule Meeting
               </button>
             )}

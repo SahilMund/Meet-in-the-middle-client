@@ -1,4 +1,6 @@
-import React, { useState, lazy, Suspense } from "react";
+
+import React, { useEffect,useState, lazy, Suspense } from "react";
+
 import { FaUsers } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
@@ -9,38 +11,17 @@ const LocationModel = lazy(() => import("../components/LocationModel"));
 // import LocationModel from "../components/LocationModel";
 import { myMeetings } from "../MyMeetings";
 
+import { getPendingMeetings } from "../services/meetings";
+import { toast } from "react-toastify";
+
+
 const Invitations = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedInvite, setSelectedInvite] = useState(null);
 
-  const pendingInvitations = [
-    {
-      title: "Marketing Strategy session",
-      name: "Kushal Deep",
-      Description: "Lets discuss Q1 marketing plans and budget allocation.",
-      people: 8,
-      date: "Aug 15",
-      time: "3:00PM",
-    },
-    {
-      title: "Just Chill",
-      name: "Kushal Deep",
-      Description: "Lets hangout and go for a weekend ride.",
-      people: 4,
-      date: "Aug 24",
-      time: "6:00AM",
-    },
-    {
-      title: "Just Chill chill ",
-      name: "Kushal Deep",
-      Description: "Lets hangout and go for a weekend ride.",
-      people: 4,
-      date: "Aug 31",
-      time: "4:00AM",
-    },
-  ];
-
+  const [pendingInvitations, setPendingInvitations] = useState([]);
+  
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -48,6 +29,15 @@ const Invitations = () => {
       .join("")
       .toUpperCase();
   };
+
+  useEffect(() => {
+    async function getPendingMeets() {
+      const res = await getPendingMeetings({ pageNo: 1, items: 10 });
+      toast.success(res.data.message);
+      setPendingInvitations(res.data.data.meetings)
+    }
+    getPendingMeets();
+  }, []);
 
   return (
     <div>
@@ -113,6 +103,7 @@ const Invitations = () => {
       </div>
 
       {/* Decline Modal */}
+
       <Suspense>
         {showDeclineModal && (
           <ConfirmationModel
@@ -131,6 +122,8 @@ const Invitations = () => {
           />
         )}
       </Suspense>
+
+
     </div>
   );
 };

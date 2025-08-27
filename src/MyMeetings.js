@@ -6,7 +6,7 @@ export  const myMeetings = [
       time: "3:00PM",
       duration: "1 hour",
       Place: "Starbucks, 5th Avenue",
-      people: ["Virat Kholi", "Salman Khan", "Dhoni Bhai", "Some One", "Some Thing", "Kushal Deep"],
+      people: ["Virat Kholi", "Salman Khan"],
       status: "Confirmed",
     },
     {

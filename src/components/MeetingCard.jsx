@@ -1,28 +1,37 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiFilter, CiSearch } from "react-icons/ci";
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaMapMarkerAlt,
+  FaUserFriends,
+} from "react-icons/fa";
 import { IoMdGrid, IoMdTime } from "react-icons/io";
 import { TfiMenuAlt } from "react-icons/tfi";
-import { myMeetings } from "../MyMeetings";
+import { getMymeetings } from "../services/meetings";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+// import { myMeetings } from "../MyMeetings";
 
 export default function MeetingList() {
+  const {userId} = useSelector(store=>store.authSlice)
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isGrid, setIsGrid] = useState(false);
-
-  
-
+  const [myMeetings, setMyMeetings] = useState([]);
   const filteredMeetings = myMeetings.filter((meeting) => {
-    const matchesSearch = meeting.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "All" || meeting.status === statusFilter;
+    const matchesSearch = meeting.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "All" || meeting.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const statusColors = {
-    Confirmed: "bg-green-100 text-green-800",
-    Pending: "bg-yellow-100 text-yellow-800",
-    Voting: "bg-blue-100 text-blue-800",
+    Confirmed: "bg-green-100 text-green-800 border-2 border-green-300",
+    pending: "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
+    Voting: "bg-blue-100 text-blue-800 border-2 border-blue-300",
   };
 
   const getInitials = (name) => {
@@ -32,7 +41,60 @@ export default function MeetingList() {
       .join("")
       .toUpperCase();
   };
+  useEffect(() => {
+   async function handleGetMyMeetings() {
+  try {
+    const res = await getMymeetings({ pageNo: 1, items: 10 });
+    setMyMeetings(
+      res.data.data.meetings.map((e) => {
+        const createdDate = new Date(e.scheduledAt);
+        const endsAt = new Date(e.endsAt);
+        const ms = endsAt - createdDate;
 
+        // Duration calculation
+        const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+
+        // Build duration string (skip 0 values)
+        const parts = [];
+        if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+        if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+        if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+
+        const duration = parts.join(" ") || "0 minutes";
+
+        // Nicely formatted date & time
+        const date = createdDate.toLocaleDateString("en-IN", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+        const time = createdDate.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        return {
+          title: e.title,
+          description: e.description,
+          date,
+          time,
+          duration,
+          Place: e?.locationSuggestion?.placeName || "Pending",
+          people: e.participants.map((ele)=>(ele.user.name)),
+          status:  e?.participants.filter(ele=>ele.user._id === userId)[0].status,
+        };
+      })
+    );
+  } catch (error) {
+    toast.error(error?.response?.data?.message || "Failed to Fetch");
+  }
+}
+
+
+    handleGetMyMeetings();
+  }, []);
   return (
     <div className="p-5">
       {/* Header */}
@@ -63,7 +125,6 @@ export default function MeetingList() {
               <option value="All">Filter</option>
               <option value="Confirmed">Confirmed</option>
               <option value="Pending">Pending</option>
-              
             </select>
           </div>
 
@@ -75,7 +136,7 @@ export default function MeetingList() {
             size={24}
             onClick={() => setIsGrid(true)}
           />
-           <TfiMenuAlt
+          <TfiMenuAlt
             className={`cursor-pointer hidden md:block ${
               !isGrid ? "text-blue-500" : ""
             }`}
@@ -86,13 +147,12 @@ export default function MeetingList() {
       </div>
 
       {/* Cards Grid */}
-    
-              <div
+
+      <div
         className={`grid gap-4 mt-4 ${
           isGrid ? "md:grid-cols-2" : "grid-cols-1"
         }`}
       >
-
         {filteredMeetings.map((meeting, idx) => {
           const visiblePeople = meeting.people.slice(0, 3);
           const remainingCount = meeting.people.length - 3;
@@ -108,7 +168,7 @@ export default function MeetingList() {
                   statusColors[meeting.status] || "bg-gray-100 text-gray-800"
                 }`}
               >
-                {meeting.status}
+                {meeting.status[0].toUpperCase()+meeting.status.slice(1)}
               </span>
 
               {/* Title & Description */}
