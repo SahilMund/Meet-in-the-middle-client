@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUserData } from '../services/authentication';
 import { useNavigate } from 'react-router-dom';
-import { setAuthenticated } from '../toolkit/authenticationSlice';
+import { setAuthenticated, setUserMail, setuserId ,setName} from '../toolkit/authenticationSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const WithAuth = ({ children }) => {
@@ -17,7 +17,10 @@ const WithAuth = ({ children }) => {
       try {
         const user = await getUserData();
         if (isMounted && user) {
-          dispatch(setAuthenticated(true));
+          dispatch(setAuthenticated(user.data.success));
+          dispatch(setUserMail(user.data.data.email));
+          dispatch(setuserId(user.data.data.id));
+          dispatch(setName(user.data.data.name));
         } else {
           navigate('/login', { replace: true });
         }

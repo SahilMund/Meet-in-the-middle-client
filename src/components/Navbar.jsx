@@ -9,8 +9,10 @@ import { IoMdMenu } from 'react-icons/io';
 import { logoutUser } from '../services/authentication';
 import { toast } from 'react-toastify';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+    const { userName } = useSelector((store) => store.authSlice);
   const [open, setOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
@@ -97,11 +99,11 @@ const Navbar = () => {
             whileHover={{ scale: 1.05 }}
             className="flex items-center space-x-2"
           >
-            <div className="w-8 h-8 flex items-center justify-center bg-gray-300 rounded-full font-semibold text-sm">
-              KD
+            <div className="w-8 h-8 text-indigo-600 flex items-center justify-center bg-gray-300 rounded-full font-semibold text-sm">
+              {userName.slice(0,2).toUpperCase()}
             </div>
             <span className="text-sm font-medium hidden sm:inline">
-              Kushal Deep
+              {userName.toUpperCase()}
             </span>
           </motion.button>
 

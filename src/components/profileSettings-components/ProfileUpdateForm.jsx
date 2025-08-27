@@ -45,11 +45,11 @@ const ProfileUpdateForm = ({
             <div className="relative">
               <MdOutlineMailOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
-                value={isEditing ? formDataUnderEdit.email : formData.email}
+                value={ formData.email}
                 id="email"
                 type="email"
                 placeholder="demo@meetinmiddle.com"
-               className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && 'pointer-events-none'}`}
+               className={`border rounded px-3 py-2 pl-10 w-full pointer-events-none ${isEditing&&'border-2 border-red-400'}`}
                 onChange={(e) =>
                   setFormDataUnderEdit({
                     ...formDataUnderEdit,

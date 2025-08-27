@@ -1,6 +1,10 @@
 import React from 'react';
+import { useSelector } from "react-redux";
+
 
 const MeetingSummary = ({ meetingData }) => {
+    const { userName,userMail } = useSelector((store) => store.authSlice);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
 
@@ -180,8 +184,8 @@ const MeetingSummary = ({ meetingData }) => {
           <div className="space-y-3">
             <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
               <div>
-                <p className="text-gray-800 font-medium">Srikanth</p>
-                <p className="text-gray-500 text-sm">srikanth@example.com</p>
+                <p className="text-gray-800 font-medium">{userName}</p>
+                <p className="text-gray-500 text-sm">{userMail}</p>
               </div>
               <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
                 Organizer
