@@ -7,6 +7,7 @@ import Login from "./pages/Login.jsx";
 import OtpVerificationPage from "./pages/OtpVerificarionPage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import { MeetingForm } from "./pages/MeetingForm.jsx";
+import MyErrorBoundary from "./components/Error boundary/ErrorBoundary.jsx";
 
 import { Routes, Route, Outlet } from "react-router-dom";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
@@ -24,22 +25,24 @@ function ProtectedLayout() {
 function App() {
   return (
     <>
-      <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Landingpage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/otp" element={<OtpVerificationPage />} />
+      <MyErrorBoundary>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/" element={<Landingpage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/otp" element={<OtpVerificationPage />} />
 
-        {/* Protected routes with Navbar */}
-        <Route element={<ProtectedLayout />}>
-          <Route path="/home" element={<Dashboard />} />
-          <Route path="/invitations" element={<Invitations />} />
-          <Route path="/createmeeting" element={<MeetingForm />} />
-          <Route path="/profileSettings" element={<ProfileSettingsPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-        </Route>
-      </Routes>
+          {/* Protected routes with Navbar */}
+          <Route element={<ProtectedLayout />}>
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="/invitations" element={<Invitations />} />
+            <Route path="/createmeeting" element={<MeetingForm />} />
+            <Route path="/profileSettings" element={<ProfileSettingsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+          </Route>
+        </Routes>
+      </MyErrorBoundary>
     </>
   );
 }
