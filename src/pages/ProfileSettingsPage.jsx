@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
-import { BiEdit } from 'react-icons/bi';
-import { MdOutlineLocationOn } from 'react-icons/md';
-import ProfileUpdateForm from '../components/profileSettings-components/profileUpdateForm';
-import MeetingHitoryCompnent from '../components/profileSettings-components/MeetingHitoryCompnent';
-import StatisticsComponent from '../components/profileSettings-components/StatisticsComponent';
-import MeetingCard from '../components/profileSettings-components/MeetingCard';
+import React, { useEffect, useState } from "react";
+import { BiEdit } from "react-icons/bi";
+import { MdOutlineLocationOn } from "react-icons/md";
+import ProfileUpdateForm from "../components/profileSettings-components/profileUpdateForm";
+import MeetingHitoryCompnent from "../components/profileSettings-components/MeetingHitoryCompnent";
+import StatisticsComponent from "../components/profileSettings-components/StatisticsComponent";
+import MeetingCard from "../components/profileSettings-components/MeetingCard";
 // import { FaUserAlt } from 'react-icons/fa';
-import { FaRegUser } from 'react-icons/fa';
-import { CiCalendar } from 'react-icons/ci';
-import { FaRegStar } from 'react-icons/fa';
-import { IoCameraSharp } from 'react-icons/io5';
+import { FaRegUser } from "react-icons/fa";
+import { CiCalendar } from "react-icons/ci";
+import { FaRegStar } from "react-icons/fa";
+import { IoCameraSharp } from "react-icons/io5";
 
 const ProfileSettingsPage = () => {
   const [currWindow, setCurrWindow] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
+  const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
-    fullName: 'vishnu',
-    email: 'vishnu@123.com',
-    phoneNumber: '939265',
-    location: 'hyd',
-    bio: 'hi evry one',
+    fullName: "vishnu",
+    email: "vishnu@123.com",
+    phoneNumber: "939265",
+    location: "hyd",
+    bio: "hi evry one",
+    avatar: "",
   });
+
   const [formDataUnderEdit, setFormDataUnderEdit] = useState(
     Object.assign({}, formData)
   );
@@ -29,6 +32,13 @@ const ProfileSettingsPage = () => {
   const handleClick = () => {
     fileInputRef.current?.click();
   };
+  const handleFileUpload = (e) => {
+    const image = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => void (setPreview(reader), console.log(image));
+    reader.readAsDataURL(image);
+  };
+  useEffect(() => console.log(preview), [preview]);
 
   return (
     <div className="max-w-3xl mx-auto p-3 select-none">
@@ -44,25 +54,28 @@ const ProfileSettingsPage = () => {
       <div className="bg-white rounded-lg shadow p-6 flex flex-col sm:flex-row items-center w-full">
         <div className="flex flex-col sm:flex-row items-center w-full gap-5">
           <div
-            className={`rounded-full bg-indigo-500 w-20 h-20 flex flex-col items-center justify-center text-2xl text-white mb-4 sm:mb-0 relative ${isEditing && 'cursor-pointer'}`}
+            className={`rounded-full bg-indigo-500 w-20 h-20 flex flex-col items-center justify-center text-2xl text-white mb-4 sm:mb-0 relative ${isEditing && "cursor-pointer"}`}
             onClick={handleClick}
           >
-            <div>DU</div>
+            {preview ? (
+              <img
+                src={preview?.result}
+                className="w-18 h-18 rounded-full"
+                alt="DP"
+              />
+            ) : (
+              <div>DU</div>
+            )}
             {isEditing && (
               <>
                 <input
                   type="file"
                   ref={fileInputRef}
                   className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      console.log('Selected file:', file.name);
-                      // Add preview or upload logic here
-                    }
-                  }}
+                  onChange={handleFileUpload}
+                  accept="image/*"
                 />
-                <IoCameraSharp className="absolute bottom-1 right-1/2 translate-x-1/2 text-[rgba(200,200,200,0.5)]" />
+                <IoCameraSharp className="absolute bottom-1 right-1/2 translate-x-1/2 text-black" />
               </>
             )}
           </div>
@@ -118,17 +131,17 @@ const ProfileSettingsPage = () => {
         {/* Tabs */}
         <div className="flex justify-start gap-4 sm:gap-10 mb-6">
           <button
-            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 0 ? 'text-rose-400 border-b-2' : 'text-black'}`}
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 0 ? "text-rose-400 border-b-2" : "text-black"}`}
             type="button"
             onClick={() => setCurrWindow(0)}
           >
             {/* <FaUserAlt /> */}
-            <FaRegUser/>
+            <FaRegUser />
             Profile
           </button>
 
           <button
-            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 1 ? 'text-rose-400 border-b-2' : 'text-black'}`}
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 1 ? "text-rose-400 border-b-2" : "text-black"}`}
             type="button"
             onClick={() => setCurrWindow(1)}
           >
@@ -137,7 +150,7 @@ const ProfileSettingsPage = () => {
           </button>
 
           <button
-            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 2 ? 'text-rose-400 border-b-2' : 'text-black'}`}
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 2 ? "text-rose-400 border-b-2" : "text-black"}`}
             type="button"
             onClick={() => setCurrWindow(2)}
           >

@@ -11,6 +11,7 @@ import { TfiMenuAlt } from "react-icons/tfi";
 import { getMymeetings } from "../services/meetings";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 // import { myMeetings } from "../MyMeetings";
 
 export default function MeetingList() {
@@ -19,6 +20,7 @@ export default function MeetingList() {
   const [statusFilter, setStatusFilter] = useState("All");
   const [isGrid, setIsGrid] = useState(false);
   const [myMeetings, setMyMeetings] = useState([]);
+  const navigate = useNavigate();
   const filteredMeetings = myMeetings.filter((meeting) => {
     const matchesSearch = meeting.title
       .toLowerCase()
@@ -228,7 +230,7 @@ export default function MeetingList() {
 
               {/* View Details */}
               <div className="flex justify-end mt-2">
-                <button className="text-blue-600 hover:underline font-medium text-sm">
+                <button className="text-blue-600 hover:underline font-medium text-sm" onClick={()=>navigate('/meetDetails')}>
                   View Details
                 </button>
               </div>

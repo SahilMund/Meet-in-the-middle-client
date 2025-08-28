@@ -10,6 +10,7 @@ import WithAuth from "./hoc/WithAuth.jsx";
 
 import { Suspense, lazy } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
+import MeetingsInfoPage from "./pages/MeetingInfoPage.jsx";
 // import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
 // import SettingsPage from "./pages/SettingsPage.jsx";
 
@@ -54,6 +55,7 @@ function App() {
             <Route path="/createmeeting" element={<MeetingForm />} />
             <Route path="/profileSettings" element={<ProfileSettingsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/meetDetails" element={<MeetingsInfoPage />} />
           </Route>
         </Routes>
       </Suspense>

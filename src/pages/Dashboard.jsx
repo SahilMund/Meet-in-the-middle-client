@@ -58,7 +58,7 @@ const Dashboard = () => {
     },
     {
       title: "Avg Participants",
-      number: updatesNumbers.avgParticipants,
+      number: updatesNumbers?.avgParticipants?.toFixed(2),
       icon: <FaUsers />,
       color: "#a063eb",
     },

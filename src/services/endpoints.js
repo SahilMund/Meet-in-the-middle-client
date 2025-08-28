@@ -1,5 +1,6 @@
 const endPoints = {
     LOGIN_USER: "/user/login",
+    UPLOAD_AVATAR: "/user/uploadAvatar",
     GET_USER_DETAILS:'/user/currUserInfo',
     GET_OTP:'/verification/sendOtp',
     VERIFY_OTP:'/verification/verifyOTP',
