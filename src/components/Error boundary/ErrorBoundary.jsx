@@ -14,6 +14,7 @@ const MyErrorBoundary = ({ children }) => {
       {children}
     </ErrorBoundary>
   );
+  
 };
 
 export default MyErrorBoundary;
