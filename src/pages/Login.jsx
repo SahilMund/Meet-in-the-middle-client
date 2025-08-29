@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import { loginUser } from '../services/authentication';
-import { toast } from 'react-toastify';
-import '../index.css';
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../services/authentication";
+import { toast } from "react-toastify";
+import "../index.css";
 
 // ✅ Schema: only email + password
 const schema = z.object({
-  email: z.string().email('Invalid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 const Login = () => {
@@ -34,11 +34,13 @@ const Login = () => {
     setIsLoading(true);
     try {
       await loginUser(data);
-      toast.success('Login successful!');
-      setTimeout(()=>{navigate('/home')},3000)
+      toast.success("Login successful!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 3000);
     } catch (err) {
-      console.log(err);
-      toast.error(err?.response?.data?.message || 'Login failed');
+      console.log({ err });
+      toast.error(err?.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +65,7 @@ const Login = () => {
             <input
               id="email"
               type="email"
-              {...register('email')}
+              {...register("email")}
               className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             {errors.email && (
@@ -84,13 +86,13 @@ const Login = () => {
             <div className="relative mt-1">
               <input
                 id="password"
-                type={showPassword ? 'text' : 'password'}
-                {...register('password')}
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all pr-12"
               />
               <span
                 role="button"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? "Hide password" : "Show password"}
                 className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 cursor-pointer"
                 onClick={() => setShowPassword((prev) => !prev)}
               >
@@ -114,7 +116,7 @@ const Login = () => {
             disabled={isLoading}
             className={`w-full flex gap-3 justify-center bg-indigo-600 text-white font-bold py-2.5 rounded-lg
               hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-300
-              ${isLoading ? 'cursor-not-allowed opacity-70' : ''}`}
+              ${isLoading ? "cursor-not-allowed opacity-70" : ""}`}
           >
             Sign In
             {isLoading && (
