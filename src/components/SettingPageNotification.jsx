@@ -1,15 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import {
+  getUserDefaultSettings,
+  updateUserDefaultSettings,
+} from "../services/userSettings";
+import { data } from "react-router-dom";
 const SettingPageNotification = () => {
   const [notification, setNotification] = useState(false);
+  const [settings, setSettings] = useState({
+    emailNotifications: false,
+    pushNotifications: false,
+    meetingsReminders: false,
+    invitationsAlerts: false,
+    votingUpdates: false,
+    weeklyDigest: true,
+  });
+  //to save user default settings
+  const saveDefaultSettings = async () => {
+    try {
+      const getSettings = await getUserDefaultSettings();
+      setSettings(getSettings.data.data);
 
+      console.log(getSettings, "hhhh");
+      toast.success(getSettings.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+  // useEffect(() => {
+  //   const fetchSettings = async () => {
+  //     try {
+  //       const { data } = await getUserDefaultSettings();
+  //       setSettings(data);
+  //     } catch (error) {
+  //       console.log(error, "error");
+  //     }
+  //   };
+  //   fetchSettings();
+  // }, []);
+  useEffect(() => {
+    saveDefaultSettings();
+  }, []);
   const handleToggle = (e) => {
     setNotification(true);
+    console.log(e.target.checked, e.target.value, "dgfvdhzbfv");
+    setSettings((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.checked,
+      };
+    });
     toast.success(
       `${e.target.dataset.message}` +
-        `${e.target.checked ? 'Enabled' : 'Disabled'}`
+        `${e.target.checked ? "Enabled" : "Disabled"}`
     );
-    
   };
 
   useEffect(() => {
@@ -18,6 +62,21 @@ const SettingPageNotification = () => {
       return () => clearTimeout(timer);
     }
   }, [notification]);
+
+  const handleSave = async () => {
+    console.log("Changed", settings);
+    try {
+      const res = await updateUserDefaultSettings(settings);
+      console.log(res, "res");
+      setSettings({
+        ...settings,
+        ...res.data.data,
+      });
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(error.res.data.message);
+    }
+  };
 
   return (
     <div>
@@ -46,6 +105,8 @@ const SettingPageNotification = () => {
                 type="checkbox"
                 className="sr-only peer"
                 onChange={handleToggle}
+                name="emailNotifications"
+                checked={settings.emailNotifications}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -67,6 +128,8 @@ const SettingPageNotification = () => {
                 type="checkbox"
                 className="sr-only peer"
                 onChange={handleToggle}
+                name="pushNotifications"
+                checked={settings.pushNotifications}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -85,10 +148,12 @@ const SettingPageNotification = () => {
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
-              data-message={`Meeting Notification `}
+                data-message={`Meeting Notification `}
                 type="checkbox"
                 className="sr-only peer"
                 onChange={handleToggle}
+                name="meetingsReminders"
+                checked={settings.meetingsReminders}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -107,10 +172,12 @@ const SettingPageNotification = () => {
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
-              data-message={`Invitation Notification `}
+                data-message={`Invitation Notification `}
                 type="checkbox"
                 className="sr-only peer"
                 onChange={handleToggle}
+                name="invitationsAlerts"
+                checked={settings.invitationsAlerts}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -129,10 +196,12 @@ const SettingPageNotification = () => {
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
-              data-message={`Voting Notification `}
+                data-message={`Voting Notification `}
                 type="checkbox"
                 className="sr-only peer"
                 onChange={handleToggle}
+                name="votingUpdates"
+                checked={settings.votingUpdates}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -151,10 +220,12 @@ const SettingPageNotification = () => {
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
-              data-message={`Weekly Notification `}
+                data-message={`Weekly Notification `}
                 type="checkbox"
                 className="sr-only peer"
                 onChange={handleToggle}
+                name="weeklyDigest"
+                checked={settings.weeklyDigest}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform "></div>
@@ -165,6 +236,7 @@ const SettingPageNotification = () => {
             <button
               type="button"
               className="mt-6 px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-900 focus:ring-offset-1 transition"
+              onClick={handleSave}
             >
               Save
             </button>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineLocationOn } from "react-icons/md";
-import ProfileUpdateForm from "../components/profileSettings-components/profileUpdateForm";
+import ProfileUpdateForm from "../components/profileSettings-components/ProfileUpdateForm";
 import MeetingHitoryCompnent from "../components/profileSettings-components/MeetingHitoryCompnent";
 import StatisticsComponent from "../components/profileSettings-components/StatisticsComponent";
 import { FaRegUser, FaTrash, FaTrashAlt } from "react-icons/fa";

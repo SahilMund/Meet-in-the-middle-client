@@ -1,6 +1,7 @@
 const endPoints = {
   LOGIN_USER: "/user/login",
   UPLOAD_AVATAR: "/user/uploadAvatar",
+  DELETE_USER: "/user/deleteUser",
   DELETE_AVATAR: "/user/deleteAvatar",
   GET_USER_DETAILS: "/user/currUserInfo",
   UPDATE_USER_DETAILS: "/user/updateUserInfo",
@@ -18,5 +19,8 @@ const endPoints = {
   GET_CONFLICTS: (id) => `/meeting/conflicts/${id}`,
   REJECT_MEETING: "/meeting/rejectMeeting",
   ACCEPT_MEETING: "/meeting/acceptMeeting",
+  GET_DEFAULT_SETTINGS: "/user/getUserSettings",
+  UPDATE_USER_SETTINGS: "/user/putUserSettings",
+  
 };
 export default endPoints;
