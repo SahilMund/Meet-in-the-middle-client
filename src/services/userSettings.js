@@ -1,3 +1,6 @@
 import axios from '../axios/instance.js';
 import endPoints from './endpoints.js';
-export const getUserData = () => axios.get(endPoints.UPLOAD_AVATAR);
+export const uploadAvatar = (data) => axios.post(endPoints.UPLOAD_AVATAR,data);
+export const deleteAvatar = () => axios.post(endPoints.DELETE_AVATAR);
+export const getUserProfileInfo = () => axios.get(endPoints.GET_USER_DETAILS);
+export const updateUserProfileInfo = (data) => axios.put(endPoints.UPDATE_USER_DETAILS,data);

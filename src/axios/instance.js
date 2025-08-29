@@ -1,25 +1,26 @@
-import axios from 'axios';
-import { toast } from 'react-toastify';
+import axios from "axios";
+import { toast } from "react-toastify";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const axiosBaseInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true, // This allows cookies to be sent with requests
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 axiosBaseInstance.interceptors.request.use(
   (config) => {
-    console.log(BASE_URL);
-    // You can add any request modifications here if needed
+    if (config.data instanceof FormData) {
+      // ❌ Don't force JSON here
+      delete config.headers["Content-Type"];
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
     return config;
   },
-  (error) => {
-    // Handle request errors here
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 axiosBaseInstance.interceptors.response.use(
@@ -40,6 +41,5 @@ axiosBaseInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 export default axiosBaseInstance;

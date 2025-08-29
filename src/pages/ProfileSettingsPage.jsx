@@ -4,42 +4,105 @@ import { MdOutlineLocationOn } from "react-icons/md";
 import ProfileUpdateForm from "../components/profileSettings-components/profileUpdateForm";
 import MeetingHitoryCompnent from "../components/profileSettings-components/MeetingHitoryCompnent";
 import StatisticsComponent from "../components/profileSettings-components/StatisticsComponent";
-import MeetingCard from "../components/profileSettings-components/MeetingCard";
-// import { FaUserAlt } from 'react-icons/fa';
-import { FaRegUser } from "react-icons/fa";
+import { FaRegUser, FaTrash, FaTrashAlt } from "react-icons/fa";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegStar } from "react-icons/fa";
 import { IoCameraSharp } from "react-icons/io5";
+import {
+  deleteAvatar,
+  getUserProfileInfo,
+  updateUserProfileInfo,
+  uploadAvatar,
+} from "../services/userSettings";
+import { toast } from "react-toastify";
 
 const ProfileSettingsPage = () => {
   const [currWindow, setCurrWindow] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [preview, setPreview] = useState(null);
+  const [dpUploadLoading, setDpUploadLoading] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "vishnu",
-    email: "vishnu@123.com",
-    phoneNumber: "939265",
-    location: "hyd",
-    bio: "hi evry one",
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    location: "",
+    bio: "",
     avatar: "",
   });
 
-  const [formDataUnderEdit, setFormDataUnderEdit] = useState(
-    Object.assign({}, formData)
-  );
+  const [formDataUnderEdit, setFormDataUnderEdit] = useState(null);
   const fileInputRef = React.useRef(null);
 
   const handleClick = () => {
     fileInputRef.current?.click();
   };
-  const handleFileUpload = (e) => {
-    const image = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => void (setPreview(reader), console.log(image));
-    reader.readAsDataURL(image);
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    try {
+      const res = await deleteAvatar();
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
-  useEffect(() => console.log(preview), [preview]);
-
+  const handleFileUpload = async (e) => {
+    try {
+      const image = e.target.files[0];
+      if (!image) return;
+      setDpUploadLoading(true);
+      const reader = new FileReader();
+      reader.onloadend = () => void setPreview(reader);
+      reader.readAsDataURL(image);
+      const formData = new FormData();
+      formData.append("image", image);
+      const res = await uploadAvatar(formData);
+      toast.success(res.data.message);
+      setFormDataUnderEdit((p) => ({
+        ...p,
+        avatar: res.data.data.cloudinary.url,
+      }));
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      setDpUploadLoading(false);
+    }
+  };
+  async function updateUserInfo() {
+    try {
+      setIsEditing(!isEditing);
+      setPreview(null);
+      setFormData(formDataUnderEdit);
+      const res = await updateUserProfileInfo({
+        ...formDataUnderEdit,
+        name: formDataUnderEdit.fullName,
+        phone: formDataUnderEdit.phoneNumber,
+      });
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+  async function getUserInfo() {
+    try {
+      const res = await getUserProfileInfo();
+      setFormData({
+        fullName: res.data.data.name,
+        email: res.data.data.email,
+        phoneNumber: res.data.data.phone,
+        location: res.data.data.location,
+        bio: res.data.data.bio,
+        avatar: res.data.data.avatar,
+      });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
+  useEffect(() => {
+    getUserInfo();
+  }, []);
+  useEffect(() => {
+    setFormDataUnderEdit(Object.assign({}, formData));
+  }, [formData]);
   return (
     <div className="max-w-3xl mx-auto p-3 select-none">
       {/* Header */}
@@ -54,17 +117,20 @@ const ProfileSettingsPage = () => {
       <div className="bg-white rounded-lg shadow p-6 flex flex-col sm:flex-row items-center w-full">
         <div className="flex flex-col sm:flex-row items-center w-full gap-5">
           <div
-            className={`rounded-full bg-indigo-500 w-20 h-20 flex flex-col items-center justify-center text-2xl text-white mb-4 sm:mb-0 relative ${isEditing && "cursor-pointer"}`}
+            className={`rounded-full bg-indigo-500  w-20 h-20 flex flex-col items-center justify-center text-2xl text-white mb-4 sm:mb-0 relative ${isEditing && "cursor-pointer"}`}
             onClick={handleClick}
           >
-            {preview ? (
+            {dpUploadLoading && (
+              <div className="w-10 absolute h-10 border-4 top-1/2 left-1/2 -translate-1/2 rounded-full border-indigo-500 animate-spin border-b-transparent " />
+            )}
+            {preview || formData?.avatar ? (
               <img
-                src={preview?.result}
+                src={formData?.avatar || preview?.result}
                 className="w-18 h-18 rounded-full"
                 alt="DP"
               />
             ) : (
-              <div>DU</div>
+              <div>{formData.fullName.slice(0, 2).toUpperCase()}</div>
             )}
             {isEditing && (
               <>
@@ -75,16 +141,26 @@ const ProfileSettingsPage = () => {
                   onChange={handleFileUpload}
                   accept="image/*"
                 />
-                <IoCameraSharp className="absolute bottom-1 right-1/2 translate-x-1/2 text-black" />
+                <IoCameraSharp
+                  title="Update Avatar"
+                  className="absolute bottom-1 right-1/2 translate-x-1/2 rounded-full bg-white/20 p-1 text-black/50"
+                />
+                <div
+                  title="Delete Avatar"
+                  className="border-2 border-white/25 absolute bottom-1 -right-1  translate-2 bg-black/30 rounded-full  p-1 text-center"
+                  onClick={handleDelete}
+                >
+                  <FaTrash className=" text-xs text-black/70 " />
+                </div>
               </>
             )}
           </div>
           <div className="flex flex-col text-center sm:text-left ">
-            <b className="text-lg"> Demo User</b>
-            <h6 className="text-gray-500">demo@meetinmiddle.com</h6>
+            <b className="text-lg"> {formData.fullName}</b>
+            <h6 className="text-gray-500">{formData.email}</h6>
             <h6 className="text-gray-500 flex items-center gap-1 justify-center sm:justify-start">
               <MdOutlineLocationOn />
-              New York, NY
+              {formData.location || "Hyderabad"}
             </h6>
           </div>
           <div className="sm:ml-auto mt-4 sm:mt-0">
@@ -113,10 +189,7 @@ const ProfileSettingsPage = () => {
                 <button
                   type="button"
                   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-[5px] flex items-center gap-2 transition w-30 sm:w-auto justify-center cursor-pointer"
-                  onClick={() =>
-                    void (setIsEditing(!isEditing),
-                    setFormData(formDataUnderEdit))
-                  }
+                  onClick={updateUserInfo}
                 >
                   Save
                 </button>

@@ -36,8 +36,8 @@ const MeetingHitoryCompnent = () => {
         style={{ scrollbarWidth: 'none' }}
         className="rounded-2xl h-[50vh] border-2 overflow-scroll p-5 grid grid-cols-1 gap-4"
       >
-        {typeofMeeting.map((e) => (
-          <MeetingCard styleMaker={styleMaker} e={e}/>
+        {typeofMeeting.map((e,i) => (
+          <MeetingCard key={i} styleMaker={styleMaker} e={e}/>
         ))}
       </div>
     </div>

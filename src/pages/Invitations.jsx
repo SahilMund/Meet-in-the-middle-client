@@ -30,10 +30,10 @@ const Invitations = () => {
   useEffect(() => {
     async function getPendingMeets() {
       const res = await getPendingMeetings({ pageNo: 1, items: 10 });
-      toast.success(res.data.message);
+      // toast.success(res.data.message);
       setPendingInvitations(res.data.data.meetings);
     }
-    getPendingMeets();
+    if(!showAcceptModal &&  !showDeclineModal) getPendingMeets();
   }, [showAcceptModal, showDeclineModal]);
 
   const handleDecline = useCallback(async (id) => {
@@ -48,7 +48,7 @@ const Invitations = () => {
       console.log("error", error.message);
       toast.error(error.message);
     }
-    setShowDeclineModal(true);
+    setShowDeclineModal(false);
   }, []);
   return (
     <div>

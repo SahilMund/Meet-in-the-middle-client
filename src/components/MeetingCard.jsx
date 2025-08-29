@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 // import { myMeetings } from "../MyMeetings";
 
 export default function MeetingList() {
-  const {userId} = useSelector(store=>store.authSlice)
+  const { userId } = useSelector((store) => store.authSlice);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isGrid, setIsGrid] = useState(false);
@@ -33,7 +33,7 @@ export default function MeetingList() {
   const statusColors = {
     accepted: "bg-green-100 text-green-800 border-2 border-green-300",
     pending: "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
-    Voting: "bg-blue-100 text-blue-800 border-2 border-blue-300",
+    rejected: "bg-blue-100 text-blue-800 border-2 border-blue-300",
   };
 
   const getInitials = (name) => {
@@ -44,63 +44,65 @@ export default function MeetingList() {
       .toUpperCase();
   };
   useEffect(() => {
-   async function handleGetMyMeetings() {
-  try {
-    const res = await getMymeetings({ pageNo: 1, items: 10 });
-   setMyMeetings(
-  res.data.data.meetings.map((e) => {
-    const createdDate = new Date(e.scheduledAt);
-    const endsAt = new Date(e.endsAt);
-    const ms = endsAt - createdDate;
+    async function handleGetMyMeetings() {
+      try {
+        const res = await getMymeetings({ pageNo: 1, items: 10 });
+        console.log({res},"===================")
+        setMyMeetings(
+          res.data.data.meetings.map((e) => {
+            const createdDate = new Date(e.scheduledAt);
+            const endsAt = new Date(e.endsAt);
+            const ms = endsAt - createdDate;
 
-    // Duration calculation
-    const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            // Duration calculation
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+            const hours = Math.floor(
+              (ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
 
-    const parts = [];
-    if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
-    if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
-    if (minutes > 0) parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
-    const duration = parts.join(" ") || "0 minutes";
+            const parts = [];
+            if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
+            if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+            if (minutes > 0)
+              parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+            const duration = parts.join(" ") || "0 minutes";
 
-    const date = createdDate.toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-    const time = createdDate.toLocaleTimeString("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+            const date = createdDate.toLocaleDateString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            });
+            const time = createdDate.toLocaleTimeString("en-IN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
 
-    // ✅ Safely extract participants
-    const people = (e.participants || [])
-      .map((ele) => ele?.user?.name)
-      .filter(Boolean);
+            // ✅ Safely extract participants
+            const people = (e.participants || [])
+              .map((ele) => ele?.user?.name)
+              .filter(Boolean);
 
-    const myParticipant = (e.participants || []).find(
-      (ele) => ele?.user?._id === userId
-    );
+            const myParticipant = (e.participants || []).find(
+              (ele) => ele?.user?._id === userId
+            );
 
-    return {
-      title: e.title,
-      description: e.description,
-      date,
-      time,
-      duration,
-      Place: e?.locationSuggestion?.placeName || "Pending",
-      people,
-      status: myParticipant?.status || "pending", // fallback
-    };
-  })
-);
-
-  } catch (error) {
-    toast.error(error?.response?.data?.message || "Failed to Fetch");
-  }
-}
-
+            return {
+              title: e.title,
+              description: e.description,
+              date,
+              time,
+              duration,
+              Place: e?.locationSuggestion?.placeName || "Pending",
+              people,
+              status: myParticipant?.status, // fallback
+            };
+          })
+        );
+      } catch (error) {
+        toast.error(error?.response?.data?.message || "Failed to Fetch");
+      }
+    }
 
     handleGetMyMeetings();
   }, []);
@@ -132,8 +134,9 @@ export default function MeetingList() {
               className="w-full border pl-8 pr-2 py-1 rounded appearance-none focus:outline-none text-sm sm:text-base"
             >
               <option value="All">Filter</option>
-              <option value="Confirmed">Confirmed</option>
-              <option value="Pending">Pending</option>
+              <option value="accepted">Confirmed</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
             </select>
           </div>
 
@@ -177,7 +180,9 @@ export default function MeetingList() {
                   statusColors[meeting.status] || "bg-gray-100 text-gray-800"
                 }`}
               >
-                {meeting.status[0].toUpperCase()+meeting.status.slice(1)}
+                {meeting.status
+                  ? meeting.status[0].toUpperCase() + meeting.status.slice(1)
+                  : "Pending"}
               </span>
 
               {/* Title & Description */}
@@ -230,7 +235,10 @@ export default function MeetingList() {
 
               {/* View Details */}
               <div className="flex justify-end mt-2">
-                <button className="text-blue-600 hover:underline font-medium text-sm" onClick={()=>navigate('/meetDetails')}>
+                <button
+                  className="text-blue-600 hover:underline font-medium text-sm"
+                  onClick={() => navigate("/meetDetails")}
+                >
                   View Details
                 </button>
               </div>

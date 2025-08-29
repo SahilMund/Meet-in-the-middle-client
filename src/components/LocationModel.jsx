@@ -264,12 +264,12 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
             )}
 
             {/* Confirm Button (always visible) */}
-            <button
+            {showLocationFields&&<button
               onClick={handleAccepted}
               className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
             >
               Confirm
-            </button>
+            </button>}
           </motion.div>
         </motion.div>
       )}

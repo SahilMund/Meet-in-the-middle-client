@@ -1,7 +1,9 @@
 const endPoints = {
   LOGIN_USER: "/user/login",
   UPLOAD_AVATAR: "/user/uploadAvatar",
+  DELETE_AVATAR: "/user/deleteAvatar",
   GET_USER_DETAILS: "/user/currUserInfo",
+  UPDATE_USER_DETAILS: "/user/updateUserInfo",
   GET_OTP: "/verification/sendOtp",
   VERIFY_OTP: "/verification/verifyOTP",
   LOGOUT_USER: "/user/logout",

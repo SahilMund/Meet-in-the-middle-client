@@ -34,10 +34,8 @@ const Login = () => {
     setIsLoading(true);
     try {
       await loginUser(data);
-      toast.success("Login successful!");
-      setTimeout(() => {
-        navigate("/home");
-      }, 3000);
+      toast.success('Login successful!');
+      setTimeout(()=>{navigate('/home')},1000)
     } catch (err) {
       console.log({ err });
       toast.error(err?.response?.data?.message || "Login failed");
