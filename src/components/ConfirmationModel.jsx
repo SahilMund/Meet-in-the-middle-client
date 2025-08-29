@@ -1,12 +1,16 @@
-import React from 'react'
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { IoClose } from 'react-icons/io5';
+import { IoClose } from "react-icons/io5";
 
-const ConfirmationModel = ({showDeclineModal,setShowDeclineModal}) => {
+const ConfirmationModel = ({
+  showDeclineModal,
+  setShowDeclineModal,
+  idx,
+  handleDecline,
+}) => {
   return (
     <div>
-
-         <AnimatePresence>
+      <AnimatePresence>
         {showDeclineModal && (
           <motion.div
             className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
@@ -43,7 +47,12 @@ const ConfirmationModel = ({showDeclineModal,setShowDeclineModal}) => {
                 >
                   No
                 </button>
-                <button className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+                <button
+                  onClick={() => {
+                    handleDecline(idx);
+                  }}
+                  className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                >
                   Yes
                 </button>
               </div>
@@ -51,11 +60,8 @@ const ConfirmationModel = ({showDeclineModal,setShowDeclineModal}) => {
           </motion.div>
         )}
       </AnimatePresence>
-        
-
-
     </div>
-  )
-}
+  );
+};
 
-export default ConfirmationModel
+export default ConfirmationModel;

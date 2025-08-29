@@ -11,3 +11,7 @@ export const getUpcomingMeetings = (data) =>
 export const getPendingMeetings = (data) =>
   axios.get(endPoints.GET_PENDING_MEETINGS(data));
 export const getConflicts = (id) => axios.put(endPoints.GET_CONFLICTS(id));
+export const rejectMeeting = (meetingId) =>
+  axios.put(endPoints.REJECT_MEETING, { meetingId });
+export const acceptMeeting = (data) =>
+  axios.put(endPoints.ACCEPT_MEETING, data);

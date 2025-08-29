@@ -1,6 +1,4 @@
-
-import React, { useEffect,useState, lazy, Suspense } from "react";
-
+import React, { useEffect, useState, lazy, Suspense, useCallback } from "react";
 import { FaUsers } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../components/Navbar";
@@ -11,17 +9,16 @@ const LocationModel = lazy(() => import("../components/LocationModel"));
 // import LocationModel from "../components/LocationModel";
 import { myMeetings } from "../MyMeetings";
 
-import { getPendingMeetings } from "../services/meetings";
+import { getPendingMeetings, rejectMeeting } from "../services/meetings";
 import { toast } from "react-toastify";
-
 
 const Invitations = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedInvite, setSelectedInvite] = useState(null);
-
+  const [inviteId, setInviteId] = useState(null);
   const [pendingInvitations, setPendingInvitations] = useState([]);
-  
+
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -34,11 +31,25 @@ const Invitations = () => {
     async function getPendingMeets() {
       const res = await getPendingMeetings({ pageNo: 1, items: 10 });
       toast.success(res.data.message);
-      setPendingInvitations(res.data.data.meetings)
+      setPendingInvitations(res.data.data.meetings);
     }
     getPendingMeets();
-  }, []);
+  }, [showAcceptModal, showDeclineModal]);
 
+  const handleDecline = useCallback(async (id) => {
+    try {
+      const response = await rejectMeeting(id);
+      const data = response.data;
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      toast.success(data.message);
+    } catch (error) {
+      console.log("error", error.message);
+      toast.error(error.message);
+    }
+    setShowDeclineModal(true);
+  }, []);
   return (
     <div>
       <div className="p-4 mt-4">
@@ -92,7 +103,9 @@ const Invitations = () => {
                 </button>
                 <button
                   className="flex-1 cursor-pointer py-1.5 rounded-lg hover:bg-red-600 hover:text-white"
-                  onClick={() => setShowDeclineModal(true)}
+                  onClick={() =>
+                    void (setShowDeclineModal(true), setInviteId(invite.id))
+                  }
                 >
                   Decline
                 </button>
@@ -107,6 +120,8 @@ const Invitations = () => {
       <Suspense>
         {showDeclineModal && (
           <ConfirmationModel
+            idx={inviteId}
+            handleDecline={handleDecline}
             showDeclineModal={showDeclineModal}
             setShowDeclineModal={setShowDeclineModal}
           />
@@ -122,8 +137,6 @@ const Invitations = () => {
           />
         )}
       </Suspense>
-
-
     </div>
   );
 };

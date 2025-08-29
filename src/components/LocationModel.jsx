@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoClose } from "react-icons/io5";
-import { getConflicts } from "../services/meetings";
-
+import { acceptMeeting, getConflicts } from "../services/meetings";
+import { rejectMeeting } from "../services/meetings";
 const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [hasConflict, setHasConflict] = useState(false);
   const [showLocationFields, setShowLocationFields] = useState(false);
   const [pendingConflicts, setPendingConflicts] = useState([]);
+  const [LatLong, setLatLong] = useState({});
   const formatDate = (dateString) => {
     const date = new Date(dateString);
 
@@ -39,6 +41,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
       console.error("Error fetching conflicts:", error.message);
     }
   };
+  console.log({ pendingConflicts });
 
   // Check for conflicts whenever invite changes
   useEffect(() => {
@@ -68,6 +71,47 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
       checkConflicts(invite.id);
     }
   }, [isOpen, invite]);
+
+  const handleConfirm = async () => {
+    console.log("executing...");
+    try {
+      const acceptedConflicts = pendingConflicts.filter(
+        (meeting) => meeting.status === "accepted"
+      );
+      await Promise.all(
+        acceptedConflicts.map((m) => rejectMeeting(m.meeting._id))
+      );
+      setShowLocationFields(true);
+    } catch (error) {
+      console.log("error", error.message);
+    }
+  };
+
+  const handleAccepted = async () => {
+    console.log("the latlong", LatLong);
+
+    try {
+      const { lat, lon } = LatLong;
+      const meetingData = {
+        meetingId: invite.id,
+        lat,
+        lng: lon,
+        placeName: query,
+      };
+      const response = await acceptMeeting(meetingData);
+      const data = await response.data;
+      console.log("response.success", data.success);
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success(data.message);
+      onClose();
+    } catch (error) {
+      console.log("the error", error.message);
+      toast.error(error.message);
+    }
+  };
   // Fetch location suggestions
   const handleSearch = async (e) => {
     const value = e.target.value;
@@ -78,6 +122,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
         `https://nominatim.openstreetmap.org/search?format=json&q=${value}`
       );
       const data = await res.json();
+      console.log("the suggestions", data);
       setSuggestions(data);
     } else {
       setSuggestions([]);
@@ -89,6 +134,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude, longitude } = pos.coords;
+        setLatLong({ lat: latitude, lon: longitude });
         const res = await fetch(
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
         );
@@ -135,7 +181,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
                 {invite?.time}. Do you want to continue?
                 <div className="flex justify-end gap-3 mt-2">
                   <button
-                    onClick={() => setShowLocationFields(true)}
+                    onClick={handleConfirm}
                     className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600"
                   >
                     Yes, continue
@@ -175,6 +221,10 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
                         key={i}
                         className="p-2 hover:bg-gray-100 cursor-pointer"
                         onClick={() => {
+                          setLatLong({
+                            lat: parseFloat(s.lat),
+                            lon: parseFloat(s.lon),
+                          });
                           setQuery(s.display_name);
                           setSuggestions([]);
                         }}
@@ -200,9 +250,12 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
                       key={idx}
                       className="p-2 border rounded bg-white shadow-sm"
                     >
-                      <div className="font-bold">{meeting.title}</div>
+                      <div className="font-bold">{meeting.meeting.title}</div>
                       <div className="text-sm text-gray-600">
-                        {formatDate(meeting.scheduledAt)}
+                        {formatDate(meeting.meeting.scheduledAt)}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {meeting.status}
                       </div>
                     </li>
                   ))}
@@ -212,7 +265,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
 
             {/* Confirm Button (always visible) */}
             <button
-              onClick={onClose}
+              onClick={handleAccepted}
               className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
             >
               Confirm
