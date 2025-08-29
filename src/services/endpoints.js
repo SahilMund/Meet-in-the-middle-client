@@ -14,5 +14,7 @@ const endPoints = {
   GET_PENDING_MEETINGS: ({ pageNo, items }) =>
     "/meeting/getPendingMeetings" + `?pageNo=${pageNo}&items=${items}`,
   GET_CONFLICTS: (id) => `/meeting/conflicts/${id}`,
+  REJECT_MEETING: "/meeting/rejectMeeting",
+  ACCEPT_MEETING: "/meeting/acceptMeeting",
 };
 export default endPoints;
