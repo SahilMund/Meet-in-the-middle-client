@@ -16,10 +16,10 @@ const SettingPagePrivacy = () => {
   const saveDefaultSettings = async () => {
     try {
       const getSettings = await getUserDefaultSettings();
-      setSettings(getSettings.data.data);
+      setSettings(getSettings?.data.data);
 
       console.log(getSettings, "hhhh");
-      toast.success(getSettings.data.message);
+      toast.success(getSettings?.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -84,7 +84,7 @@ const SettingPagePrivacy = () => {
                   className="sr-only peer"
                   onChange={handleToggle}
                   name="locationSharing"
-                  checked={settings.locationSharing}
+                  checked={settings?.locationSharing}
                 />
                 <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
                 <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -108,7 +108,7 @@ const SettingPagePrivacy = () => {
                   className="sr-only peer"
                   onChange={handleToggle}
                   name="activityStatus"
-                  checked={settings.activityStatus}
+                  checked={settings?.activityStatus}
                 />
                 <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
                 <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -132,7 +132,7 @@ const SettingPagePrivacy = () => {
                   className="sr-only peer"
                   onChange={handleToggle}
                   name="searchableProfile"
-                  checked={settings.searchableProfile}
+                  checked={settings?.searchableProfile}
                 />
                 <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
                 <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>

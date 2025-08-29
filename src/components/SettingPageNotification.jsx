@@ -19,10 +19,10 @@ const SettingPageNotification = () => {
   const saveDefaultSettings = async () => {
     try {
       const getSettings = await getUserDefaultSettings();
-      setSettings(getSettings.data.data);
+      setSettings(getSettings?.data.data);
 
       console.log(getSettings, "hhhh");
-      toast.success(getSettings.data.message);
+      toast.success(getSettings?.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -106,7 +106,7 @@ const SettingPageNotification = () => {
                 className="sr-only peer"
                 onChange={handleToggle}
                 name="emailNotifications"
-                checked={settings.emailNotifications}
+                checked={settings?.emailNotifications}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -129,7 +129,7 @@ const SettingPageNotification = () => {
                 className="sr-only peer"
                 onChange={handleToggle}
                 name="pushNotifications"
-                checked={settings.pushNotifications}
+                checked={settings?.pushNotifications}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -153,7 +153,7 @@ const SettingPageNotification = () => {
                 className="sr-only peer"
                 onChange={handleToggle}
                 name="meetingsReminders"
-                checked={settings.meetingsReminders}
+                checked={settings?.meetingsReminders}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -177,7 +177,7 @@ const SettingPageNotification = () => {
                 className="sr-only peer"
                 onChange={handleToggle}
                 name="invitationsAlerts"
-                checked={settings.invitationsAlerts}
+                checked={settings?.invitationsAlerts}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -201,7 +201,7 @@ const SettingPageNotification = () => {
                 className="sr-only peer"
                 onChange={handleToggle}
                 name="votingUpdates"
-                checked={settings.votingUpdates}
+                checked={settings?.votingUpdates}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform"></div>
@@ -225,7 +225,7 @@ const SettingPageNotification = () => {
                 className="sr-only peer"
                 onChange={handleToggle}
                 name="weeklyDigest"
-                checked={settings.weeklyDigest}
+                checked={settings?.weeklyDigest}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform "></div>
