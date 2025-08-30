@@ -1,17 +1,17 @@
-import { useForm } from 'react-hook-form';
-import React, { useState } from 'react';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import '../index.css';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import "../index.css";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 const SignUp = () => {
@@ -26,17 +26,11 @@ const SignUp = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (dat) => {
-    console.log(data)
-    navigate('/otp', { state: {data} });
+  const onSubmit = (data) => {
+    console.log(data);
+    navigate("/otp", { state: { data } });
   };
 
-  const handleGoogleSso=()=>{
-    window.location.href="http://localhost:8000/api/user/auth/google"
-  }
-  const handleFacebookSso=()=>{
-    window.location.href="http://localhost:8000/api/user/auth/facebook"
-  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-lg transition-all duration-300 transform scale-100 opacity-100">
@@ -55,7 +49,7 @@ const SignUp = () => {
             <input
               id="name"
               type="text"
-              {...register('name')}
+              {...register("name")}
               className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             {errors.name && (
@@ -73,7 +67,7 @@ const SignUp = () => {
             <input
               id="email"
               type="email"
-              {...register('email')}
+              {...register("email")}
               className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             {errors.email && (
@@ -93,8 +87,8 @@ const SignUp = () => {
             <div className="relative mt-1">
               <input
                 id="password"
-                type={showPassword ? 'text' : 'password'}
-                {...register('password')}
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all pr-12"
               />
               <span
@@ -142,13 +136,13 @@ const SignUp = () => {
         </div>
         <div className="space-y-4">
           {/* Google Button */}
-          <button onClick={handleGoogleSso}  className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
             <FcGoogle size={20} />
             <span>Continue with Google</span>
           </button>
 
           {/* Facebook Button */}
-          <button onClick={handleFacebookSso}  className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
             <FaFacebook size={20} className="text-blue-600" />
             <span>Continue with Facebook</span>
           </button>

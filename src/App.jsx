@@ -7,11 +7,12 @@ import Login from "./pages/Login.jsx";
 import OtpVerificationPage from "./pages/OtpVerificarionPage.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import { MeetingForm } from "./pages/MeetingForm.jsx";
-import MyErrorBoundary from "./components/Error boundary/ErrorBoundary.jsx";
 
 import { Routes, Route, Outlet } from "react-router-dom";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
 import SettingsPage from "./pages/SettingsPage.jsx";
+import MyErrorBoundary from "./components/Error-Boundary/ErrorBoundary.jsx";
+import NetworkWatcher from "./components/Error-Boundary/NetworkWatcher.jsx";
 
 function ProtectedLayout() {
   return (
@@ -26,6 +27,8 @@ function App() {
   return (
     <>
       <MyErrorBoundary>
+        <NetworkWatcher>
+
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Landingpage />} />
@@ -42,6 +45,7 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Route>
         </Routes>
+        </NetworkWatcher>
       </MyErrorBoundary>
     </>
   );
