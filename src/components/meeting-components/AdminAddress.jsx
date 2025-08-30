@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 
 const AdminAddress = ({ meetingData, setMeetingData, errors, setErrors }) => {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const debounceRef = useRef(null);
   const handleChange = (e) => {
@@ -41,7 +41,7 @@ const AdminAddress = ({ meetingData, setMeetingData, errors, setErrors }) => {
           },
         }));
       });
-      setErrors({ message: '' });
+      setErrors({ message: "" });
     }
   };
 
@@ -78,7 +78,7 @@ const AdminAddress = ({ meetingData, setMeetingData, errors, setErrors }) => {
                       address: s.display_name,
                     },
                   }));
-                  setErrors({ message: '' });
+                  setErrors({ message: "" });
                   setSuggestions([]);
                 }}
               >

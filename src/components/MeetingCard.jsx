@@ -10,20 +10,24 @@ import { IoMdGrid, IoMdTime } from "react-icons/io";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { getMymeetings } from "../services/meetings";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import getDuration from "../utils/getDuration";
+import { setMeetings } from "../toolkit/authenticationSlice";
+
 // import { myMeetings } from "../MyMeetings";
 
 export default function MeetingList() {
-  const { userId } = useSelector((store) => store.authSlice);
+  const { user } = useSelector((store) => store.authSlice);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isGrid, setIsGrid] = useState(false);
   const [myMeetings, setMyMeetings] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const filteredMeetings = myMeetings.filter((meeting) => {
-    const matchesSearch = meeting.title
-      .toLowerCase()
+    const matchesSearch = meeting?.title
+      ?.toLowerCase()
       .includes(searchTerm.toLowerCase());
     const matchesStatus =
       statusFilter === "All" || meeting.status === statusFilter;
@@ -47,26 +51,15 @@ export default function MeetingList() {
     async function handleGetMyMeetings() {
       try {
         const res = await getMymeetings({ pageNo: 1, items: 10 });
-        console.log({res},"===================")
+        console.log(res, "-------------");
+
         setMyMeetings(
-          res.data.data.meetings.map((e) => {
-            const createdDate = new Date(e.scheduledAt);
-            const endsAt = new Date(e.endsAt);
-            const ms = endsAt - createdDate;
-
-            // Duration calculation
-            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
-            const hours = Math.floor(
-              (ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          res.data.data.meetings.map((participation) => {
+            const createdDate = new Date(participation?.meeting?.scheduledAt);
+            const duration = getDuration(
+              participation?.meeting?.endsAt,
+              createdDate
             );
-            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-
-            const parts = [];
-            if (days > 0) parts.push(`${days} day${days > 1 ? "s" : ""}`);
-            if (hours > 0) parts.push(`${hours} hour${hours > 1 ? "s" : ""}`);
-            if (minutes > 0)
-              parts.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
-            const duration = parts.join(" ") || "0 minutes";
 
             const date = createdDate.toLocaleDateString("en-IN", {
               day: "2-digit",
@@ -79,33 +72,35 @@ export default function MeetingList() {
             });
 
             // ✅ Safely extract participants
-            const people = (e.participants || [])
-              .map((ele) => ele?.user?.name)
+            const people = (participation?.meeting?.participants || [])
+              .map((ele) => ele?.meeting?.user?.name)
               .filter(Boolean);
 
-            const myParticipant = (e.participants || []).find(
-              (ele) => ele?.user?._id === userId
-            );
-
             return {
-              title: e.title,
-              description: e.description,
+              _id: participation?.meeting?._id,
+              title: participation?.meeting?.title,
+              description: participation?.meeting?.description,
               date,
               time,
               duration,
-              Place: e?.locationSuggestion?.placeName || "Pending",
+              Place:
+                participation?.meeting?.locationSuggestion?.placeName ||
+                "Pending",
               people,
-              status: myParticipant?.status, // fallback
+              status: participation?.status,
             };
           })
         );
+
+        dispatch(setMeetings(myMeetings));
       } catch (error) {
+        console.log(error);
         toast.error(error?.response?.data?.message || "Failed to Fetch");
       }
     }
 
     handleGetMyMeetings();
-  }, []);
+  }, [user.id, dispatch, myMeetings]);
   return (
     <div className="p-5">
       {/* Header */}
@@ -237,7 +232,7 @@ export default function MeetingList() {
               <div className="flex justify-end mt-2">
                 <button
                   className="text-blue-600 hover:underline font-medium text-sm"
-                  onClick={() => navigate("/meetDetails")}
+                  onClick={() => navigate(`/meeting/${meeting?._id}`)}
                 >
                   View Details
                 </button>

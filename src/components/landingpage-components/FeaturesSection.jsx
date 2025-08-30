@@ -1,11 +1,11 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { RiUserLocationFill } from 'react-icons/ri';
-import { BsFillPeopleFill } from 'react-icons/bs';
-import { MdOutlineAccessTime } from 'react-icons/md';
-import { GoGlobe } from 'react-icons/go';
-import { MdMobileFriendly } from 'react-icons/md';
-import { BsLightning } from 'react-icons/bs';
+import React from "react";
+import { motion } from "framer-motion";
+import { RiUserLocationFill } from "react-icons/ri";
+import { BsFillPeopleFill } from "react-icons/bs";
+import { MdOutlineAccessTime } from "react-icons/md";
+import { GoGlobe } from "react-icons/go";
+import { MdMobileFriendly } from "react-icons/md";
+import { BsLightning } from "react-icons/bs";
 
 const FeaturesSection = () => {
   const cardVariants = {
@@ -16,37 +16,37 @@ const FeaturesSection = () => {
   const features = [
     {
       icon: <RiUserLocationFill className="text-4xl text-[#FF4C61]" />,
-      heading: 'Smart Location Finding',
+      heading: "Smart Location Finding",
       description:
-        'our algorithm finds the perfect meeting spot equidistant from all participants',
+        "our algorithm finds the perfect meeting spot equidistant from all participants",
     },
     {
       icon: <BsFillPeopleFill className="text-4xl text-[#FF4C61]" />,
-      heading: 'Easy Collaboration',
+      heading: "Easy Collaboration",
       description:
-        'Invite participants, share locations and vote on the best meeting places',
+        "Invite participants, share locations and vote on the best meeting places",
     },
     {
       icon: <MdOutlineAccessTime className="text-4xl text-[#FF4C61]" />,
-      heading: 'Real Time Updates',
+      heading: "Real Time Updates",
       description:
-        'Get instant notifications about meeting changes and participant responses',
+        "Get instant notifications about meeting changes and participant responses",
     },
     {
       icon: <GoGlobe className="text-4xl text-[#FF4C61]" />,
-      heading: 'Global Coverage',
+      heading: "Global Coverage",
       description:
-        'Works anywhere in the world with comprehensive location data',
+        "Works anywhere in the world with comprehensive location data",
     },
     {
       icon: <MdMobileFriendly className="text-4xl text-[#FF4C61]" />,
-      heading: 'Mobile optimized',
-      description: 'Perfect experience on any device, from desktop to mobile',
+      heading: "Mobile optimized",
+      description: "Perfect experience on any device, from desktop to mobile",
     },
     {
       icon: <BsLightning className="text-4xl text-[#FF4C61]" />,
-      heading: 'Lightning Fast',
-      description: 'Quick setup,instant results and seamless user experience',
+      heading: "Lightning Fast",
+      description: "Quick setup,instant results and seamless user experience",
     },
   ];
   return (
@@ -72,7 +72,7 @@ const FeaturesSection = () => {
             transition={{ delay: index * 0.2, duration: 0.6 }}
             whileHover={{
               scale: 1.03,
-              boxShadow: '0px 8px 24px rgba(0,0,0,0.1)',
+              boxShadow: "0px 8px 24px rgba(0,0,0,0.1)",
               transition: { duration: 0.3 },
             }}
             className="bg-white rounded-lg p-6 shadow-md cursor-pointer"

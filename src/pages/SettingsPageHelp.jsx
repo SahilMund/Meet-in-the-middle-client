@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { IoIosHelpCircleOutline } from 'react-icons/io';
-import { FiMessageSquare } from 'react-icons/fi';
+import React from "react";
+import { Link } from "react-router-dom";
+import { IoIosHelpCircleOutline } from "react-icons/io";
+import { FiMessageSquare } from "react-icons/fi";
 
 const SettingsPageHelp = () => {
   return (

@@ -9,6 +9,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authentication";
 import { toast } from "react-toastify";
 import "../index.css";
+import { useDispatch } from "react-redux";
+import { setUser } from "../toolkit/authenticationSlice";
 
 // ✅ Schema: only email + password
 const schema = z.object({
@@ -20,6 +22,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -33,9 +36,20 @@ const Login = () => {
     e.preventDefault(); // ✅ explicitly stop page refresh
     setIsLoading(true);
     try {
-      await loginUser(data);
-      toast.success('Login successful!');
-      setTimeout(()=>{navigate('/home')},1000)
+      const res = await loginUser(data);
+      console.log(res.data.data.user);
+      dispatch(
+        setUser({
+          email: res.data.data.email,
+          id: res.data.data.id,
+          name: res.data.data.name,
+        })
+      );
+
+      toast.success("Login successful!");
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
     } catch (err) {
       console.log({ err });
       toast.error(err?.response?.data?.message || "Login failed");

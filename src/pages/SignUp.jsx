@@ -1,17 +1,17 @@
-import { useForm } from 'react-hook-form';
-import React, { useState } from 'react';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import '../index.css';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import "../index.css";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 const SignUp = () => {
@@ -27,8 +27,8 @@ const SignUp = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(data)
-    navigate('/otp', { state: {data} });
+    console.log(data);
+    navigate("/otp", { state: { data } });
   };
 
   return (
@@ -49,7 +49,7 @@ const SignUp = () => {
             <input
               id="name"
               type="text"
-              {...register('name')}
+              {...register("name")}
               className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             {errors.name && (
@@ -67,7 +67,7 @@ const SignUp = () => {
             <input
               id="email"
               type="email"
-              {...register('email')}
+              {...register("email")}
               className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             {errors.email && (
@@ -87,8 +87,8 @@ const SignUp = () => {
             <div className="relative mt-1">
               <input
                 id="password"
-                type={showPassword ? 'text' : 'password'}
-                {...register('password')}
+                type={showPassword ? "text" : "password"}
+                {...register("password")}
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all pr-12"
               />
               <span

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { IoClose } from "react-icons/io5";
 import { acceptMeeting, getConflicts } from "../services/meetings";
 import { rejectMeeting } from "../services/meetings";
+
 const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -24,6 +25,7 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
   };
 
   const checkConflicts = async (meetingId) => {
+    console.log(meetingId);
     try {
       const response = await getConflicts(meetingId);
       const data = await response.data;
@@ -264,12 +266,14 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
             )}
 
             {/* Confirm Button (always visible) */}
-            {showLocationFields&&<button
-              onClick={handleAccepted}
-              className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
-            >
-              Confirm
-            </button>}
+            {showLocationFields && (
+              <button
+                onClick={handleAccepted}
+                className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+              >
+                Confirm
+              </button>
+            )}
           </motion.div>
         </motion.div>
       )}

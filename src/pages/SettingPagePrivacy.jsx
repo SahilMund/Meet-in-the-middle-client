@@ -5,7 +5,6 @@ import {
   getUserDefaultSettings,
   updateUserDefaultSettings,
 } from "../services/userSettings";
-import { data } from "react-router-dom";
 const SettingPagePrivacy = () => {
   const [notification, setNotification] = useState(false);
   const [settings, setSettings] = useState({

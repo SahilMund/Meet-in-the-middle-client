@@ -25,8 +25,8 @@ axiosBaseInstance.interceptors.request.use(
 
 axiosBaseInstance.interceptors.response.use(
   (response) => {
-    console.log("📥 Response:", response.status, response.config.url);
-    console.log("Response data:", response.data);
+    // console.log("📥 Response:", response.status, response.config.url);
+    // console.log("Response data:", response.data);
     return response;
   },
   (error) => {

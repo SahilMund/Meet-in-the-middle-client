@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { getUserData } from '../services/authentication';
-import { useNavigate } from 'react-router-dom';
-import { setAuthenticated, setUserMail, setuserId ,setName} from '../toolkit/authenticationSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { getUserData } from "../services/authentication";
+import { useNavigate } from "react-router-dom";
+import { setAuthenticated, setUser } from "../toolkit/authenticationSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { email } from "zod";
 
 const WithAuth = ({ children }) => {
   const navigate = useNavigate();
@@ -12,21 +13,28 @@ const WithAuth = ({ children }) => {
 
   useEffect(() => {
     let isMounted = true; // ✅ prevent state updates if component unmounts
-    
+
     const checkAuth = async () => {
       try {
         const user = await getUserData();
         if (isMounted && user) {
           dispatch(setAuthenticated(user.data.success));
-          dispatch(setUserMail(user.data.data.email));
-          dispatch(setuserId(user.data.data.id));
-          dispatch(setName(user.data.data.name));
+          // dispatch(setUserMail(user.data.data.email));
+          // dispatch(setuserId(user.data.data.id));
+          // dispatch(setName(user.data.data.name));
+          dispatch(
+            setUser({
+              email: user.data.data.email,
+              id: user.data.data.id,
+              name: user.data.data.name,
+            })
+          );
         } else {
-          navigate('/login', { replace: true });
+          navigate("/login", { replace: true });
         }
       } catch (err) {
         if (isMounted) {
-          navigate('/login', { replace: true });
+          navigate("/login", { replace: true });
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -38,7 +46,7 @@ const WithAuth = ({ children }) => {
     return () => {
       isMounted = false;
     };
-  }, [navigate]);
+  }, [navigate, dispatch]);
 
   if (loading) {
     return (
