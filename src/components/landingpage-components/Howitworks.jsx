@@ -1,32 +1,32 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaRegCheckCircle } from 'react-icons/fa';
-import { LuTarget } from 'react-icons/lu';
-import { FaRegCalendarAlt } from 'react-icons/fa';
-import { FaArrowRight } from 'react-icons/fa';
+import React from "react";
+import { motion } from "framer-motion";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { LuTarget } from "react-icons/lu";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { FaArrowRight } from "react-icons/fa";
 
 const Howitworks = () => {
   const steps = [
     {
       icon: <FaRegCalendarAlt />,
-      step: '1',
-      title: 'Enter Your Locations',
+      step: "1",
+      title: "Enter Your Locations",
       description:
         "Simply add your location and your friends' locations into our tool.",
     },
     {
       icon: <LuTarget />,
-      step: '2',
-      title: 'Find the Middle Point',
+      step: "2",
+      title: "Find the Middle Point",
       description:
-        'We calculate the perfect meeting spot that is fair for everyone.',
+        "We calculate the perfect meeting spot that is fair for everyone.",
     },
     {
       icon: <FaRegCheckCircle />,
-      step: '3',
-      title: 'Meet & Enjoy',
+      step: "3",
+      title: "Meet & Enjoy",
       description:
-        'Head to the suggested location and have a great time together.',
+        "Head to the suggested location and have a great time together.",
     },
   ];
   return (

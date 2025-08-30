@@ -5,8 +5,6 @@ import Navbar from "../components/Navbar";
 import { IoClose } from "react-icons/io5";
 const ConfirmationModel = lazy(() => import("../components/ConfirmationModel"));
 const LocationModel = lazy(() => import("../components/LocationModel"));
-// import ConfirmationModel from "../components/ConfirmationModel";
-// import LocationModel from "../components/LocationModel";
 import { myMeetings } from "../MyMeetings";
 
 import { getPendingMeetings, rejectMeeting } from "../services/meetings";
@@ -18,6 +16,7 @@ const Invitations = () => {
   const [selectedInvite, setSelectedInvite] = useState(null);
   const [inviteId, setInviteId] = useState(null);
   const [pendingInvitations, setPendingInvitations] = useState([]);
+  // console.log(pendingInvitations);
 
   const getInitials = (name) => {
     return name
@@ -30,10 +29,11 @@ const Invitations = () => {
   useEffect(() => {
     async function getPendingMeets() {
       const res = await getPendingMeetings({ pageNo: 1, items: 10 });
+      console.log(res);
       // toast.success(res.data.message);
       setPendingInvitations(res.data.data.meetings);
     }
-    if(!showAcceptModal &&  !showDeclineModal) getPendingMeets();
+    if (!showAcceptModal && !showDeclineModal) getPendingMeets();
   }, [showAcceptModal, showDeclineModal]);
 
   const handleDecline = useCallback(async (id) => {
@@ -103,9 +103,10 @@ const Invitations = () => {
                 </button>
                 <button
                   className="flex-1 cursor-pointer py-1.5 rounded-lg hover:bg-red-600 hover:text-white"
-                  onClick={() =>
-                    void (setShowDeclineModal(true), setInviteId(invite.id))
-                  }
+                  onClick={() => {
+                    setShowDeclineModal(true);
+                    setInviteId(invite.id);
+                  }}
                 >
                   Decline
                 </button>

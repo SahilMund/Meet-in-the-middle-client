@@ -9,6 +9,7 @@ const endPoints = {
   VERIFY_OTP: "/verification/verifyOTP",
   LOGOUT_USER: "/user/logout",
   CREATE_MEETING: "/meeting/createMeeting",
+  GET_MEETING_BY_ID: (id) => `/meeting/getMeetingById/${id}`,
   GET_DASHBOARD_STATS: "/meeting/getDashBoardStats",
   GET_ALL_MY_MEETINGS: ({ pageNo, items }) =>
     "/meeting/getMeetings" + `?pageNo=${pageNo}&items=${items}`,
@@ -21,6 +22,5 @@ const endPoints = {
   ACCEPT_MEETING: "/meeting/acceptMeeting",
   GET_DEFAULT_SETTINGS: "/user/getUserSettings",
   UPDATE_USER_SETTINGS: "/user/putUserSettings",
-  
 };
 export default endPoints;

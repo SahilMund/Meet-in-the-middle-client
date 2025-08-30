@@ -1,8 +1,8 @@
-import React from 'react';
-import { MdOutlineMailOutline } from 'react-icons/md';
-import { MdOutlinePhoneCallback } from 'react-icons/md';
-import { MdOutlineLocationOn } from 'react-icons/md';
-import { FaRegUser } from 'react-icons/fa';
+import React from "react";
+import { MdOutlineMailOutline } from "react-icons/md";
+import { MdOutlinePhoneCallback } from "react-icons/md";
+import { MdOutlineLocationOn } from "react-icons/md";
+import { FaRegUser } from "react-icons/fa";
 
 const ProfileUpdateForm = ({
   isEditing,
@@ -28,7 +28,7 @@ const ProfileUpdateForm = ({
                 id="fullName"
                 type="text"
                 placeholder="Demo User"
-                className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && 'pointer-events-none'}`}
+                className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && "pointer-events-none"}`}
                 onChange={(e) =>
                   setFormDataUnderEdit({
                     ...formDataUnderEdit,
@@ -45,11 +45,11 @@ const ProfileUpdateForm = ({
             <div className="relative">
               <MdOutlineMailOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
-                value={ formData.email}
+                value={formData.email}
                 id="email"
                 type="email"
                 placeholder="demo@meetinmiddle.com"
-               className={`border rounded px-3 py-2 pl-10 w-full pointer-events-none ${isEditing&&'border-2 border-red-400'}`}
+                className={`border rounded px-3 py-2 pl-10 w-full pointer-events-none ${isEditing && "border-2 border-red-400"}`}
                 onChange={(e) =>
                   setFormDataUnderEdit({
                     ...formDataUnderEdit,
@@ -78,7 +78,7 @@ const ProfileUpdateForm = ({
                 id="phone"
                 type="tel"
                 placeholder="91+(555) 123-4567"
-                className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && 'pointer-events-none'}`}
+                className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && "pointer-events-none"}`}
                 maxLength={14}
                 onChange={(e) =>
                   setFormDataUnderEdit({
@@ -102,7 +102,7 @@ const ProfileUpdateForm = ({
                 id="Location"
                 type="text"
                 placeholder="New York, NY"
-                className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && 'pointer-events-none'}`}
+                className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && "pointer-events-none"}`}
                 onChange={(e) =>
                   setFormDataUnderEdit({
                     ...formDataUnderEdit,
@@ -123,7 +123,7 @@ const ProfileUpdateForm = ({
             value={isEditing ? formDataUnderEdit.bio : formData.bio}
             id="Bio"
             placeholder="Demo user for Meet in Middle application"
-           className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && 'pointer-events-none'}`}
+            className={`border rounded px-3 py-2 pl-10 w-full ${!isEditing && "pointer-events-none"}`}
             onChange={(e) =>
               setFormDataUnderEdit({
                 ...formDataUnderEdit,

@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const MeetingForm = () => {
-
   const navigate = useNavigate();
 
   const [meetingData, setMeetingData] = useState({

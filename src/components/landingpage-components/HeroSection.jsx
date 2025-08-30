@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import locationimage from '../../assets/locationimage.png';
+import React, { useState } from "react";
+import locationimage from "../../assets/locationimage.png";
 // import { Menu, X } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,13 +22,13 @@ const HeroSection = () => {
         <div className="hidden sm:flex items-center gap-4">
           <button
             className="text-gray-700 cursor-pointer hover:text-[#FF4C61] font-medium"
-            onClick={() => navigator('/login')}
+            onClick={() => navigator("/login")}
           >
             Sign In
           </button>
           <button
             className="bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
-            onClick={() => navigator('/home')}
+            onClick={() => navigator("/home")}
           >
             Get Started
           </button>
@@ -48,13 +48,13 @@ const HeroSection = () => {
         <div className="flex flex-col gap-3 mt-4 sm:hidden w-full">
           <button
             className="w-full text-gray-700 hover:text-[#FF4C61] font-medium border border-gray-300 py-2 rounded-lg transition"
-            onClick={() => navigator('/login')}
+            onClick={() => navigator("/login")}
           >
             Sign In
           </button>
           <button
             className="w-full bg-[#FF4C61] hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
-            onClick={() => navigator('/home')}
+            onClick={() => navigator("/home")}
           >
             Get Started
           </button>
@@ -66,7 +66,7 @@ const HeroSection = () => {
         <motion.h1
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800"
         >
           Find The Perfect
@@ -74,7 +74,7 @@ const HeroSection = () => {
         <motion.h1
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#FF4C61]"
         >
           Meeting Location
@@ -92,14 +92,14 @@ const HeroSection = () => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{
-            type: 'spring',
+            type: "spring",
             stiffness: 200,
             damping: 10,
             delay: 0.6,
           }}
           whileHover={{ scale: 1.05 }}
           className="mt-6 bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-8 py-3 rounded-lg text-lg font-medium shadow-md transition"
-          onClick={() => navigator('/home')}
+          onClick={() => navigator("/home")}
         >
           Start Meeting Plan
         </motion.button>

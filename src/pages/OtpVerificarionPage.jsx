@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { sendOtp, verifyOTP } from '../services/authentication';
-import OtpInput from '../components/OtpInput';
+import React, { useCallback, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { sendOtp, verifyOTP } from "../services/authentication";
+import OtpInput from "../components/OtpInput";
 
 const OtpVerificationPage = () => {
   const location = useLocation();
@@ -10,12 +10,11 @@ const OtpVerificationPage = () => {
 
   // Get data passed from previous page
   const { data } = location.state || {};
-  
 
   const handleVerify = (otp) => {
-    console.log(otp.length)
+    console.log(otp.length);
     if (otp.length !== 6) {
-      toast.error('Please enter a valid 6-digit OTP');
+      toast.error("Please enter a valid 6-digit OTP");
       return;
     }
     verifyotp(otp);
@@ -25,24 +24,23 @@ const OtpVerificationPage = () => {
       const res = await verifyOTP({ ...data, otp });
       toast.success(res.data.message);
       setTimeout(() => {
-        navigate('/login');
+        navigate("/login");
       }, 3000);
     } catch (error) {
-      toast.error(error.response.data.message || 'Please enter correct OTP');
-
+      toast.error(error.response.data.message || "Please enter correct OTP");
     }
   }
-  async function fn() {
+  const fn = useCallback(async () => {
     try {
       const res = await sendOtp({ ...data });
       toast.success(res.data.message);
     } catch (error) {
-      toast.error(error.response.data.message || 'Failed sending OTP');
+      toast.error(error.response.data.message || "Failed sending OTP");
     }
-  }
+  }, [data]);
   useEffect(() => {
     fn();
-  }, []);
+  }, [fn]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f0f1a] via-[#1a1a2e] to-[#0f0f1a] p-4">
@@ -53,10 +51,10 @@ const OtpVerificationPage = () => {
         <p className="text-center text-gray-300 mt-2">
           Enter the 6-digit OTP sent to <br />
           <span className="font-semibold text-white">
-            {data.email || 'your email'}
+            {data.email || "your email"}
           </span>
         </p>
-        <OtpInput size={6} onSubmit={(otp)=>handleVerify(otp)}/>
+        <OtpInput size={6} onSubmit={(otp) => handleVerify(otp)} />
 
         {/* <form onSubmit={handleVerify} className="mt-6 space-y-4">
           <input

@@ -1,26 +1,26 @@
-import React, { useEffect, forwardRef, useImperativeHandle } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import React, { useEffect, forwardRef, useImperativeHandle } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const MeetingInfo = forwardRef(({ meetingData, setMeetingData }, ref) => {
   const schema = z
     .object({
-      title: z.string().min(3, 'Meeting title must be at least 3 characters'),
+      title: z.string().min(3, "Meeting title must be at least 3 characters"),
       description: z.string().optional(),
-      startDate: z.date({ required_error: 'Start date is required' }),
-      endDate: z.date({ required_error: 'End date is required' }),
+      startDate: z.date({ required_error: "Start date is required" }),
+      endDate: z.date({ required_error: "End date is required" }),
     })
     .refine((data) => data.endDate > data.startDate, {
-      path: ['endDate'],
-      message: 'End date must be after start date',
+      path: ["endDate"],
+      message: "End date must be after start date",
     });
 
   const {
     register,
-    handleSubmit,
+    dleSubmit,
     control,
     trigger,
     watch,
@@ -68,9 +68,9 @@ const MeetingInfo = forwardRef(({ meetingData, setMeetingData }, ref) => {
             Meeting Title <span className="text-red-500">*</span>
           </label>
           <input
-            {...register('title')}
+            {...register("title")}
             placeholder="Enter meeting title"
-            className={`w-full border ${errors.title ? 'border-red-300' : 'border-gray-300'} rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition placeholder-gray-400`}
+            className={`w-full border ${errors.title ? "border-red-300" : "border-gray-300"} rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition placeholder-gray-400`}
           />
           {errors.title && (
             <p className="text-red-500 text-sm mt-2 flex items-center">
@@ -100,7 +100,7 @@ const MeetingInfo = forwardRef(({ meetingData, setMeetingData }, ref) => {
             <span className="text-gray-500 font-normal ml-1">(optional)</span>
           </label>
           <textarea
-            {...register('description')}
+            {...register("description")}
             value={meetingData.info.description}
             placeholder="Enter meeting description"
             rows={3}
@@ -121,7 +121,7 @@ const MeetingInfo = forwardRef(({ meetingData, setMeetingData }, ref) => {
                     Start Date & Time <span className="text-red-500">*</span>
                   </label>
                   <div
-                    className={`relative ${errors.startDate ? 'border-red-300' : 'border-gray-300'} border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500`}
+                    className={`relative ${errors.startDate ? "border-red-300" : "border-gray-300"} border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500`}
                   >
                     <DatePicker
                       selected={field.value ?? null}
@@ -186,7 +186,7 @@ const MeetingInfo = forwardRef(({ meetingData, setMeetingData }, ref) => {
                     End Date & Time <span className="text-red-500">*</span>
                   </label>
                   <div
-                    className={`relative ${errors.endDate ? 'border-red-300' : 'border-gray-300'} border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500`}
+                    className={`relative ${errors.endDate ? "border-red-300" : "border-gray-300"} border rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500`}
                   >
                     <DatePicker
                       selected={field.value ?? null}

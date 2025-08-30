@@ -1,18 +1,17 @@
-import React from 'react';
+import React from "react";
 import { useSelector } from "react-redux";
 
-
 const MeetingSummary = ({ meetingData }) => {
-    const { userName,userMail } = useSelector((store) => store.authSlice);
+  const { user } = useSelector((store) => store.authSlice.user);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
 
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
 
     return `${day}-${month}-${year} ${hours}:${minutes}`;
   };
@@ -184,8 +183,8 @@ const MeetingSummary = ({ meetingData }) => {
           <div className="space-y-3">
             <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
               <div>
-                <p className="text-gray-800 font-medium">{userName}</p>
-                <p className="text-gray-500 text-sm">{userMail}</p>
+                <p className="text-gray-800 font-medium">{user.name}</p>
+                <p className="text-gray-500 text-sm">{user.email}</p>
               </div>
               <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
                 Organizer

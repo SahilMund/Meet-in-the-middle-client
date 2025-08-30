@@ -1,18 +1,12 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  forwardRef,
-  useImperativeHandle,
-} from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { MdOutlinePersonAdd, MdOutlineMail, MdClose } from 'react-icons/md';
+import React, { useState, forwardRef, useImperativeHandle } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { MdOutlinePersonAdd, MdOutlineMail, MdClose } from "react-icons/md";
 
 const schema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email address"),
 });
 
 const AddParticipant = forwardRef(({ meetingData, setMeetingData }, ref) => {
@@ -77,7 +71,7 @@ const AddParticipant = forwardRef(({ meetingData, setMeetingData }, ref) => {
             <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 h-12 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-colors">
               <MdOutlinePersonAdd className="text-gray-500 mr-2 text-lg" />
               <input
-                {...register('name')}
+                {...register("name")}
                 type="text"
                 placeholder="Enter name"
                 className="flex-1 outline-none bg-transparent"
@@ -96,7 +90,7 @@ const AddParticipant = forwardRef(({ meetingData, setMeetingData }, ref) => {
             <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 h-12 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition-colors">
               <MdOutlineMail className="text-gray-500 mr-2 text-lg" />
               <input
-                {...register('email')}
+                {...register("email")}
                 type="email"
                 placeholder="Enter email"
                 className="flex-1 outline-none bg-transparent"

@@ -115,7 +115,7 @@ const Dashboard = () => {
     }
 
     fetchDashBoard();
-  }, []);
+  }, [userId]);
 
   return (
     <div className="w-screen">
