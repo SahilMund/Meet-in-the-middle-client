@@ -11,6 +11,8 @@ import WithAuth from "./hoc/WithAuth.jsx";
 import { Suspense, lazy } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import MeetingsInfoPage from "./pages/MeetingInfoPage.jsx";
+import MyErrorBoundary from "./components/error-boundary/ErrorBoundary.jsx";
+import NetworkWatcher from "./components/error-boundary/NetwrokWatcher.jsx";
 // import ProfileSettingsPage from "./pages/ProfileSettingsPage.jsx";
 // import SettingsPage from "./pages/SettingsPage.jsx";
 
@@ -40,6 +42,9 @@ function ProtectedLayout() {
 function App() {
   return (
     <>
+    <MyErrorBoundary>
+    <NetworkWatcher>
+
       <Suspense>
         <Routes>
           {/* Public routes */}
@@ -59,6 +64,8 @@ function App() {
           </Route>
         </Routes>
       </Suspense>
+    </NetworkWatcher>
+    </MyErrorBoundary>
     </>
   );
 }
