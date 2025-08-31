@@ -104,6 +104,10 @@ const OtpInput = ({ size, onSubmit }) => {
     onSubmit(inputValues.join(""));
   }, [inputValues, onSubmit]);
 
+  useEffect(() => {
+    inputRefs.current[0].focus();
+  }, []);
+
   return (
     <div className="flex justify-center  gap-2.5 p-5">
       {inputValues.map((val, idx) => (
