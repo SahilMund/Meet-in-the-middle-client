@@ -183,8 +183,8 @@ const MeetingSummary = ({ meetingData }) => {
           <div className="space-y-3">
             <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100">
               <div>
-                <p className="text-gray-800 font-medium">{user.name}</p>
-                <p className="text-gray-500 text-sm">{user.email}</p>
+                <p className="text-gray-800 font-medium">{user?.name}</p>
+                <p className="text-gray-500 text-sm">{user?.email}</p>
               </div>
               <span className="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded">
                 Organizer
