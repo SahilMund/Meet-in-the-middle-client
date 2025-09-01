@@ -27,6 +27,7 @@ const WithAuth = ({ children }) => {
               email: user.data.data.email,
               id: user.data.data.id,
               name: user.data.data.name,
+              avatar: user.data.data.avatar,
             })
           );
         } else {

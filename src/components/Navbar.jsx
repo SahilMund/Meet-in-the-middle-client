@@ -59,6 +59,7 @@ const Navbar = () => {
           email: user.data.data.email,
           id: user.data.data.id,
           name: user.data.data.name,
+          avatar: user.data.data.avatar,
         })
       );
     };
@@ -118,9 +119,17 @@ const Navbar = () => {
             whileHover={{ scale: 1.05 }}
             className="flex items-center space-x-2"
           >
-            <div className="w-8 h-8 text-indigo-600 flex items-center justify-center bg-gray-300 rounded-full font-semibold text-sm">
-              {user.avatar || user.name.slice(0, 2).toUpperCase()}
-            </div>
+            {user?.avatar ? (
+              <img
+                src={user.avatar}
+                alt="User Avatar"
+                className="w-8 h-8 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-8 h-8 text-indigo-600 flex items-center justify-center bg-gray-300 rounded-full font-semibold text-sm">
+                {user.name.slice(0, 2).toUpperCase()}
+              </div>
+            )}
             <span className="text-sm font-medium hidden sm:inline">
               {user.name.toUpperCase()}
             </span>
