@@ -77,7 +77,6 @@ const Navbar = () => {
       getUser();
     }
   }, [user, dispatch]);
-  console.log("the avatar", user);
   return (
     <div className="relative">
       {/* NAVBAR */}

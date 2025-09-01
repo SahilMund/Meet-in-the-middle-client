@@ -17,3 +17,5 @@ export const rejectMeeting = (meetingId) =>
   axios.put(endPoints.REJECT_MEETING, { meetingId });
 export const acceptMeeting = (data) =>
   axios.put(endPoints.ACCEPT_MEETING, data);
+export const updatemeetingDetails = (meetingId, data) =>
+  axios.put(endPoints.UPDATE_MEETING_DETAILS(meetingId), data);

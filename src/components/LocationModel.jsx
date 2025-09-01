@@ -25,7 +25,6 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
   };
 
   const checkConflicts = async (meetingId) => {
-    console.log(meetingId);
     try {
       const response = await getConflicts(meetingId);
       const data = await response.data;
@@ -43,7 +42,6 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
       console.error("Error fetching conflicts:", error.message);
     }
   };
-  console.log({ pendingConflicts });
 
   // Check for conflicts whenever invite changes
   useEffect(() => {
@@ -75,7 +73,6 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
   }, [isOpen, invite]);
 
   const handleConfirm = async () => {
-    console.log("executing...");
     try {
       const acceptedConflicts = pendingConflicts.filter(
         (meeting) => meeting.status === "accepted"
@@ -90,8 +87,6 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
   };
 
   const handleAccepted = async () => {
-    console.log("the latlong", LatLong);
-
     try {
       const { lat, lon } = LatLong;
       const meetingData = {
@@ -102,7 +97,6 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
       };
       const response = await acceptMeeting(meetingData);
       const data = await response.data;
-      console.log("response.success", data.success);
       if (!data.success) {
         toast.error(data.message);
         return;
@@ -110,7 +104,6 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
       toast.success(data.message);
       onClose();
     } catch (error) {
-      console.log("the error", error.message);
       toast.error(error.message);
     }
   };
@@ -124,7 +117,6 @@ const LocationModel = ({ isOpen, onClose, invite, myMeetings }) => {
         `https://nominatim.openstreetmap.org/search?format=json&q=${value}`
       );
       const data = await res.json();
-      console.log("the suggestions", data);
       setSuggestions(data);
     } else {
       setSuggestions([]);

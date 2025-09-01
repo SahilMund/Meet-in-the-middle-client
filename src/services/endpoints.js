@@ -17,6 +17,7 @@ const endPoints = {
     "/meeting/getUpCommingMeetings" + `?pageNo=${pageNo}&items=${items}`,
   GET_PENDING_MEETINGS: ({ pageNo, items }) =>
     "/meeting/getPendingMeetings" + `?pageNo=${pageNo}&items=${items}`,
+  UPDATE_MEETING_DETAILS: (meetingId) => `/meeting/editMeeting/${meetingId}`,
   GET_CONFLICTS: (id) => `/meeting/conflicts/${id}`,
   REJECT_MEETING: "/meeting/rejectMeeting",
   ACCEPT_MEETING: "/meeting/acceptMeeting",
