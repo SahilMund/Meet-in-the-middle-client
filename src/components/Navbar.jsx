@@ -119,7 +119,7 @@ const Navbar = () => {
             className="flex items-center space-x-2"
           >
             <div className="w-8 h-8 text-indigo-600 flex items-center justify-center bg-gray-300 rounded-full font-semibold text-sm">
-              {user.name.slice(0, 2).toUpperCase()}
+              {user.avatar || user.name.slice(0, 2).toUpperCase()}
             </div>
             <span className="text-sm font-medium hidden sm:inline">
               {user.name.toUpperCase()}

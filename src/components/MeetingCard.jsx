@@ -19,6 +19,7 @@ import { setMeetings } from "../toolkit/authenticationSlice";
 
 export default function MeetingList() {
   const { user } = useSelector((store) => store.authSlice);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isGrid, setIsGrid] = useState(false);
@@ -70,12 +71,15 @@ export default function MeetingList() {
               hour: "2-digit",
               minute: "2-digit",
             });
-
+            console.log(
+              "the participants",
+              participation?.meeting?.participants
+            );
             // ✅ Safely extract participants
             const people = (participation?.meeting?.participants || [])
-              .map((ele) => ele?.meeting?.user?.name)
+              .map((ele) => ele?.name)
               .filter(Boolean);
-
+            console.log({ people });
             return {
               _id: participation?.meeting?._id,
               title: participation?.meeting?.title,
@@ -100,7 +104,7 @@ export default function MeetingList() {
     }
 
     handleGetMyMeetings();
-  }, [user.id, dispatch, myMeetings]);
+  }, [user.id, dispatch]);
   return (
     <div className="p-5">
       {/* Header */}

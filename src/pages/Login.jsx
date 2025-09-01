@@ -43,6 +43,7 @@ const Login = () => {
           email: res.data.data.email,
           id: res.data.data.id,
           name: res.data.data.name,
+          avatar: res.data.data.avatar,
         })
       );
 
