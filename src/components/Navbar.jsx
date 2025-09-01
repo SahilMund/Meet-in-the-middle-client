@@ -21,12 +21,22 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const location = useLocation(); // ✅ check current route
-
+  const channel = new BroadcastChannel("logout_channel");
+  useEffect(() => {
+    const channel = new BroadcastChannel("logout_channel");
+    channel.onmessage = (event) => {
+      if (event.data === "logout") {
+        navigate("/login");
+      }
+    };
+    return () => channel.close();
+  }, [navigate]);
   async function handleSignOut() {
     try {
       setIsLogoutLoading(true);
       const data = await logoutUser();
       toast.success(data.data.message);
+      channel.postMessage("logout");
       setTimeout(() => navigate("/login"), 1000);
     } catch (error) {
       toast.error(error.response.message || "Failed Action");
@@ -67,7 +77,7 @@ const Navbar = () => {
       getUser();
     }
   }, [user, dispatch]);
-
+  console.log("the avatar", user);
   return (
     <div className="relative">
       {/* NAVBAR */}
