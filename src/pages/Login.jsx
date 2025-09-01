@@ -37,13 +37,14 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await loginUser(data);
-      console.log(res.data.data.user);
+      console.log("the response", res.data.data.user.avatar);
+
       dispatch(
         setUser({
-          email: res.data.data.email,
-          id: res.data.data.id,
-          name: res.data.data.name,
-          avatar: res.data.data.avatar,
+          email: res.data.data.user.email,
+          id: res.data.data.user._id,
+          name: res.data.data.user.name,
+          avatar: res.data.data.user.avatar,
         })
       );
 
