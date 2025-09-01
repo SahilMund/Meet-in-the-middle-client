@@ -37,7 +37,6 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await loginUser(data);
-      console.log("the response", res.data.data.user.avatar);
 
       dispatch(
         setUser({
@@ -53,7 +52,6 @@ const Login = () => {
         navigate("/home");
       }, 1000);
     } catch (err) {
-      console.log({ err });
       toast.error(err?.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);

@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 const MeetingSummary = ({ meetingData }) => {
   const { user } = useSelector((store) => store.authSlice);
-  console.log({ user });
   const formatDate = (dateString) => {
     const date = new Date(dateString);
 
