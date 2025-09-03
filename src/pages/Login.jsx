@@ -16,6 +16,7 @@ import { setUser } from "../toolkit/authenticationSlice";
 const schema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  rememberMe: z.boolean().optional(),
 });
 
 const Login = () => {
@@ -33,7 +34,7 @@ const Login = () => {
   });
 
   const onSubmit = async (data, e) => {
-    e.preventDefault(); // ✅ explicitly stop page refresh
+    e.preventDefault();
     setIsLoading(true);
     try {
       const res = await loginUser(data);
@@ -120,6 +121,20 @@ const Login = () => {
                 {errors.password.message}
               </p>
             )}
+          </div>
+          <div className="flex items-center">
+            <input
+              id="rememberMe"
+              {...register("rememberMe")}
+              type="checkbox"
+              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="rememberMe"
+              className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
+            >
+              Remember me
+            </label>
           </div>
 
           {/* Submit Button */}
