@@ -98,7 +98,7 @@ export default function MeetingList() {
     }
 
     handleGetMyMeetings();
-  }, [user.id, dispatch, myMeetings]);
+  }, [user?.id, dispatch, myMeetings]);
   return (
     <div className="p-5">
       {/* Header */}
