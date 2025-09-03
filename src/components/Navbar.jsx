@@ -133,6 +133,7 @@ const Navbar = () => {
                 src={user.avatar}
                 alt="User Avatar"
                 className="w-8 h-8 rounded-full object-cover"
+                loading="lazy"
               />
             ) : (
               <div className="w-8 h-8 text-indigo-600 flex items-center justify-center bg-gray-300 rounded-full font-semibold text-sm">
