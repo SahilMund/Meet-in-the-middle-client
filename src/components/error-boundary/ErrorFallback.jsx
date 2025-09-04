@@ -32,6 +32,10 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
           Please check your connection and try again.
         </p>
 
+        <pre className="mt-4 text-xs text-left text-red-700 bg-red-100 px-3 py-2 rounded border border-red-400 shadow-sm overflow-auto max-h-64 w-full max-w-2xl">
+          {error.stack || error.message}
+        </pre>
+
         <button
           onClick={resetErrorBoundary}
           className="mt-6 px-6 py-2 rounded-lg bg-red-600 text-white font-medium shadow hover:bg-red-700 transition"
@@ -63,12 +67,17 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
       </svg>
 
       <h2 className="text-2xl font-semibold text-blue-600 mb-2">
-        Something wrong here...
+        Something went wrong...
       </h2>
       <p className="text-gray-600 max-w-md text-sm">
-        Sorry, we're having some technical issues (as you can see). <br />
+        Sorry, we're having some technical issues. <br />
         Try refreshing the page, sometimes it works :)
       </p>
+
+      {/* Show full error (stack trace) */}
+      <pre className="mt-4 text-xs text-left text-gray-700 bg-white px-3 py-2 rounded border border-blue-200 shadow-sm overflow-auto max-h-64 w-full max-w-2xl">
+        {error.stack || error.message}
+      </pre>
 
       <button
         onClick={resetErrorBoundary}

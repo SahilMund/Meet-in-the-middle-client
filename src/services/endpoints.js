@@ -1,5 +1,5 @@
 const endPoints = {
-  LOGIN_USER: "/user/login",
+  LOGIN_USER: "/user/loin",
   UPLOAD_AVATAR: "/user/uploadAvatar",
   DELETE_USER: "/user/deleteUser",
   DELETE_AVATAR: "/user/deleteAvatar",
