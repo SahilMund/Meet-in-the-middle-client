@@ -32,19 +32,22 @@ axiosBaseInstance.interceptors.response.use(
   },
   async (error) => {
     console.error("❌ API Error:", error);
-
+    const originalRequest = error.config;
     // optional: handle 401 Unauthorized
-    if (error.response && error.response.status === 401) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
       try {
-        const res = await refreshUser();
-        console.log("new refresh toke", res.data);
-        window.location.href = "/home";
+        await refreshUser();
+        return axiosBaseInstance(originalRequest);
       } catch (error) {
         console.log({ error });
         toast.warn("🚨 Unauthorized. Redirecting to login...");
+        window.location.href = "/login";
       }
-      toast.warn("🚨 Unauthorized. Redirecting to login...");
-      // window.location.href = "/login";
     }
 
     return Promise.reject(error);
