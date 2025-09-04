@@ -186,14 +186,12 @@ const MeetingForm = () => {
     };
     setIsLoading(true);
     try {
-      console.log(data);
       const res = await createMeeting(data);
       toast.success(res.data.message);
       setTimeout(() => {
         navigate("/home");
       }, 1000);
     } catch (err) {
-      console.log(err);
       toast.error(err?.response?.data?.message || "create meeting failed");
     } finally {
       setIsLoading(false);

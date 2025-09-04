@@ -12,7 +12,6 @@ const OtpVerificationPage = () => {
   const { data } = location.state || {};
 
   const handleVerify = (otp) => {
-    console.log(otp.length);
     if (otp.length !== 6) {
       toast.error("Please enter a valid 6-digit OTP");
       return;

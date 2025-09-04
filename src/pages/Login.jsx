@@ -16,6 +16,7 @@ import { setUser } from "../toolkit/authenticationSlice";
 const schema = z.object({
   email: z.string().email("Invalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  rememberMe: z.boolean().optional(),
 });
 
 const Login = () => {
@@ -33,11 +34,10 @@ const Login = () => {
   });
 
   const onSubmit = async (data, e) => {
-    e.preventDefault(); // ✅ explicitly stop page refresh
+    e.preventDefault();
     setIsLoading(true);
     try {
       const res = await loginUser(data);
-      console.log("the response", res.data.data.user.avatar);
 
       dispatch(
         setUser({
@@ -53,12 +53,23 @@ const Login = () => {
         navigate("/home");
       }, 1000);
     } catch (err) {
-      console.log({ err });
       toast.error(err?.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }
   };
+
+    const handleGoogleOAuth = () => {
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+    window.location.href = `${BASE_URL}/user/google`
+  }
+
+  const handleFbOAuth = () => {
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+    window.location.href = `${BASE_URL}/user/facebook`
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -123,6 +134,20 @@ const Login = () => {
               </p>
             )}
           </div>
+          <div className="flex items-center">
+            <input
+              id="rememberMe"
+              {...register("rememberMe")}
+              type="checkbox"
+              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="rememberMe"
+              className="ml-2 block text-sm text-gray-900 dark:text-gray-300"
+            >
+              Remember me
+            </label>
+          </div>
 
           {/* Submit Button */}
           <button
@@ -164,12 +189,18 @@ const Login = () => {
 
         {/* Social Login */}
         <div className="space-y-4">
-          <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          {/* Google Button */}
+          <button
+            onClick={handleGoogleOAuth}
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
             <FcGoogle size={20} />
             <span>Continue with Google</span>
           </button>
 
-          <button className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+          {/* Facebook Button */}
+          <button
+            onClick={handleFbOAuth}
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
             <FaFacebook size={20} className="text-blue-600" />
             <span>Continue with Facebook</span>
           </button>

@@ -69,6 +69,16 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
       <h2 className="text-2xl font-semibold text-blue-600 mb-2">
         Something went wrong...
       </h2>
+      {/*  show error details */}
+      {import.meta.env.DEV && <div>
+        <p className="text-red-500 font-mono text-sm mb-3">
+          {error.message}
+        </p>
+
+        <pre className="bg-gray-200 text-left p-3 rounded mt-4 text-xs text-red-700 overflow-auto">
+          {error.stack}
+        </pre></div>
+      }
       <p className="text-gray-600 max-w-md text-sm">
         Sorry, we're having some technical issues. <br />
         Try refreshing the page, sometimes it works :)

@@ -21,7 +21,6 @@ const SettingPageNotification = () => {
       const getSettings = await getUserDefaultSettings();
       setSettings(getSettings?.data.data);
 
-      console.log(getSettings, "hhhh");
       toast.success(getSettings?.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
@@ -43,7 +42,6 @@ const SettingPageNotification = () => {
   }, []);
   const handleToggle = (e) => {
     setNotification(true);
-    console.log(e.target.checked, e.target.value, "dgfvdhzbfv");
     setSettings((prev) => {
       return {
         ...prev,
@@ -64,10 +62,8 @@ const SettingPageNotification = () => {
   }, [notification]);
 
   const handleSave = async () => {
-    console.log("Changed", settings);
     try {
       const res = await updateUserDefaultSettings(settings);
-      console.log(res, "res");
       setSettings({
         ...settings,
         ...res.data.data,

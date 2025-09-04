@@ -100,7 +100,6 @@ const OtpInput = ({ size, onSubmit }) => {
 
   useEffect(() => {
     if (inputValues.includes("")) return;
-    console.log("inotp submition", inputValues.join(""));
     onSubmit(inputValues.join(""));
   }, [inputValues, onSubmit]);
 
