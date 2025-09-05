@@ -206,7 +206,7 @@ const Login = () => {
             onClick={handleMagicLink}
             className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
           >
-            <span>Continue with Magic Link</span>
+            <span>✨Continue with Magic Link</span>
           </button>
           {/* Google Button */}
           <button

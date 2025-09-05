@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import MeetingCard from "../components/MeetingCard";
 import { motion } from "framer-motion";
-import { FaMapMarkerAlt, FaCalendarAlt, FaRegCheckCircle, FaRegStar, FaUsers } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaRegCheckCircle,
+  FaRegStar,
+  FaUsers,
+} from "react-icons/fa";
 import { IoPersonOutline, IoNotificationsOutline } from "react-icons/io5";
 import { MdHistory } from "react-icons/md";
 import { AiOutlineStock } from "react-icons/ai";
@@ -31,15 +37,45 @@ const Dashboard = () => {
   });
 
   const updates1 = [
-    { title: "Upcoming meetings", number: updatesNumbers.upcomingmeetings, icon: <FaCalendarAlt />, color: "#155dfc" },
-    { title: "Pending invitations", number: updatesNumbers.pendingInvations, icon: <IoPersonOutline />, color: "#ffc400" },
-    { title: "Total Meetings", number: updatesNumbers.totalMeetings, icon: <FaRegStar />, color: "#f70505" },
+    {
+      title: "Upcoming meetings",
+      number: updatesNumbers.upcomingmeetings,
+      icon: <FaCalendarAlt />,
+      color: "#155dfc",
+    },
+    {
+      title: "Pending invitations",
+      number: updatesNumbers.pendingInvations,
+      icon: <IoPersonOutline />,
+      color: "#ffc400",
+    },
+    {
+      title: "Total Meetings",
+      number: updatesNumbers.totalMeetings,
+      icon: <FaRegStar />,
+      color: "#f70505",
+    },
   ];
 
   const updates2 = [
-    { title: "This Week", number: updatesNumbers.currentWeekMeetingCount, icon: <AiOutlineStock />, color: "#f70505" },
-    { title: "Avg Participants", number: updatesNumbers?.avgParticipants?.toFixed(2), icon: <FaUsers />, color: "#a063eb" },
-    { title: "Success Rate", number: updatesNumbers.successRate, icon: <FaRegCheckCircle />, color: "#ff7700" },
+    {
+      title: "This Week",
+      number: updatesNumbers.currentWeekMeetingCount,
+      icon: <AiOutlineStock />,
+      color: "#f70505",
+    },
+    {
+      title: "Avg Participants",
+      number: updatesNumbers?.avgParticipants?.toFixed(2),
+      icon: <FaUsers />,
+      color: "#a063eb",
+    },
+    {
+      title: "Success Rate",
+      number: updatesNumbers.successRate,
+      icon: <FaRegCheckCircle />,
+      color: "#ff7700",
+    },
   ];
 
   async function fetchUpcomingMeetings(page = 1) {
@@ -58,7 +94,8 @@ const Dashboard = () => {
         const peopleCount = ele.participants.length;
 
         const myStatus =
-          ele.participants.find((itm) => itm.user === userId)?.status || "Pending";
+          ele.participants.find((itm) => itm.user === userId)?.status ||
+          "Pending";
 
         return {
           title: ele.title || "Untitled Meeting",
@@ -70,7 +107,9 @@ const Dashboard = () => {
         };
       });
 
-      setUpcomingMeetings((prev) => (page === 1 ? newMeetings : [...prev, ...newMeetings]));
+      setUpcomingMeetings((prev) =>
+        page === 1 ? newMeetings : [...prev, ...newMeetings]
+      );
       setHasMore(newMeetings.length > 0);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Error Fetching Meetings");
@@ -111,9 +150,12 @@ const Dashboard = () => {
         {/* CTA Card */}
         <div className="flex justify-between items-center mt-10 bg-[#0b0626] rounded-2xl p-6 shadow-lg">
           <div className="flex flex-col text-white max-w-[70%]">
-            <h2 className="text-2xl font-bold mb-2">Ready To Organize a New Meeting?</h2>
+            <h2 className="text-2xl font-bold mb-2">
+              Ready To Organize a New Meeting?
+            </h2>
             <p className="text-sm opacity-90">
-              Create a meeting and invite participants to find the perfect location.
+              Create a meeting and invite participants to find the perfect
+              location.
             </p>
           </div>
           <motion.button
@@ -177,13 +219,29 @@ const Dashboard = () => {
             </div>
             <div className="flex flex-col gap-4 max-h-64 overflow-y-auto pr-2">
               {[
-                { user: "John", action: "voted for Central Park Cafe", context: "Team StandUp", time: "12:08 PM" },
-                { user: "Sarah", action: "joined the meeting", context: "Weekly Sync", time: "9:45 AM" },
-                { user: "Mike", action: "created a new poll", context: "Product Planning", time: "8:30 AM" },
+                {
+                  user: "John",
+                  action: "voted for Central Park Cafe",
+                  context: "Team StandUp",
+                  time: "12:08 PM",
+                },
+                {
+                  user: "Sarah",
+                  action: "joined the meeting",
+                  context: "Weekly Sync",
+                  time: "9:45 AM",
+                },
+                {
+                  user: "Mike",
+                  action: "created a new poll",
+                  context: "Product Planning",
+                  time: "8:30 AM",
+                },
               ].map((activity, index) => (
                 <div key={index} className="p-4 bg-purple-50 rounded-lg">
                   <h3 className="font-medium">
-                    <span className="font-semibold">{activity.user}</span> {activity.action}
+                    <span className="font-semibold">{activity.user}</span>{" "}
+                    {activity.action}
                   </h3>
                   <p className="text-sm text-gray-500">
                     {activity.context} • {activity.time}
@@ -201,8 +259,14 @@ const Dashboard = () => {
             </div>
             <div className="flex flex-col gap-4 max-h-64 overflow-y-auto pr-2">
               {[
-                { title: "Meeting will start soon", message: "Team StandUp starts in 2 hours" },
-                { title: "New poll created", message: "Vote for the next meeting location" },
+                {
+                  title: "Meeting will start soon",
+                  message: "Team StandUp starts in 2 hours",
+                },
+                {
+                  title: "New poll created",
+                  message: "Vote for the next meeting location",
+                },
               ].map((notif, index) => (
                 <div key={index} className="p-4 bg-red-50 rounded-lg">
                   <h4 className="font-semibold">{notif.title}</h4>
@@ -212,7 +276,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-
+        <br />
         <MeetingCard />
       </div>
     </div>
