@@ -8,19 +8,20 @@ import NetworkWatcher from "./components/error-boundary/NetwrokWatcher.jsx";
 import PageNotFound from "./components/error-boundary/PageNotFound.jsx";
 import ServerError from "./components/error-boundary/ServerError.jsx";
 import { useNotification } from "./hooks/useNotification.js";
+import MagicLogin from "./components/MagicLogin.jsx";
 
 // Lazy Loading
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
 const Invitations = lazy(() => import("./pages/Invitations.jsx"));
 const Landingpage = lazy(() => import("./pages/Landingpage.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
-const OtpVerificationPage = lazy(() =>
-  import("./pages/OtpVerificarionPage.jsx")
+const OtpVerificationPage = lazy(
+  () => import("./pages/OtpVerificarionPage.jsx")
 );
 const SignUp = lazy(() => import("./pages/SignUp.jsx"));
 const MeetingForm = lazy(() => import("./pages/MeetingForm.jsx"));
-const ProfileSettingsPage = lazy(() =>
-  import("./pages/ProfileSettingsPage.jsx")
+const ProfileSettingsPage = lazy(
+  () => import("./pages/ProfileSettingsPage.jsx")
 );
 const SettingsPage = lazy(() => import("./pages/SettingsPage.jsx"));
 
@@ -65,7 +66,7 @@ function App() {
 
   return (
     <MyErrorBoundary>
-      {/* <NetworkWatcher> */}
+ {/* <NetworkWatcher> */}
       <Suspense
         fallback={
           <div className="flex h-screen items-center justify-center text-lg">
@@ -79,6 +80,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/otp" element={<OtpVerificationPage />} />
+           <Route path="/magicLogin" element={<MagicLogin />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/500" element={<ServerError />} />
 

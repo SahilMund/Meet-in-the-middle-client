@@ -30,6 +30,7 @@ const Invitations = () => {
     async function getPendingMeets() {
       const res = await getPendingMeetings({ pageNo: 1, items: 10 });
       // toast.success(res.data.message);
+      console.log("the data", res.data);
       setPendingInvitations(res.data.data.meetings);
     }
     if (!showAcceptModal && !showDeclineModal) getPendingMeets();

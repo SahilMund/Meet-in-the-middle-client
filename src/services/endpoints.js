@@ -1,6 +1,7 @@
 const endPoints = {
   LOGIN_USER: "/user/login",
   REFRESH_USER: "/user/refreshAccessToken",
+  MAGIC_LINK: "/user/sendMagicLink",
   UPLOAD_AVATAR: "/user/uploadAvatar",
   DELETE_USER: "/user/deleteUser",
   DELETE_AVATAR: "/user/deleteAvatar",
