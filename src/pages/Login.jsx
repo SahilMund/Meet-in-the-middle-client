@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +23,18 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const authChannel = new BroadcastChannel("auth");
+  useEffect(() => {
+    authChannel.onmessage = (event) => {
+      if (event.data.type === "LOGIN") {
+        dispatch(setUser(event.data.payload));
+        navigate("/home");
+      }
+    };
+    return () => {
+      authChannel.close();
+    };
+  }, [dispatch, navigate]);
   const {
     register,
     handleSubmit,
@@ -37,17 +48,15 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await loginUser(data);
-      console.log("the response", res.data.data.user.avatar);
-
-      dispatch(
-        setUser({
-          email: res.data.data.user.email,
-          id: res.data.data.user._id,
-          name: res.data.data.user.name,
-          avatar: res.data.data.user.avatar,
-        })
-      );
-
+      const userData = {
+        email: res.data.data.user.email,
+        id: res.data.data.user._id,
+        name: res.data.data.user.name,
+        avatar: res.data.data.user.avatar,
+      };
+      dispatch(setUser(userData));
+      //Notify the other tabs
+      authChannel.postMessage({ type: "LOGIN", payload: userData });
       toast.success("Login successful!");
       setTimeout(() => {
         navigate("/home");
