@@ -71,9 +71,6 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
       </h2>
       {/*  show error details */}
       {import.meta.env.DEV && <div>
-        <p className="text-red-500 font-mono text-sm mb-3">
-          {error.message}
-        </p>
 
         <pre className="bg-gray-200 text-left p-3 rounded mt-4 text-xs text-red-700 overflow-auto">
           {error.stack}
@@ -83,11 +80,6 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
         Sorry, we're having some technical issues. <br />
         Try refreshing the page, sometimes it works :)
       </p>
-
-      {/* Show full error (stack trace) */}
-      <pre className="mt-4 text-xs text-left text-gray-700 bg-white px-3 py-2 rounded border border-blue-200 shadow-sm overflow-auto max-h-64 w-full max-w-2xl">
-        {error.stack || error.message}
-      </pre>
 
       <button
         onClick={resetErrorBoundary}

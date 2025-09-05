@@ -3,7 +3,6 @@ import React, {
   Suspense,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import {
@@ -42,7 +41,7 @@ const MeetingsInfoPage = () => {
   const [currentWindow, setcurrentWindow] = useState(0);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const { id } = useParams();
-  const { user, meetings } = useSelector((store) => store.authSlice);
+  const { user } = useSelector((store) => store.authSlice);
   // console.log({ user, meetings });
 
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +52,7 @@ const MeetingsInfoPage = () => {
   const [description, setDescription] = useState("");
 
   const myParticipation = meeting?.participants?.find(
-    (participant) => participant.email == user.email
+    (participant) => participant?.email == user?.email
   );
 
   useEffect(() => {
@@ -268,41 +267,37 @@ const MeetingsInfoPage = () => {
         {/* Tabs */}
         <div className="flex gap-8 border-b-2 border-gray-200 pb-3 mb-6 text-lg">
           <div
-            className={`flex items-center gap-2 cursor-pointer ${
-              currentWindow === 0
-                ? "text-indigo-600 font-semibold"
-                : "text-gray-500"
-            }`}
+            className={`flex items-center gap-2 cursor-pointer ${currentWindow === 0
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-500"
+              }`}
             onClick={() => setcurrentWindow(0)}
           >
             <FaInfoCircle /> Overview
           </div>
           <div
-            className={`flex items-center gap-2 cursor-pointer ${
-              currentWindow === 1
-                ? "text-indigo-600 font-semibold"
-                : "text-gray-500"
-            }`}
+            className={`flex items-center gap-2 cursor-pointer ${currentWindow === 1
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-500"
+              }`}
             onClick={() => setcurrentWindow(1)}
           >
             <FaUsers /> Participants
           </div>
           <div
-            className={`cursor-pointer ${
-              currentWindow === 2
-                ? "text-indigo-600 font-semibold"
-                : "text-gray-500"
-            }`}
+            className={`cursor-pointer ${currentWindow === 2
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-500"
+              }`}
             onClick={() => setcurrentWindow(2)}
           >
             Voting
           </div>
           <div
-            className={`cursor-pointer ${
-              currentWindow === 3
-                ? "text-indigo-600 font-semibold"
-                : "text-gray-500"
-            }`}
+            className={`cursor-pointer ${currentWindow === 3
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-500"
+              }`}
             onClick={() => setcurrentWindow(3)}
           >
             Map View
