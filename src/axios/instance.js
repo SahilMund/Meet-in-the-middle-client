@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { refreshUser } from "../services/authentication";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const axiosBaseInstance = axios.create({
@@ -26,16 +27,27 @@ axiosBaseInstance.interceptors.request.use(
 axiosBaseInstance.interceptors.response.use(
   (response) => {
     // console.log("📥 Response:", response.status, response.config.url);
-    // console.log("Response data:", response.data);
+    // console.log("Response data from interceptors:", response.data);
     return response;
   },
-  (error) => {
+  async (error) => {
     console.error("❌ API Error:", error);
-
+    const originalRequest = error.config;
     // optional: handle 401 Unauthorized
-    if (error.response && error.response.status === 401) {
-      toast.warn("🚨 Unauthorized. Redirecting to login...");
-      // window.location.href = "/login";
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+      try {
+        await refreshUser();
+        return axiosBaseInstance(originalRequest);
+      } catch (error) {
+        console.log({ error });
+        toast.warn("🚨 Unauthorized. Redirecting to login...");
+        window.location.href = "/login";
+      }
     }
 
     return Promise.reject(error);

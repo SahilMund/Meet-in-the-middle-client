@@ -36,9 +36,9 @@ export default function MeetingList() {
   });
 
   const statusColors = {
-    accepted: "bg-green-100 text-green-800 border-2 border-green-300",
-    pending: "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
-    rejected: "bg-blue-100 text-blue-800 border-2 border-blue-300",
+    Accepted: "bg-green-100 text-green-800 border-2 border-green-300",
+    Pending: "bg-yellow-100 text-yellow-800 border-2 border-yellow-300",
+    Rejected: "bg-blue-100 text-blue-800 border-2 border-blue-300",
   };
 
   const getInitials = (name) => {
@@ -52,7 +52,6 @@ export default function MeetingList() {
     async function handleGetMyMeetings() {
       try {
         const res = await getMymeetings({ pageNo: 1, items: 10 });
-        console.log(res, "-------------");
 
         setMyMeetings(
           res.data.data.meetings.map((participation) => {
@@ -71,15 +70,11 @@ export default function MeetingList() {
               hour: "2-digit",
               minute: "2-digit",
             });
-            console.log(
-              "the participants",
-              participation?.meeting?.participants
-            );
+
             // ✅ Safely extract participants
             const people = (participation?.meeting?.participants || [])
               .map((ele) => ele?.name)
               .filter(Boolean);
-            console.log({ people });
             return {
               _id: participation?.meeting?._id,
               title: participation?.meeting?.title,
@@ -98,13 +93,12 @@ export default function MeetingList() {
 
         dispatch(setMeetings(myMeetings));
       } catch (error) {
-        console.log(error);
         toast.error(error?.response?.data?.message || "Failed to Fetch");
       }
     }
 
     handleGetMyMeetings();
-  }, [user.id, dispatch]);
+  }, [user?.id, dispatch, myMeetings]);
   return (
     <div className="p-5">
       {/* Header */}

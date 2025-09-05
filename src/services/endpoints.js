@@ -1,5 +1,7 @@
 const endPoints = {
   LOGIN_USER: "/user/login",
+  REFRESH_USER: "/user/refreshAccessToken",
+  MAGIC_LINK: "/user/sendMagicLink",
   UPLOAD_AVATAR: "/user/uploadAvatar",
   DELETE_USER: "/user/deleteUser",
   DELETE_AVATAR: "/user/deleteAvatar",
@@ -17,6 +19,7 @@ const endPoints = {
     "/meeting/getUpCommingMeetings" + `?pageNo=${pageNo}&items=${items}`,
   GET_PENDING_MEETINGS: ({ pageNo, items }) =>
     "/meeting/getPendingMeetings" + `?pageNo=${pageNo}&items=${items}`,
+  UPDATE_MEETING_DETAILS: (meetingId) => `/meeting/editMeeting/${meetingId}`,
   GET_CONFLICTS: (id) => `/meeting/conflicts/${id}`,
   REJECT_MEETING: "/meeting/rejectMeeting",
   ACCEPT_MEETING: "/meeting/acceptMeeting",

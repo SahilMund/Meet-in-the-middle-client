@@ -1,4 +1,11 @@
-import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import React, {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   FaCalendarAlt,
   FaClock,
@@ -22,50 +29,44 @@ import getDuration from "../utils/getDuration";
 import { toast } from "react-toastify";
 import {
   getMeetingById,
-  getPendingMeetings,
   rejectMeeting,
+  updatemeetingDetails,
 } from "../services/meetings";
+import Modal from "../components/Modal";
 
 const MeetingsInfoPage = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
-  const [showAcceptModal, setShowAcceptModal] = useState(false);
-  const [selectedInvite, setSelectedInvite] = useState(null);
-  const [inviteId, setInviteId] = useState(null);
-  const [pendingInvitations, setPendingInvitations] = useState([]);
+
   const [meeting, setMeeting] = useState({});
+
   const [currentWindow, setcurrentWindow] = useState(0);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const { id } = useParams();
+  const { user, meetings } = useSelector((store) => store.authSlice);
+  // console.log({ user, meetings });
 
-  const { meetings } = useSelector((store) => store.authSlice);
+  const [isOpen, setIsOpen] = useState(false);
+
+  //edit meeting details modal
+  const [isOpenMadal, setIsOpenMadal] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  const myParticipation = meeting?.participants?.find(
+    (participant) => participant.email == user.email
+  );
 
   useEffect(() => {
-    async function getPendingMeets() {
-      const res = await getPendingMeetings({ pageNo: 1, items: 10 });
-      console.log(res);
-      // toast.success(res.data.message);
-      setPendingInvitations(res.data.data.meetings);
+    if (meeting) {
+      setTitle(meeting.title || "");
+      setDescription(meeting.description || "");
     }
-    if (!showAcceptModal && !showDeclineModal) getPendingMeets();
-  }, [showAcceptModal, showDeclineModal]);
+  }, [meeting]);
 
-  const { user } = useSelector((store) => store.authSlice);
-  console.log({ user });
-  // console.log(user.id, meeting.creator._id);
-
-  //  Participants with status
-  const participants = [
-    { name: "Jane Smith", status: "confirmed" },
-    { name: "Bob Johnson", status: "confirmed" },
-    { name: "Alice Brown", status: "pending" }, // one pending
-  ];
   const handleDelete = () => {
     setShowDeleteAlert(false);
-    console.log("Meeting Deleted ✅");
     // add delete logic here (API call etc.)
   };
-
-  console.log("hello", user?.name == meeting?.creator?.name);
   useEffect(() => {
     const fetchmeeting = async () => {
       const response = await getMeetingById(id);
@@ -74,8 +75,8 @@ const MeetingsInfoPage = () => {
 
     fetchmeeting();
   }, [id]);
-  // console.log(meeting);
 
+  console.log(meeting);
   const convertDate = (date) => {
     return date.toLocaleDateString("en-IN", {
       day: "2-digit",
@@ -84,11 +85,30 @@ const MeetingsInfoPage = () => {
     });
   };
   const convertTime = (date) => {
-    console.log({ user });
     return date.toLocaleTimeString("en-IN", {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const onClose = () => {
+    setIsOpenMadal(false);
+  };
+
+  const updateMeeting = async () => {
+    const response = await updatemeetingDetails(meeting?._id, {
+      title,
+      description,
+    });
+    if (response.data.success) {
+      toast.success(response.data.message);
+    } else {
+      toast.error(response.data.message);
+    }
+  };
+
+  const onCloseLocationModal = () => {
+    setIsOpen(false);
   };
 
   const handleDecline = useCallback(async (id) => {
@@ -100,11 +120,30 @@ const MeetingsInfoPage = () => {
       }
       toast.success(data.message);
     } catch (error) {
-      console.log("error", error.message);
       toast.error(error.message);
     }
     setShowDeclineModal(false);
   }, []);
+
+  // const checkConflicts = async (meetingId) => {
+  //   console.log(meetingId);
+  //   try {
+  //     const response = await getConflicts(meetingId);
+  //     const data = await response.data;
+
+  //     if (data.success && data.data.conflicts.length > 0) {
+  //       setHasConflict(true);
+  //       setPendingConflicts(data.data.conflicts);
+  //       setShowLocationFields(false);
+  //     } else {
+  //       setHasConflict(false);
+  //       setPendingConflicts([]);
+  //       setShowLocationFields(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching conflicts:", error.message);
+  //   }
+  // };
 
   return (
     <div className="p-6 bg-[#f4f6f9] min-h-screen relative">
@@ -153,7 +192,7 @@ const MeetingsInfoPage = () => {
 
           <div className="flex flex-col gap-6 text-indigo-100 font-medium">
             <div className="flex gap-2">
-              <p>Stats On:</p>
+              <p>Starts On:</p>
               <FaCalendarAlt className="text-yellow-300" />
               <span>{convertDate(new Date(meeting.scheduledAt))}</span>
 
@@ -183,7 +222,12 @@ const MeetingsInfoPage = () => {
           </button>
           {user?.id === meeting?.creator?._id ? (
             <>
-              <button className="flex items-center gap-2 border-2 border-blue-300 text-blue-100 hover:bg-blue-400 hover:text-white transition px-3 py-2 rounded-lg shadow">
+              <button
+                className="flex items-center gap-2 border-2 border-blue-300 text-blue-100 hover:bg-blue-400 hover:text-white transition px-3 py-2 rounded-lg shadow"
+                onClick={() => {
+                  setIsOpenMadal(true);
+                }}
+              >
                 <FaEdit /> Edit
               </button>
               <button
@@ -193,27 +237,28 @@ const MeetingsInfoPage = () => {
                 <FaTrash /> Cancel
               </button>
             </>
-          ) : (
+          ) : myParticipation?.status == "Pending" ? (
             <>
               <button
                 className="flex items-center gap-2 border-2 border-green-300 text-blue-100 hover:bg-green-400 hover:text-white transition px-3 py-2 rounded-lg shadow"
-                onClick={() => {
-                  setSelectedInvite(meeting);
-                  setShowAcceptModal(true);
-                }}
+                onClick={() => setIsOpen(true)}
               >
                 Accept
               </button>
               <button
                 className="flex items-center gap-2 border-2 border-red-300 text-red-100 hover:bg-red-500 hover:text-white transition px-3 py-2 rounded-lg shadow"
-                onClick={() => {
-                  setShowDeclineModal(true);
-                  setInviteId(meeting.id);
-                }}
+                onClick={() => setShowDeclineModal(true)}
               >
                 Reject
               </button>
             </>
+          ) : (
+            <button
+              disabled={true}
+              className="flex cursor-not-allowed items-center gap-2 border-2 border-blue-300 text-blue-100 hover:text-white transition px-3 py-2 rounded-lg shadow"
+            >
+              {myParticipation?.status}
+            </button>
           )}
         </div>
       </div>
@@ -293,7 +338,7 @@ const MeetingsInfoPage = () => {
           {currentWindow === 1 && (
             <div>
               <p className="text-gray-700 mb-4 font-bold text-lg">
-                Participants ({participants.length})
+                Participants ({meeting?.participants.length})
               </p>
               <div
                 className="flex flex-col gap-4 h-[40vh] overflow-y-scroll pr-2"
@@ -351,25 +396,49 @@ const MeetingsInfoPage = () => {
           )}
         </div>
       </div>
-      <Suspense>
-        {showDeclineModal && (
-          <ConfirmationModel
-            idx={inviteId}
-            handleDecline={handleDecline}
-            showDeclineModal={showDeclineModal}
-            setShowDeclineModal={setShowDeclineModal}
-          />
-        )}
 
-        {showAcceptModal && (
-          <LocationModel
-            isOpen={showAcceptModal}
-            onClose={() => setShowAcceptModal(false)}
-            invite={selectedInvite}
-            myMeetings={meetings}
-          />
-        )}
-      </Suspense>
+      <LocationModel
+        isOpen={isOpen}
+        onClose={onCloseLocationModal}
+        invite={{ ...meeting, id: meeting._id }}
+      />
+
+      <ConfirmationModel
+        idx={meeting._id}
+        handleDecline={handleDecline}
+        showDeclineModal={showDeclineModal}
+        setShowDeclineModal={setShowDeclineModal}
+      />
+
+      <Modal open={isOpenMadal} onClose={onClose} save={updateMeeting}>
+        <div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Meeting Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              placeholder="Enter meeting title"
+              value={title}
+              className={`w-full border rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition placeholder-gray-400`}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Description
+              <span className="text-gray-500 font-normal ml-1">(optional)</span>
+            </label>
+            <textarea
+              placeholder="Enter meeting description"
+              value={description}
+              rows={3}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition placeholder-gray-400"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
