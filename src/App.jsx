@@ -57,7 +57,7 @@ function App() {
 
   if (import.meta.env.MODE === "development") {
     console.log("[SW]: forces a clean slate every time you restart Vite. ");
-    import("./unregisterServiceWorker.js").then(
+    import("./unregister.sw.js").then(
       ({ unregisterServiceWorker }) => {
         unregisterServiceWorker();
       }
