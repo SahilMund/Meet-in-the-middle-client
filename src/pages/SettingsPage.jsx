@@ -9,9 +9,12 @@ import SettingPagePrivacy from "./SettingPagePrivacy";
 import SettingPageGenaral from "./SettingPageGenaral";
 import SettingPageAccount from "./SettingPageAccount";
 import SettingsPageHelp from "./SettingsPageHelp";
+import { useNotification } from "../hooks/useNotification";
 
 const SettingsPage = () => {
   const [currWindow, setCurrWindow] = useState(0);
+
+  const { subscribeToPush, isSubscribed } = useNotification();
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -20,7 +23,20 @@ const SettingsPage = () => {
         <h1 className="text-3xl font-bold text-gray-800">Settings</h1>
         <p className="text-gray-500">
           Manage your account preferences and application settings
+
         </p>
+
+        {isSubscribed ? (
+          <p>Push notifications enabled ✅</p>
+        ) : (
+          <button
+            className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 0
+              ? "text-rose-500 border-b-2 border-rose-500"
+              : "text-gray-600 hover:text-gray-800"
+              }`}
+            type="button"
+            onClick={subscribeToPush}>Enable Push Notifications</button>
+        )}
       </div>
 
       {/* Card Container */}
@@ -28,11 +44,10 @@ const SettingsPage = () => {
         {/* Tabs Navigation */}
         <div className="flex flex-wrap gap-4 sm:gap-8 ">
           <button
-            className={`flex items-center gap-2 text-lg font-medium transition-colors ${
-              currWindow === 0
-                ? "text-rose-500 border-b-2 border-rose-500"
-                : "text-gray-600 hover:text-gray-800"
-            }`}
+            className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 0
+              ? "text-rose-500 border-b-2 border-rose-500"
+              : "text-gray-600 hover:text-gray-800"
+              }`}
             type="button"
             onClick={() => setCurrWindow(0)}
           >
@@ -41,11 +56,10 @@ const SettingsPage = () => {
           </button>
 
           <button
-            className={`flex items-center gap-2 text-lg font-medium transition-colors ${
-              currWindow === 1
-                ? "text-rose-500 border-b-2 border-rose-500"
-                : "text-gray-600 hover:text-gray-800"
-            }`}
+            className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 1
+              ? "text-rose-500 border-b-2 border-rose-500"
+              : "text-gray-600 hover:text-gray-800"
+              }`}
             type="button"
             onClick={() => setCurrWindow(1)}
           >
@@ -54,11 +68,10 @@ const SettingsPage = () => {
           </button>
 
           <button
-            className={`flex items-center gap-2 text-lg font-medium transition-colors ${
-              currWindow === 2
-                ? "text-rose-500 border-b-2 border-rose-500"
-                : "text-gray-600 hover:text-gray-800"
-            }`}
+            className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 2
+              ? "text-rose-500 border-b-2 border-rose-500"
+              : "text-gray-600 hover:text-gray-800"
+              }`}
             type="button"
             onClick={() => setCurrWindow(2)}
           >
@@ -67,11 +80,10 @@ const SettingsPage = () => {
           </button>
 
           <button
-            className={`flex items-center gap-2 text-lg font-medium transition-colors ${
-              currWindow === 3
-                ? "text-rose-500 border-b-2 border-rose-500"
-                : "text-gray-600 hover:text-gray-800"
-            }`}
+            className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 3
+              ? "text-rose-500 border-b-2 border-rose-500"
+              : "text-gray-600 hover:text-gray-800"
+              }`}
             type="button"
             onClick={() => setCurrWindow(3)}
           >
@@ -80,11 +92,10 @@ const SettingsPage = () => {
           </button>
 
           <button
-            className={`flex items-center gap-2 text-lg font-medium transition-colors ${
-              currWindow === 4
-                ? "text-rose-500 border-b-2 border-rose-500"
-                : "text-gray-600 hover:text-gray-800"
-            }`}
+            className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 4
+              ? "text-rose-500 border-b-2 border-rose-500"
+              : "text-gray-600 hover:text-gray-800"
+              }`}
             type="button"
             onClick={() => setCurrWindow(4)}
           >
