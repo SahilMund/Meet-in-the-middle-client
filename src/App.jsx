@@ -38,7 +38,6 @@ function App() {
   const [serverDown, setServerDown] = useState(false);
   const { subscribeToPush } = useNotification();
 
-
   useEffect(() => {
     fetch("http://localhost:8000")
       .then((res) => {
@@ -46,7 +45,6 @@ function App() {
       })
       .catch(() => setServerDown(true));
   }, []);
-
 
   useEffect(() => {
     // Auto-subscribe on mount
@@ -57,16 +55,18 @@ function App() {
     return <ServerError />;
   }
 
-  // if (import.meta.env.MODE === "development") {
-  //   import("./unregister.sw.js").then(({ unregisterServiceWorker }) => {
-  //     unregisterServiceWorker();
-  //   });
-  // }
-
+  if (import.meta.env.MODE === "development") {
+    console.log("[SW]: forces a clean slate every time you restart Vite. ");
+    import("./unregisterServiceWorker.js").then(
+      ({ unregisterServiceWorker }) => {
+        unregisterServiceWorker();
+      }
+    );
+  }
 
   return (
     <MyErrorBoundary>
- {/* <NetworkWatcher> */}
+      {/* <NetworkWatcher> */}
       <Suspense
         fallback={
           <div className="flex h-screen items-center justify-center text-lg">
@@ -75,12 +75,11 @@ function App() {
         }
       >
         <Routes>
-
           <Route path="/" element={<Landingpage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/otp" element={<OtpVerificationPage />} />
-           <Route path="/magicLogin" element={<MagicLogin />} />
+          <Route path="/magicLogin" element={<MagicLogin />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/500" element={<ServerError />} />
 
@@ -98,10 +97,5 @@ function App() {
     </MyErrorBoundary>
   );
 }
-
-
-/*
-
-*/
 
 export default App;

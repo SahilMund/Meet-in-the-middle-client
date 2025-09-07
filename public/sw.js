@@ -1,7 +1,7 @@
 /* eslint-env serviceworker */
 // sw.js (in public folder)
 
-const CACHE_NAME = "app-cache-v6";
+const CACHE_NAME = "app-cache-v7";
 
 // ✅ Only cache what you KNOW exists in /dist after build
 const urlsToCache = [
@@ -10,6 +10,8 @@ const urlsToCache = [
   "/manifest.webmanifest",
   "/favicon.ico",
 ];
+
+const isDev = self.location.hostname === "localhost";
 
 // Install Service Worker
 self.addEventListener("install", (event) => {
@@ -42,9 +44,16 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch handler (Cache-First, then Network)
+// Fetch handler (Cache-First, then Network) , fetch from cache first
 self.addEventListener("fetch", (event) => {
   // Skip non-http(s) requests (chrome-extension://, data:, etc.)
+
+  if (isDev) {
+    // In dev, just go to network always
+    console.warn("[SW] skip fetching from Cache for localhost");
+    return;
+  }
+
   if (!event.request.url.startsWith("http")) return;
 
   event.respondWith(
@@ -60,7 +69,11 @@ self.addEventListener("fetch", (event) => {
           const resClone = res.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, resClone).catch((err) => {
-              console.warn("[SW] Cache put failed for:", event.request.url, err);
+              console.warn(
+                "[SW] Cache put failed for:",
+                event.request.url,
+                err
+              );
             });
           });
 
@@ -74,8 +87,6 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
-
-
 
 // ------PUSH NOTIFICATION----
 
@@ -101,15 +112,17 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   event.waitUntil(
-    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
-      for (const client of clientList) {
-        if (client.url === event.notification.data && "focus" in client) {
-          return client.focus();
+    self.clients
+      .matchAll({ type: "window", includeUncontrolled: true })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if (client.url === event.notification.data && "focus" in client) {
+            return client.focus();
+          }
         }
-      }
-      if (self.clients.openWindow) {
-        return self.clients.openWindow(event.notification.data);
-      }
-    })
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(event.notification.data);
+        }
+      })
   );
 });
