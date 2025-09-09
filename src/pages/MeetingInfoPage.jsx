@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+
 import {
   FaCalendarAlt,
   FaClock,
@@ -27,11 +28,14 @@ import { useSelector } from "react-redux";
 import getDuration from "../utils/getDuration";
 import { toast } from "react-toastify";
 import {
+  deleteMeetingById,
   getMeetingById,
   rejectMeeting,
   updatemeetingDetails,
 } from "../services/meetings";
 import Modal from "../components/Modal";
+import MapContainer from "../components/MapContainer";
+import { useNavigate } from "react-router-dom";
 
 const MeetingsInfoPage = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
@@ -41,15 +45,16 @@ const MeetingsInfoPage = () => {
   const [currentWindow, setcurrentWindow] = useState(0);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const { id } = useParams();
+
   const { user } = useSelector((store) => store.authSlice);
-  // console.log({ user, meetings });
 
   const [isOpen, setIsOpen] = useState(false);
 
-  //edit meeting details modal
   const [isOpenMadal, setIsOpenMadal] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  const navigate = useNavigate();
 
   const myParticipation = meeting?.participants?.find(
     (participant) => participant?.email == user?.email
@@ -63,19 +68,18 @@ const MeetingsInfoPage = () => {
   }, [meeting]);
 
   const handleDelete = () => {
+    deleteMeetingById(meeting._id);
     setShowDeleteAlert(false);
-    // add delete logic here (API call etc.)
+    navigate("/home", { replace: true });
   };
   useEffect(() => {
     const fetchmeeting = async () => {
       const response = await getMeetingById(id);
       setMeeting(response.data.data.meeting);
     };
-
     fetchmeeting();
   }, [id]);
 
-  console.log(meeting);
   const convertDate = (date) => {
     return date.toLocaleDateString("en-IN", {
       day: "2-digit",
@@ -124,29 +128,8 @@ const MeetingsInfoPage = () => {
     setShowDeclineModal(false);
   }, []);
 
-  // const checkConflicts = async (meetingId) => {
-  //   console.log(meetingId);
-  //   try {
-  //     const response = await getConflicts(meetingId);
-  //     const data = await response.data;
-
-  //     if (data.success && data.data.conflicts.length > 0) {
-  //       setHasConflict(true);
-  //       setPendingConflicts(data.data.conflicts);
-  //       setShowLocationFields(false);
-  //     } else {
-  //       setHasConflict(false);
-  //       setPendingConflicts([]);
-  //       setShowLocationFields(true);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching conflicts:", error.message);
-  //   }
-  // };
-
   return (
     <div className="p-6 bg-[#f4f6f9] min-h-screen relative">
-      {/* Delete Confirmation Modal */}
       {showDeleteAlert && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
           <div className="bg-white rounded-xl shadow-2xl p-6 w-[90%] max-w-md text-center">
@@ -361,15 +344,14 @@ const MeetingsInfoPage = () => {
                       </div>
                     </div>
 
-                    {/* Conditional Status */}
-                    {participant.status === "accepted" ? (
+                    {participant.status === "Accepted" ? (
                       <div className="text-right text-green-600 font-semibold flex flex-col items-end">
                         <p> Location provided</p>
                         <div className="flex items-center gap-1 text-green-500">
                           <FaCheckCircle /> Confirmed
                         </div>
                       </div>
-                    ) : participant.status === "pending" ? (
+                    ) : participant.status === "Pending" ? (
                       <div className="text-right text-yellow-600 font-semibold flex flex-col items-end">
                         <p> Location pending</p>
                         <div className="flex items-center gap-1 text-yellow-500">
@@ -387,6 +369,12 @@ const MeetingsInfoPage = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {currentWindow === 3 && (
+            <div className="px-4">
+              <MapContainer meeting={meeting} />
             </div>
           )}
         </div>
