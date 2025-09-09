@@ -6,6 +6,8 @@ import { store } from "./toolkit/store.js";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import registerServiceWorker from "./registerServiceWorker.js";
+
 
 createRoot(document.getElementById("root")).render(
   <>
@@ -15,7 +17,7 @@ createRoot(document.getElementById("root")).render(
       </Provider>
     </BrowserRouter>
     <ToastContainer
-      position="top-center" // 👈 better for mobile, avoids side cutoff
+      position="top-right" // 👈 better for mobile, avoids side cutoff
       autoClose={3000}
       hideProgressBar={false}
       newestOnTop={true}
@@ -28,3 +30,6 @@ createRoot(document.getElementById("root")).render(
     />
   </>
 );
+
+// Register service worker (keeps it out of initial render flow)
+registerServiceWorker();
