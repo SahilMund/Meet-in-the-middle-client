@@ -69,8 +69,8 @@ function App() {
       {/* <NetworkWatcher> */}
       <Suspense
         fallback={
-          <div className="flex h-screen items-center justify-center text-lg">
-            Loading...
+          <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <span className="w-10 h-10 rounded-full border-4 border-indigo-600 border-l-transparent animate-spin"></span>
           </div>
         }
       >

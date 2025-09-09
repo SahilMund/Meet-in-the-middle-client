@@ -20,7 +20,6 @@ const MeetingInfo = forwardRef(({ meetingData, setMeetingData }, ref) => {
 
   const {
     register,
-    dleSubmit,
     control,
     trigger,
     watch,
