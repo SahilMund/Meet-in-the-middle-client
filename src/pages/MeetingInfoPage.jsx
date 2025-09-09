@@ -199,7 +199,16 @@ const MeetingsInfoPage = () => {
 
         {/* Action Buttons */}
         <div className="flex gap-3 items-baseline-last">
-          <button className="flex items-center gap-2 border-2 border-green-300 text-green-100 hover:bg-green-400 hover:text-white transition px-3 py-2 rounded-lg shadow">
+          <button className="flex items-center gap-2 border-2 border-green-300 text-green-100 hover:bg-green-400 hover:text-white transition px-3 py-2 rounded-lg shadow"
+            onClick={() => {
+              navigator.share({
+                title: `Meeting Invite for ${meeting.title}`,
+                text: "Join our meeting",
+                url: meeting.meetingLink,
+              });
+
+            }}
+          >
             <FaShareAlt /> Share
           </button>
           {user?.id === meeting?.creator?._id ? (

@@ -71,11 +71,11 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
       </h2>
       {/*  show error details */}
       {import.meta.env.DEV && <div>
-          <pre className="bg-gray-200 text-left p-3 rounded mt-4 text-xs text-red-700 overflow-auto mb-2">
-            {error.stack}
-          </pre>
-        </div>
-      )}
+        <pre className="bg-gray-200 text-left p-3 rounded mt-4 text-xs text-red-700 overflow-auto mb-2">
+          {error.stack}
+        </pre>
+      </div>
+      }
 
       <p className="text-gray-600 max-w-md text-sm">
         Sorry, we're having some technical issues. <br />
