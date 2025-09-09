@@ -12,6 +12,7 @@ const endPoints = {
   LOGOUT_USER: "/user/logout",
   CREATE_MEETING: "/meeting/createMeeting",
   GET_MEETING_BY_ID: (id) => `/meeting/getMeetingById/${id}`,
+  DELETE_MEETING_BY_ID: (id) => `meeting/deleteMeeting/${id}`,
   GET_DASHBOARD_STATS: "/meeting/getDashBoardStats",
   GET_ALL_MY_MEETINGS: ({ pageNo, items }) =>
     "/meeting/getMeetings" + `?pageNo=${pageNo}&items=${items}`,

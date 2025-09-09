@@ -7,14 +7,10 @@ const MyErrorBoundary = ({ children }) => {
   };
 
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      onError={handleError}
-    >
+    <ErrorBoundary FallbackComponent={ErrorFallback} onError={handleError}>
       {children}
     </ErrorBoundary>
   );
-  
 };
 
 export default MyErrorBoundary;
