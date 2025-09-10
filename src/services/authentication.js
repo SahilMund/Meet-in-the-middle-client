@@ -7,3 +7,4 @@ export const magicLink = (data) => axios.post(endPoints.MAGIC_LINK, data);
 export const sendOtp = (data) => axios.post(endPoints.GET_OTP, data);
 export const verifyOTP = (data) => axios.post(endPoints.VERIFY_OTP, data);
 export const logoutUser = () => axios.post(endPoints.LOGOUT_USER);
+// export const resetpassword = (data) =>axios.post(endPoints.RESETPASSWORD, data)

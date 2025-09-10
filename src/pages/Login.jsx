@@ -228,14 +228,14 @@ const Login = () => {
         </div>
 
         {/* Forgot Password */}
-        <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
-          Forgot Password?
-          <a
-            href="/forgot"
+         <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+           Forgot Password?
+          <Link
+            to="/forgot-password"
             className="ml-1 font-semibold text-indigo-600 hover:text-indigo-500 hover:underline"
           >
             Reset
-          </a>
+          </Link>
         </p>
       </div>
     </div>
