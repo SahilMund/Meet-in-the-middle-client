@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import locationimage from "../../assets/locationimage.png";
-// import { Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -14,20 +14,20 @@ const HeroSection = () => {
       <div className="flex justify-between items-center">
         {/* Logo + Title */}
         <div className="flex gap-2 items-center">
-          <img src={locationimage} height={40} width={50} alt="logo" />
+          <img src={locationimage} height={30} width={40} alt="logo" />
           <h1 className="font-semibold text-xl sm:text-2xl">Meet In Middle</h1>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden sm:flex items-center gap-4">
           <button
-            className="text-gray-700 cursor-pointer hover:text-[#FF4C61] font-medium"
+            className="text-gray-700 cursor-pointer hover:text-indigo-600 font-medium"
             onClick={() => navigator("/login")}
           >
             Sign In
           </button>
           <button
-            className="bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
+            className="bg-indigo-600 cursor-pointer hover:bg-indigo-500 text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
             onClick={() => navigator("/home")}
           >
             Get Started
@@ -39,7 +39,7 @@ const HeroSection = () => {
           className="sm:hidden p-2 rounded-lg hover:bg-gray-100"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {/* {menuOpen ? <X size={24} /> : <Menu size={24} />} */}
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
@@ -53,7 +53,7 @@ const HeroSection = () => {
             Sign In
           </button>
           <button
-            className="w-full bg-[#FF4C61] hover:bg-[#e94457] text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
+            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-lg font-medium shadow-md transition"
             onClick={() => navigator("/home")}
           >
             Get Started
@@ -75,7 +75,7 @@ const HeroSection = () => {
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#FF4C61]"
+          className="text-5xl sm:text-6xl md:text-7xl font-bold text-indigo-600"
         >
           Meeting Location
         </motion.h1>
@@ -98,7 +98,7 @@ const HeroSection = () => {
             delay: 0.6,
           }}
           whileHover={{ scale: 1.05 }}
-          className="mt-6 bg-[#FF4C61] cursor-pointer hover:bg-[#e94457] text-white px-8 py-3 rounded-lg text-lg font-medium shadow-md transition"
+          className="mt-6 bg-indigo-600 cursor-pointer hover:bg-indigo-500 text-white px-8 py-3 rounded-lg text-lg font-medium shadow-md transition"
           onClick={() => navigator("/home")}
         >
           Start Meeting Plan

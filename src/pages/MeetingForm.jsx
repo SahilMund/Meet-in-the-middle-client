@@ -82,7 +82,7 @@ const MeetingForm = () => {
     {
       id: 3,
       name: "3",
-      label: "Venue",
+      label: " User Location",
       component: (meetingData) => (
         <AdminAddress
           meetingData={meetingData}
