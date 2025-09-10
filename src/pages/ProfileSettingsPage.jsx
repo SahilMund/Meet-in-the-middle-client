@@ -104,7 +104,9 @@ const ProfileSettingsPage = () => {
     setFormDataUnderEdit(Object.assign({}, formData));
   }, [formData]);
   return (
-    <div className="max-w-3xl mx-auto p-3 select-none">
+    // <div className="max-w-3xl mx-auto p-3 select-none">
+    <div className="w-full max-w-3xl mx-auto p-3 select-none">
+
       {/* Header */}
       <div className="mb-6">
         <b className="text-xl block mb-1">Profile</b>
@@ -114,7 +116,7 @@ const ProfileSettingsPage = () => {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-white rounded-lg shadow p-6 flex flex-col sm:flex-row items-center w-full">
+      <div className="bg-white rounded-lg shadow p-6 flex flex-col sm:flex-row items-center sm:items-start gap-6 w-full">
         <div className="flex flex-col sm:flex-row items-center w-full gap-5">
           <div
             className={`rounded-full bg-indigo-500  w-20 h-20 flex flex-col items-center justify-center text-2xl text-white mb-4 sm:mb-0 relative ${isEditing && "cursor-pointer"}`}
@@ -126,7 +128,7 @@ const ProfileSettingsPage = () => {
             {preview || formData?.avatar ? (
               <img
                 src={formData?.avatar || preview?.result}
-                className="w-18 h-18 rounded-full"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover"
                 alt="DP"
               />
             ) : (
@@ -155,7 +157,7 @@ const ProfileSettingsPage = () => {
               </>
             )}
           </div>
-          <div className="flex flex-col text-center sm:text-left ">
+          <div className="flex flex-col text-center sm:text-left break-words ">
             <b className="text-lg"> {formData.fullName}</b>
             <h6 className="text-gray-500">{formData.email}</h6>
             <h6 className="text-gray-500 flex items-center gap-1 justify-center sm:justify-start">
@@ -163,7 +165,7 @@ const ProfileSettingsPage = () => {
               {formData.location || "Hyderabad"}
             </h6>
           </div>
-          <div className="sm:ml-auto mt-4 sm:mt-0">
+          <div className="sm:ml-auto mt-4 sm:mt-0 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             {!isEditing && (
               <button
                 type="button"
@@ -202,9 +204,9 @@ const ProfileSettingsPage = () => {
       {/* Settings Form */}
       <div className="mt-6">
         {/* Tabs */}
-        <div className="flex justify-start gap-4 sm:gap-10 mb-6">
+        <div className="flex flex-wrap justify-start gap-4 sm:gap-10 mb-6 text=base sm:text-lg">
           <button
-            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 0 ? "text-rose-400 border-b-2" : "text-black"}`}
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 0 ? "text-indigo-600 border-b-2" : "text-black"}`}
             type="button"
             onClick={() => setCurrWindow(0)}
           >
@@ -214,7 +216,7 @@ const ProfileSettingsPage = () => {
           </button>
 
           <button
-            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 1 ? "text-rose-400 border-b-2" : "text-black"}`}
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 1 ? "text-indigo-600 border-b-2" : "text-black"}`}
             type="button"
             onClick={() => setCurrWindow(1)}
           >
@@ -223,7 +225,7 @@ const ProfileSettingsPage = () => {
           </button>
 
           <button
-            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 2 ? "text-rose-400 border-b-2" : "text-black"}`}
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 2 ? "text-indigo-600 border-b-2" : "text-black"}`}
             type="button"
             onClick={() => setCurrWindow(2)}
           >
