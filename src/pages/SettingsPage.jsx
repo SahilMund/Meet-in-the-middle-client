@@ -31,7 +31,7 @@ const SettingsPage = () => {
         ) : (
           <button
             className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 0
-              ? "text-rose-500 border-b-2 border-rose-500"
+              ? "text-indigo-600 border-b-2 border-indigo-500"
               : "text-gray-600 hover:text-gray-800"
               }`}
             type="button"
@@ -45,7 +45,7 @@ const SettingsPage = () => {
         <div className="flex flex-wrap gap-4 sm:gap-8 ">
           <button
             className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 0
-              ? "text-rose-500 border-b-2 border-rose-500"
+              ? "text-indigo-500 border-b-2 border-indigo-500"
               : "text-gray-600 hover:text-gray-800"
               }`}
             type="button"
@@ -57,7 +57,7 @@ const SettingsPage = () => {
 
           <button
             className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 1
-              ? "text-rose-500 border-b-2 border-rose-500"
+              ? "text-indigo-500 border-b-2 border-indigo-500"
               : "text-gray-600 hover:text-gray-800"
               }`}
             type="button"
@@ -69,7 +69,7 @@ const SettingsPage = () => {
 
           <button
             className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 2
-              ? "text-rose-500 border-b-2 border-rose-500"
+              ? "text-indigo-500 border-b-2 border-indigo-500"
               : "text-gray-600 hover:text-gray-800"
               }`}
             type="button"
@@ -81,7 +81,7 @@ const SettingsPage = () => {
 
           <button
             className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 3
-              ? "text-rose-500 border-b-2 border-rose-500"
+              ? "text-indigo-500 border-b-2 border-indigo-500"
               : "text-gray-600 hover:text-gray-800"
               }`}
             type="button"
@@ -93,7 +93,7 @@ const SettingsPage = () => {
 
           <button
             className={`flex items-center gap-2 text-lg font-medium transition-colors ${currWindow === 4
-              ? "text-rose-500 border-b-2 border-rose-500"
+              ? "text-indigo-500 border-b-2 border-indigo-500"
               : "text-gray-600 hover:text-gray-800"
               }`}
             type="button"
