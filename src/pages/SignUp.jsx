@@ -32,20 +32,18 @@ const SignUp = () => {
 
   const handleGoogleOAuth = () => {
     const BASE_URL = import.meta.env.VITE_BASE_URL;
-
     window.location.href = `${BASE_URL}/user/google`;
   };
 
   const handleFbOAuth = () => {
     const BASE_URL = import.meta.env.VITE_BASE_URL;
-
     window.location.href = `${BASE_URL}/user/facebook`;
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-lg transition-all duration-300 transform scale-100 opacity-100">
-        <h2 className="text-3xl font-extrabold text-center text-gray-900 dark:text-white mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg transition-all duration-300 transform scale-100 opacity-100">
+        <h2 className="text-3xl font-extrabold text-center text-gray-900 mb-6">
           Create an Account
         </h2>
 
@@ -53,7 +51,7 @@ const SignUp = () => {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+              className="block text-sm font-semibold text-gray-700"
             >
               Name
             </label>
@@ -61,7 +59,7 @@ const SignUp = () => {
               id="name"
               type="text"
               {...register("name")}
-              className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             {errors.name && (
               <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
@@ -71,7 +69,7 @@ const SignUp = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+              className="block text-sm font-semibold text-gray-700"
             >
               Email address
             </label>
@@ -79,7 +77,7 @@ const SignUp = () => {
               id="email"
               type="email"
               {...register("email")}
-              className="mt-1 w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-500">
@@ -91,7 +89,7 @@ const SignUp = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+              className="block text-sm font-semibold text-gray-700"
             >
               Password
             </label>
@@ -100,10 +98,10 @@ const SignUp = () => {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 {...register("password")}
-                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all pr-12"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all pr-12"
               />
               <span
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 dark:text-gray-400 cursor-pointer"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 cursor-pointer"
                 onClick={() => setShowPassword((prev) => !prev)}
               >
                 {showPassword ? (
@@ -126,7 +124,7 @@ const SignUp = () => {
             Sign Up
           </button>
         </form>
-        <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-center mt-6 text-sm text-gray-600">
           Already have an account?
           <Link
             to="/login"
@@ -137,10 +135,10 @@ const SignUp = () => {
         </p>
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            <div className="w-full border-t border-gray-300"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+            <span className="px-2 bg-white text-gray-500">
               Or continue with
             </span>
           </div>
@@ -149,7 +147,7 @@ const SignUp = () => {
           {/* Google Button */}
           <button
             onClick={handleGoogleOAuth}
-            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 rounded-lg px-4 py-2.5 font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
           >
             <FcGoogle size={20} />
             <span>Continue with Google</span>
@@ -158,7 +156,7 @@ const SignUp = () => {
           {/* Facebook Button */}
           <button
             onClick={handleFbOAuth}
-            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 rounded-lg px-4 py-2.5 font-semibold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-colors duration-200"
           >
             <FaFacebook size={20} className="text-blue-600" />
             <span>Continue with Facebook</span>
