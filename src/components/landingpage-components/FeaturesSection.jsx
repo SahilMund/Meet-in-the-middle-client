@@ -15,36 +15,36 @@ const FeaturesSection = () => {
 
   const features = [
     {
-      icon: <RiUserLocationFill className="text-4xl text-[#FF4C61]" />,
+      icon: <RiUserLocationFill className="text-4xl text-indigo-600" />,
       heading: "Smart Location Finding",
       description:
         "our algorithm finds the perfect meeting spot equidistant from all participants",
     },
     {
-      icon: <BsFillPeopleFill className="text-4xl text-[#FF4C61]" />,
+      icon: <BsFillPeopleFill className="text-4xl text-indigo-600" />,
       heading: "Easy Collaboration",
       description:
         "Invite participants, share locations and vote on the best meeting places",
     },
     {
-      icon: <MdOutlineAccessTime className="text-4xl text-[#FF4C61]" />,
+      icon: <MdOutlineAccessTime className="text-4xl text-indigo-600" />,
       heading: "Real Time Updates",
       description:
         "Get instant notifications about meeting changes and participant responses",
     },
     {
-      icon: <GoGlobe className="text-4xl text-[#FF4C61]" />,
+      icon: <GoGlobe className="text-4xl text-indigo-600" />,
       heading: "Global Coverage",
       description:
         "Works anywhere in the world with comprehensive location data",
     },
     {
-      icon: <MdMobileFriendly className="text-4xl text-[#FF4C61]" />,
+      icon: <MdMobileFriendly className="text-4xl text-indigo-600" />,
       heading: "Mobile optimized",
       description: "Perfect experience on any device, from desktop to mobile",
     },
     {
-      icon: <BsLightning className="text-4xl text-[#FF4C61]" />,
+      icon: <BsLightning className="text-4xl text-indigo-600" />,
       heading: "Lightning Fast",
       description: "Quick setup,instant results and seamless user experience",
     },
