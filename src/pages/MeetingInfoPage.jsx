@@ -175,11 +175,13 @@ const MeetingsInfoPage = () => {
       )}
 
       {/* Header */}
-      <div className="mb-6 shadow-md p-6 flex justify-between bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl">
+      {/* <div className="mb-6 shadow-md p-6 flex justify-between bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl"> */}
+      <div className="mb-6 shadow-md p-6 flex flex-col md:flex-row md:justify-between gap-6 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl">
+
         {/* Meeting Info */}
         <div className="flex flex-col gap-3">
           <div className="flex gap-2 items-end">
-            <span className="text-3xl font-bold text-white drop-shadow-lg">
+            <span className="text-3xl font-bold text-white drop-shadow-lg break-words">
               {meeting.title}
             </span>
             <span className="rounded-2xl px-3 py-1 bg-yellow-400 text-gray-900 text-sm font-semibold shadow-md">
@@ -187,7 +189,7 @@ const MeetingsInfoPage = () => {
             </span>
           </div>
 
-          <p className="text-indigo-100 max-w-lg">{meeting.description}</p>
+          <p className="text-indigo-100 max-w-lg break-words">{meeting.description}</p>
 
           <div className="flex flex-col gap-6 text-indigo-100 font-medium">
             <div className="flex gap-2">
@@ -215,7 +217,10 @@ const MeetingsInfoPage = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 items-baseline-last">
+        {/* <div className="flex gap-3 items-baseline-last"> */}
+        <div className="flex flex-wrap gap-3 md:items-baseline">
+
+
           <button className="flex items-center gap-2 border-2 border-green-300 text-green-100 hover:bg-green-400 hover:text-white transition px-3 py-2 rounded-lg shadow">
             <FaShareAlt /> Share
           </button>
@@ -265,7 +270,9 @@ const MeetingsInfoPage = () => {
       {/* Tabs + Content */}
       <div className="shadow bg-white rounded-2xl p-6">
         {/* Tabs */}
-        <div className="flex gap-8 border-b-2 border-gray-200 pb-3 mb-6 text-lg">
+        {/* <div className="flex gap-8 border-b-2 border-gray-200 pb-3 mb-6 text-lg"> */}
+          <div className="flex flex-wrap gap-4 sm:gap-8 border-b-2 border-gray-200 pb-3 mb-6 text-base sm:text-lg">
+
           <div
             className={`flex items-center gap-2 cursor-pointer ${currentWindow === 0
               ? "text-indigo-600 font-semibold"
@@ -342,7 +349,9 @@ const MeetingsInfoPage = () => {
                 {meeting.participants.map((participant, i) => (
                   <div
                     key={i}
-                    className="flex justify-between items-center border border-gray-200 rounded-2xl p-4 bg-indigo-50 shadow-sm"
+                    // className="flex justify-between items-center border border-gray-200 rounded-2xl p-4 bg-indigo-50 shadow-sm"
+                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center border border-gray-200 rounded-2xl p-4 bg-indigo-50 shadow-sm gap-4"
+
                   >
                     <div className="flex items-center gap-4">
                       <div className="text-lg w-12 h-12 flex items-center justify-center rounded-full bg-indigo-500 text-white font-bold">
