@@ -11,7 +11,7 @@ import { TfiMenuAlt } from "react-icons/tfi";
 import { getMymeetings } from "../services/meetings";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import getDuration from "../utils/getDuration";
 import { setMeetings } from "../toolkit/authenticationSlice";
 
@@ -192,9 +192,7 @@ export default function MeetingList() {
       {/* Scrollable Body */}
       <div className="flex-1 overflow-y-auto p-5" ref={mainElement}>
         <div
-          className={`grid gap-4 ${
-            isGrid ? "md:grid-cols-2" : "grid-cols-1"
-          }`}
+          className={`grid gap-4 ${isGrid ? "md:grid-cols-2" : "grid-cols-1"}`}
         >
           {filteredMeetings.map((meeting, idx) => {
             const visiblePeople = meeting.people.slice(0, 3);
@@ -207,8 +205,7 @@ export default function MeetingList() {
               >
                 <span
                   className={`absolute top-3 right-3 px-3 py-1 text-sm font-semibold rounded-full ${
-                    statusColors[meeting.status] ||
-                    "bg-gray-100 text-gray-800"
+                    statusColors[meeting.status] || "bg-gray-100 text-gray-800"
                   }`}
                 >
                   {meeting.status
@@ -218,9 +215,7 @@ export default function MeetingList() {
 
                 <div>
                   <h2 className="text-lg font-bold">{meeting.title}</h2>
-                  <p className="text-gray-600 text-sm">
-                    {meeting.description}
-                  </p>
+                  <p className="text-gray-600 text-sm">{meeting.description}</p>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700">
@@ -265,7 +260,9 @@ export default function MeetingList() {
                 <div className="flex justify-end mt-2">
                   <button
                     className="text-blue-600 hover:underline font-medium text-sm"
-                    onClick={() => navigate(`/meeting/${meeting?._id}`)}
+                    onClick={() =>
+                      navigate(`/meeting/${meeting?._id}`, replace)
+                    }
                   >
                     View Details
                   </button>
@@ -276,9 +273,7 @@ export default function MeetingList() {
         </div>
 
         {hasCompleted && (
-          <p className="text-center text-gray-500 mt-4">
-            No more meetings
-          </p>
+          <p className="text-center text-gray-500 mt-4">No more meetings</p>
         )}
       </div>
     </div>
