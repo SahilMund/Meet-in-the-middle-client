@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,7 +24,18 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const authChannel = new BroadcastChannel("auth");
+  useEffect(() => {
+    authChannel.onmessage = (event) => {
+      if (event.data.type === "LOGIN") {
+        dispatch(setUser(event.data.payload));
+        navigate("/home");
+      }
+    };
+    return () => {
+      authChannel.close();
+    };
+  }, [dispatch, navigate]);
   const {
     register,
     handleSubmit,
@@ -38,15 +49,15 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await loginUser(data);
-
-      dispatch(
-        setUser({
-          email: res.data.data.user.email,
-          id: res.data.data.user._id,
-          name: res.data.data.user.name,
-          avatar: res.data.data.user.avatar,
-        })
-      );
+      const userData = {
+        email: res.data.data.user.email,
+        id: res.data.data.user._id,
+        name: res.data.data.user.name,
+        avatar: res.data.data.user.avatar,
+      };
+      dispatch(setUser(userData));
+      //Notify the other tabs
+      authChannel.postMessage({ type: "LOGIN", payload: userData });
 
       toast.success("Login successful!");
       setTimeout(() => {
@@ -58,18 +69,20 @@ const Login = () => {
       setIsLoading(false);
     }
   };
-
-    const handleGoogleOAuth = () => {
+  const handleMagicLink = () => {
+    navigate("/magicLogin");
+  };
+  const handleGoogleOAuth = () => {
     const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-    window.location.href = `${BASE_URL}/user/google`
-  }
+    window.location.href = `${BASE_URL}/user/google`;
+  };
 
   const handleFbOAuth = () => {
     const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-    window.location.href = `${BASE_URL}/user/facebook`
-  }
+    window.location.href = `${BASE_URL}/user/facebook`;
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
@@ -189,10 +202,17 @@ const Login = () => {
 
         {/* Social Login */}
         <div className="space-y-4">
+          <button
+            onClick={handleMagicLink}
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+          >
+            <span>✨Continue with Magic Link</span>
+          </button>
           {/* Google Button */}
           <button
             onClick={handleGoogleOAuth}
-            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+          >
             <FcGoogle size={20} />
             <span>Continue with Google</span>
           </button>
@@ -200,7 +220,8 @@ const Login = () => {
           {/* Facebook Button */}
           <button
             onClick={handleFbOAuth}
-            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200">
+            className="w-full flex items-center justify-center space-x-2 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 font-semibold text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
+          >
             <FaFacebook size={20} className="text-blue-600" />
             <span>Continue with Facebook</span>
           </button>

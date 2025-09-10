@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import MeetingCard from "../components/MeetingCard";
 import { motion } from "framer-motion";
-import { FaMapMarkerAlt } from "react-icons/fa";
-import { FaCalendarAlt, FaRegCheckCircle } from "react-icons/fa";
-import { IoPersonOutline } from "react-icons/io5";
-import { FaRegStar } from "react-icons/fa";
-import { IoNotificationsOutline } from "react-icons/io5";
+import {
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaRegCheckCircle,
+  FaRegStar,
+  FaUsers,
+} from "react-icons/fa";
+import { IoPersonOutline, IoNotificationsOutline } from "react-icons/io5";
 import { MdHistory } from "react-icons/md";
-import { FaUsers } from "react-icons/fa";
 import { AiOutlineStock } from "react-icons/ai";
 import InfoCard from "../components/InfoCard";
 import { dashBoardStats, getUpcomingMeetings } from "../services/meetings";
@@ -19,7 +21,12 @@ import { useSelector } from "react-redux";
 const Dashboard = () => {
   const { userId } = useSelector((store) => store.authSlice);
   const [upcomingMeetings, setUpcomingMeetings] = useState([]);
+  const [pageNo, setPageNo] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
   const [updatesNumbers, setUpdatesNumbers] = useState({
     upcomingmeetings: null,
     pendingInvations: null,
@@ -28,6 +35,7 @@ const Dashboard = () => {
     avgParticipants: null,
     successRate: null,
   });
+
   const updates1 = [
     {
       title: "Upcoming meetings",
@@ -70,64 +78,77 @@ const Dashboard = () => {
     },
   ];
 
-  useEffect(() => {
-    async function fetchDashBoard() {
-      try {
-        const res = await dashBoardStats();
-        const upRes = await getUpcomingMeetings({ items: 5, pageNo: 1 });
+  async function fetchUpcomingMeetings(page = 1) {
+    try {
+      setLoading(true);
+      const upRes = await getUpcomingMeetings({ items: 5, pageNo: page });
 
-        setUpcomingMeetings(
-          upRes.data.data.meetings.map((ele) => {
-            const scheduleAt = new Date(ele.scheduledAt);
+      const newMeetings = upRes.data.data.meetings.map((ele) => {
+        const scheduleAt = new Date(ele.scheduledAt);
 
-            // Format date
-            let dateLabel = moment(scheduleAt).isSame(moment(), "day")
-              ? "Today"
-              : moment(scheduleAt).format("DD MMM");
+        let dateLabel = moment(scheduleAt).isSame(moment(), "day")
+          ? "Today"
+          : moment(scheduleAt).format("DD MMM");
 
-            // Format time
-            const timeLabel = moment(scheduleAt).format("hh:mm A"); // e.g., 11:18 PM
+        const timeLabel = moment(scheduleAt).format("hh:mm A");
+        const peopleCount = ele.participants.length;
 
-            // People count
-            const peopleCount = ele.participants.length;
+        const myStatus =
+          ele.participants.find((itm) => itm.user === userId)?.status ||
+          "Pending";
 
-            // Status for current user
-            const myStatus =
-              ele.participants.find((itm) => itm.user === userId)?.status ||
-              "Pending";
+        return {
+          title: ele.title || "Untitled Meeting",
+          date: dateLabel,
+          time: timeLabel,
+          people: peopleCount,
+          status: myStatus,
+          place: ele.locationSuggestion?.placeName || "Pending",
+        };
+      });
 
-            return {
-              title: ele.title || "Untitled Meeting",
-              date: dateLabel,
-              time: timeLabel,
-              people: peopleCount,
-              status: myStatus,
-              place: ele.locationSuggestion?.placeName || "Pending",
-            };
-          })
-        );
-
-        toast.success(res.message);
-        setUpdatesNumbers(res.data.data);
-      } catch (error) {
-        toast.error(error?.response?.data?.message || "Error Dash Board Fetch");
-      }
+      setUpcomingMeetings((prev) =>
+        page === 1 ? newMeetings : [...prev, ...newMeetings]
+      );
+      setHasMore(newMeetings.length > 0);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error Fetching Meetings");
+    } finally {
+      setLoading(false);
     }
+  }
 
+  async function fetchDashBoard() {
+    try {
+      const res = await dashBoardStats();
+      setUpdatesNumbers(res.data.data);
+      toast.success(res.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error Dash Board Fetch");
+    }
+  }
+
+  useEffect(() => {
     fetchDashBoard();
+    fetchUpcomingMeetings(1);
   }, [userId]);
+
+  const loadMore = () => {
+    const nextPage = pageNo + 1;
+    setPageNo(nextPage);
+    fetchUpcomingMeetings(nextPage);
+  };
 
   return (
     <div className="w-screen">
       <div className="px-5 sm:px-20 py-10">
-        <h1 className="text-4xl  font-extrabold">Welcome Back! 👋</h1>
+        <h1 className="text-4xl font-extrabold">Welcome Back! 👋</h1>
         <p className="">Here's What happening With your meetings today</p>
 
         <InfoCard updates={updates1} />
 
-        {/* Long Card */}
+        {/* CTA Card */}
         <div className="flex justify-between items-center mt-10 bg-[#0b0626] rounded-2xl p-6 shadow-lg">
-          {/* Text Section */}
           <div className="flex flex-col text-white max-w-[70%]">
             <h2 className="text-2xl font-bold mb-2">
               Ready To Organize a New Meeting?
@@ -137,8 +158,6 @@ const Dashboard = () => {
               location.
             </p>
           </div>
-
-          {/* Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -149,10 +168,9 @@ const Dashboard = () => {
           </motion.button>
         </div>
 
-        {/* {cards again} */}
-
         <InfoCard updates={updates2} />
 
+        {/* Dashboard Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           {/* Upcoming Meetings */}
           <div className="bg-white shadow-md rounded-xl p-5 flex flex-col">
@@ -160,7 +178,7 @@ const Dashboard = () => {
               <FaCalendarAlt className="text-blue-500 text-xl" />
               <h2 className="text-xl font-semibold">Upcoming Meetings</h2>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 max-h-64 overflow-y-auto pr-2">
               {upcomingMeetings.map((item, index) => (
                 <div
                   key={index}
@@ -173,13 +191,24 @@ const Dashboard = () => {
                     </p>
                     <p className="text-sm text-gray-500 flex gap-2">
                       <IoPersonOutline className="mt-1" />
-                      {item.people} <FaMapMarkerAlt className="mt-1" />{" "}
-                      {item.place}
+                      {item.people}
+                      <FaMapMarkerAlt className="mt-1" /> {item.place}
                     </p>
                   </div>
                 </div>
               ))}
             </div>
+            {hasMore ? (
+              <button
+                className="mt-4 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={loadMore}
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Load More"}
+              </button>
+            ) : (
+              <p className="text-center text-gray-500 mt-4">No more meetings</p>
+            )}
           </div>
 
           {/* Recent Activity */}
@@ -188,7 +217,7 @@ const Dashboard = () => {
               <MdHistory className="text-purple-500 text-xl" />
               <h2 className="text-xl font-semibold">Recent Activity</h2>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 max-h-64 overflow-y-auto pr-2">
               {[
                 {
                   user: "John",
@@ -228,7 +257,7 @@ const Dashboard = () => {
               <IoNotificationsOutline className="text-red-500 text-xl" />
               <h2 className="text-xl font-semibold">Notifications</h2>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 max-h-64 overflow-y-auto pr-2">
               {[
                 {
                   title: "Meeting will start soon",
@@ -247,6 +276,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        <br />
         <MeetingCard />
       </div>
     </div>

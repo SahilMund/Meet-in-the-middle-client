@@ -2,6 +2,7 @@ const endPoints = {
   LOGIN_USER: "/user/login",
   REFRESH_USER: "/user/refreshAccessToken",
   // RESETPASSWORD:"/user/resetpassword",
+  MAGIC_LINK: "/user/sendMagicLink",
   UPLOAD_AVATAR: "/user/uploadAvatar",
   DELETE_USER: "/user/deleteUser",
   DELETE_AVATAR: "/user/deleteAvatar",
@@ -12,6 +13,7 @@ const endPoints = {
   LOGOUT_USER: "/user/logout",
   CREATE_MEETING: "/meeting/createMeeting",
   GET_MEETING_BY_ID: (id) => `/meeting/getMeetingById/${id}`,
+  DELETE_MEETING_BY_ID: (id) => `meeting/deleteMeeting/${id}`,
   GET_DASHBOARD_STATS: "/meeting/getDashBoardStats",
   GET_ALL_MY_MEETINGS: ({ pageNo, items }) =>
     "/meeting/getMeetings" + `?pageNo=${pageNo}&items=${items}`,

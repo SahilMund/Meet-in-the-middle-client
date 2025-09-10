@@ -7,9 +7,13 @@ import MyErrorBoundary from "./components/error-boundary/ErrorBoundary.jsx";
 import NetworkWatcher from "./components/error-boundary/NetwrokWatcher.jsx";
 import PageNotFound from "./components/error-boundary/PageNotFound.jsx";
 import ServerError from "./components/error-boundary/ServerError.jsx";
-// import ResetPassword from "./pages/ResetPassword.jsx";
+
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
+
+import { useNotification } from "./hooks/useNotification.js";
+import MagicLogin from "./components/MagicLogin.jsx";
+
 
 // Lazy Loading
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
@@ -37,6 +41,7 @@ function ProtectedLayout() {
 
 function App() {
   const [serverDown, setServerDown] = useState(false);
+  const { subscribeToPush } = useNotification();
 
   useEffect(() => {
     fetch("http://localhost:8000")
@@ -46,44 +51,56 @@ function App() {
       .catch(() => setServerDown(true));
   }, []);
 
+  useEffect(() => {
+    // Auto-subscribe on mount
+    subscribeToPush();
+  }, []);
+
   if (serverDown) {
     return <ServerError />;
   }
 
+  if (import.meta.env.MODE === "development") {
+    console.log("[SW]: forces a clean slate every time you restart Vite. ");
+    import("./unregister.sw.js").then(
+      ({ unregisterServiceWorker }) => {
+        unregisterServiceWorker();
+      }
+    );
+  }
+
   return (
     <MyErrorBoundary>
-      <NetworkWatcher>
-        <Suspense
-          fallback={
-            <div className="flex h-screen items-center justify-center text-lg">
-              Loading...
-            </div>
-          }
-        >
-          <Routes>
-            <Route path="/" element={<Landingpage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
+      {/* <NetworkWatcher> */}
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+            <span className="w-10 h-10 rounded-full border-4 border-indigo-600 border-l-transparent animate-spin"></span>
+          </div>
+        }
+      >
+        <Routes>
+          <Route path="/" element={<Landingpage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/otp" element={<OtpVerificationPage />} />
+          <Route path="/magicLogin" element={<MagicLogin />} />
+             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/otp" element={<OtpVerificationPage />} />
-            <Route path="*" element={<PageNotFound />} />
-            <Route path="/500" element={<ServerError />} />
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/500" element={<ServerError />} />
 
-            <Route element={<ProtectedLayout />}>
-              <Route path="/home" element={<Dashboard />} />
-              <Route path="/invitations" element={<Invitations />} />
-              <Route path="/createmeeting" element={<MeetingForm />} />
-              <Route
-                path="/profileSettings"
-                element={<ProfileSettingsPage />}
-              />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/meeting/:id" element={<MeetingsInfoPage />} />
-            </Route>
-          </Routes>
-        </Suspense>
-      </NetworkWatcher>
+          <Route element={<ProtectedLayout />}>
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="/invitations" element={<Invitations />} />
+            <Route path="/createmeeting" element={<MeetingForm />} />
+            <Route path="/profileSettings" element={<ProfileSettingsPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/meeting/:id" element={<MeetingsInfoPage />} />
+          </Route>
+        </Routes>
+      </Suspense>
+      {/* </NetworkWatcher> */}
     </MyErrorBoundary>
   );
 }

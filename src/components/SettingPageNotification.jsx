@@ -4,7 +4,6 @@ import {
   getUserDefaultSettings,
   updateUserDefaultSettings,
 } from "../services/userSettings";
-import { data } from "react-router-dom";
 const SettingPageNotification = () => {
   const [notification, setNotification] = useState(false);
   const [settings, setSettings] = useState({
@@ -13,33 +12,23 @@ const SettingPageNotification = () => {
     meetingsReminders: false,
     invitationsAlerts: false,
     votingUpdates: false,
-    weeklyDigest: true,
+    weeklyDigest: false,
+    inAppNotification: false,
   });
   //to save user default settings
   const saveDefaultSettings = async () => {
     try {
       const getSettings = await getUserDefaultSettings();
       setSettings(getSettings?.data.data);
-
-      toast.success(getSettings?.data.message);
     } catch (error) {
       toast.error(error.response.data.message);
     }
   };
-  // useEffect(() => {
-  //   const fetchSettings = async () => {
-  //     try {
-  //       const { data } = await getUserDefaultSettings();
-  //       setSettings(data);
-  //     } catch (error) {
-  //       console.log(error, "error");
-  //     }
-  //   };
-  //   fetchSettings();
-  // }, []);
+
   useEffect(() => {
     saveDefaultSettings();
   }, []);
+
   const handleToggle = (e) => {
     setNotification(true);
     setSettings((prev) => {
@@ -48,10 +37,6 @@ const SettingPageNotification = () => {
         [e.target.name]: e.target.checked,
       };
     });
-    toast.success(
-      `${e.target.dataset.message}` +
-        `${e.target.checked ? "Enabled" : "Disabled"}`
-    );
   };
 
   useEffect(() => {
@@ -208,10 +193,10 @@ const SettingPageNotification = () => {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-medium text-gray-700">
-                Weekly Digest
+                In App Notification
               </h2>
               <p className="text-sm text-gray-500">
-                Get a summary of your meetings every week
+                Get a realtime notification in the application
               </p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -221,12 +206,13 @@ const SettingPageNotification = () => {
                 className="sr-only peer"
                 onChange={handleToggle}
                 name="weeklyDigest"
-                checked={settings?.weeklyDigest}
+                checked={settings?.inAppNotification}
               />
               <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-400 rounded-full peer peer-checked:bg-blue-600 transition-colors"></div>
               <div className="absolute left-1 top-1 bg-white w-5 h-5 rounded-full border border-gray-300 peer-checked:translate-x-7 transition-transform "></div>
             </label>
           </div>
+
           <div className="border-b pb-3"></div>
           <div className="flex justify-end ">
             <button
