@@ -7,8 +7,13 @@ import MyErrorBoundary from "./components/error-boundary/ErrorBoundary.jsx";
 import NetworkWatcher from "./components/error-boundary/NetwrokWatcher.jsx";
 import PageNotFound from "./components/error-boundary/PageNotFound.jsx";
 import ServerError from "./components/error-boundary/ServerError.jsx";
+
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+
 import { useNotification } from "./hooks/useNotification.js";
 import MagicLogin from "./components/MagicLogin.jsx";
+
 
 // Lazy Loading
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
@@ -80,6 +85,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/otp" element={<OtpVerificationPage />} />
           <Route path="/magicLogin" element={<MagicLogin />} />
+             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/500" element={<ServerError />} />
 

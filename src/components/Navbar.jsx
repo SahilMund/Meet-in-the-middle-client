@@ -49,8 +49,8 @@ const Navbar = () => {
   const getButtonClasses = (path) =>
     `px-4 py-2 cursor-pointer rounded-md ${
       location.pathname === path
-        ? "bg-[#FF4C61] text-white" // active
-        : "hover:bg-[#FF4C61] hover:text-white"
+        ? "bg-indigo-600 text-white" // active
+        : "hover:bg-indigo-600 hover:text-white"
     }`;
   const handleSettingsClick = () => {
     setOpen(false);

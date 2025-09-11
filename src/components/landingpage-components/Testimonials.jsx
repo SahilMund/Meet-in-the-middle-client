@@ -101,7 +101,7 @@ const Testimonials = () => {
 
                 {/* User Info */}
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#FF4C61] text-white font-bold">
+                  <div className="w-12 h-12 flex items-center justify-center rounded-full bg-indigo-600 text-white font-bold">
                     {t.name
                       .split(" ")
                       .map((n) => n[0])
