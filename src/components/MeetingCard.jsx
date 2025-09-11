@@ -11,7 +11,7 @@ import { TfiMenuAlt } from "react-icons/tfi";
 import { getMymeetings } from "../services/meetings";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import getDuration from "../utils/getDuration";
 import { setMeetings } from "../toolkit/authenticationSlice";
 
@@ -261,7 +261,9 @@ export default function MeetingList() {
                 <div className="flex justify-end mt-2">
                   <button
                     className="text-blue-600 hover:underline font-medium text-sm"
-                    onClick={() => navigate(`/meeting/${meeting?._id}`)}
+                    onClick={() =>
+                      navigate(`/meeting/${meeting?._id}`, replace)
+                    }
                   >
                     View Details
                   </button>
