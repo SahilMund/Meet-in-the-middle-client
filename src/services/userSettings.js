@@ -5,7 +5,7 @@ export const deleteAvatar = () => axios.post(endPoints.DELETE_AVATAR);
 export const getUserProfileInfo = () => axios.get(endPoints.GET_USER_DETAILS);
 export const updateUserProfileInfo = (data) =>
   axios.put(endPoints.UPDATE_USER_DETAILS, data);
-export const deleteUserAccount = () => axios.put(endPoints.DELETE_USER);
+export const deleteUserAccount = () => axios.delete(endPoints.DELETE_USER);
 export const getUserDefaultSettings = () =>
   axios.get(endPoints.GET_DEFAULT_SETTINGS);
 export const updateUserDefaultSettings = (settings) =>
