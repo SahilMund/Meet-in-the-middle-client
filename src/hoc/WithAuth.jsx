@@ -3,7 +3,7 @@ import { getUserData } from "../services/authentication";
 import { useNavigate } from "react-router-dom";
 import { setAuthenticated, setUser } from "../toolkit/authenticationSlice";
 import { useDispatch, useSelector } from "react-redux";
-// import { useSocket } from "../hooks/useSocket";
+import { useSocket } from "../hooks/useSocket";
 
 const WithAuth = ({ children }) => {
   const navigate = useNavigate();
@@ -12,11 +12,11 @@ const WithAuth = ({ children }) => {
   const { authenticated, user } = useSelector((store) => store.authSlice);
 
   // Only initialize socket after user exists
-  // const userId = user?.id;
+  const userId = user?.id;
 
-  // useSocket(userId, (notification) => {
-  //   console.log("Notification Sent", notification);
-  // });
+  useSocket(userId, (notification) => {
+    console.log("Notification Sent", notification);
+  });
 
 
   useEffect(() => {

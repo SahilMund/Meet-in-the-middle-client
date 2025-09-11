@@ -21,11 +21,13 @@ export function useDebounce(value, delay) {
 }
 
 //   const [query, setQuery] = useState("");
+//   const [fi, setQuery] = useState("");
 //   const debouncedQuery = useDebounce(query, 500); // wait 500ms after typing
+//   const debouncedFilter = useDebounce(fi, 500); // wait 500ms after typing
 
 //   useEffect(() => {
 //     if (debouncedQuery) {
 //       console.log("Searching for:", debouncedQuery);
-//       // call API: fetch(`/api/search?q=${debouncedQuery}`)
+      // call API: fetch(`/api/search?q=${debouncedQuery}`)
 //     }
 //   }, [debouncedQuery]);
