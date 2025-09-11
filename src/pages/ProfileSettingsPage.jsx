@@ -21,6 +21,7 @@ const ProfileSettingsPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [preview, setPreview] = useState(null);
   const [dpUploadLoading, setDpUploadLoading] = useState(false);
+  const formImageData = new FormData();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -32,7 +33,7 @@ const ProfileSettingsPage = () => {
 
   const [formDataUnderEdit, setFormDataUnderEdit] = useState(null);
   const fileInputRef = React.useRef(null);
-
+  
   const handleClick = () => {
     fileInputRef.current?.click();
   };
@@ -45,43 +46,42 @@ const ProfileSettingsPage = () => {
       toast.error(error.response.data.message);
     }
   };
+
   const handleFileUpload = async (e) => {
-    try {
       const image = e.target.files[0];
       if (!image) return;
-      setDpUploadLoading(true);
       const reader = new FileReader();
       reader.onloadend = () => void setPreview(reader);
       reader.readAsDataURL(image);
-      const formData = new FormData();
-      formData.append("image", image);
-      const res = await uploadAvatar(formData);
-      toast.success(res.data.message);
-      setFormDataUnderEdit((p) => ({
-        ...p,
-        avatar: res.data.data.cloudinary.url,
-      }));
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      setDpUploadLoading(false);
+      formImageData.append("image", image);
+    };
+    
+    async function updateUserInfo() {
+      try {
+        setIsEditing(!isEditing);
+        setDpUploadLoading(true);
+        setPreview(null);
+        setFormData(formDataUnderEdit);
+        const res = await updateUserProfileInfo({
+          ...formDataUnderEdit,
+          name: formDataUnderEdit.fullName,
+          phone: formDataUnderEdit.phoneNumber,
+        });
+        const imageRes = await uploadAvatar(formImageData);
+        setFormDataUnderEdit((p) => ({
+          ...p,
+          avatar: imageRes.data.data.cloudinary.url,
+        }));
+        toast.success(imageRes.data.message);
+        toast.success(res.data.message);
+      
+      } catch (error) {
+        toast.error(error.response.data.message);
+      }finally{
+        setDpUploadLoading(false);
+        setPreview(null);
+      }
     }
-  };
-  async function updateUserInfo() {
-    try {
-      setIsEditing(!isEditing);
-      setPreview(null);
-      setFormData(formDataUnderEdit);
-      const res = await updateUserProfileInfo({
-        ...formDataUnderEdit,
-        name: formDataUnderEdit.fullName,
-        phone: formDataUnderEdit.phoneNumber,
-      });
-      toast.success(res.data.message);
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  }
   async function getUserInfo() {
     try {
       const res = await getUserProfileInfo();
@@ -179,10 +179,12 @@ const ProfileSettingsPage = () => {
                 <button
                   type="button"
                   className="bg-transparent text-black border border-gray-400 px-4 py-2 rounded hover:bg-gray-500 hover:text-white transition "
-                  onClick={() =>
+                  onClick={() =>{
                     void (setIsEditing(!isEditing),
                     setFormDataUnderEdit(formData))
-                  }
+                            setPreview(null);
+
+                  }}
                 >
                   Cancel
                 </button>
