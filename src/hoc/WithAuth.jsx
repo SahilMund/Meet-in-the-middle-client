@@ -3,13 +3,21 @@ import { getUserData } from "../services/authentication";
 import { useNavigate } from "react-router-dom";
 import { setAuthenticated, setUser } from "../toolkit/authenticationSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { email } from "zod";
+import { useSocket } from "../hooks/useSocket";
 
 const WithAuth = ({ children }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  const { authenticated } = useSelector((store) => store.authSlice);
+  const { authenticated, user } = useSelector((store) => store.authSlice);
+
+  // Only initialize socket after user exists
+  const userId = user?.id;
+
+  useSocket(userId, (notification) => {
+    console.log("Notification Sent", notification);
+  });
+
 
   useEffect(() => {
     let isMounted = true; // ✅ prevent state updates if component unmounts
@@ -34,6 +42,8 @@ const WithAuth = ({ children }) => {
           navigate("/login", { replace: true });
         }
       } catch (err) {
+        console.error(err);
+
         if (isMounted) {
           navigate("/login", { replace: true });
         }

@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 
 import getDuration from "../utils/getDuration";
 import {
+  deleteMeetingById,
   getMeetingById,
   rejectMeeting,
   updatemeetingDetails,
@@ -28,6 +29,8 @@ import VoteDistribution from "../components/VoteDistribution";
 
 const ConfirmationModel = lazy(() => import("../components/ConfirmationModel"));
 const LocationModel = lazy(() => import("../components/LocationModel"));
+import MapContainer from "../components/MapContainer";
+import { useNavigate } from "react-router-dom";
 
 const MeetingsInfoPage = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
@@ -94,7 +97,7 @@ const MeetingsInfoPage = () => {
   );
 
   const myParticipation = meeting?.participants?.find(
-    (participant) => participant.email === user.email
+    (participant) => participant?.email === user?.email
   );
 
   useEffect(() => {
@@ -105,8 +108,9 @@ const MeetingsInfoPage = () => {
   }, [meeting]);
 
   const handleDelete = () => {
+    deleteMeetingById(meeting._id);
     setShowDeleteAlert(false);
-    // delete meeting logic here
+    navigate("/home", { replace: true });
   };
 
   useEffect(() => {
@@ -221,7 +225,16 @@ const MeetingsInfoPage = () => {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <button className="flex items-center gap-1 border border-green-300 text-green-100 px-2 py-1 rounded-md text-sm">
+          <button className="flex items-center gap-1 border border-green-300 text-green-100 px-2 py-1 rounded-md text-sm"
+            onClick={() => {
+              navigator.share({
+                title: `Meeting Invite for ${meeting.title}`,
+                text: "Join our meeting",
+                url: meeting.meetingLink,
+              });
+
+            }}
+          >
             <FaShareAlt className="text-base" /> Share
           </button>
           {user?.id === meeting?.creator?._id ? (
@@ -270,11 +283,10 @@ const MeetingsInfoPage = () => {
         <div className="flex gap-8 border-b-2 border-gray-200 pb-3 mb-6 text-lg">
           <div
             onClick={() => setcurrentWindow(0)}
-            className={`flex items-center gap-2 cursor-pointer ${
-              currentWindow === 0
-                ? "text-indigo-600 font-semibold"
-                : "text-gray-500"
-            }`}
+            className={`flex items-center gap-2 cursor-pointer ${currentWindow === 0
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-500"
+              }`}
           >
             <FaInfoCircle /> Overview
           </div>
@@ -290,21 +302,19 @@ const MeetingsInfoPage = () => {
           </div>
           <div
             onClick={() => setcurrentWindow(2)}
-            className={`cursor-pointer ${
-              currentWindow === 2
-                ? "text-indigo-600 font-semibold"
-                : "text-gray-500"
-            }`}
+            className={`cursor-pointer ${currentWindow === 2
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-500"
+              }`}
           >
             Voting
           </div>
           <div
             onClick={() => setcurrentWindow(3)}
-            className={`cursor-pointer ${
-              currentWindow === 3
-                ? "text-indigo-600 font-semibold"
-                : "text-gray-500"
-            }`}
+            className={`cursor-pointer ${currentWindow === 3
+              ? "text-indigo-600 font-semibold"
+              : "text-gray-500"
+              }`}
           >
             Map View
           </div>

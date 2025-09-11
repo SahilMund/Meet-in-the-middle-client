@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { CiFilter, CiSearch } from "react-icons/ci";
 import {
   FaCalendarAlt,
@@ -45,8 +45,8 @@ export default function MeetingList() {
       .join("")
       .toUpperCase();
 
-  async function handleGetMyMeetings() {
-    if (hasCompleted || isFetching.current) return;
+      const handleGetMyMeetings=useCallback(async () => {
+        if (hasCompleted || isFetching.current) return;
     isFetching.current = true;
 
     try {
@@ -100,13 +100,14 @@ export default function MeetingList() {
     } finally {
       isFetching.current = false;
     }
-  }
+      },[hasCompleted,pageNo])
+
 
   useEffect(() => {
     if (user?.id) {
       handleGetMyMeetings();
     }
-  }, [user?.id, pageNo]);
+  }, [user?.id, pageNo, handleGetMyMeetings]);
 
   useEffect(() => {
     dispatch(setMeetings(myMeetings));

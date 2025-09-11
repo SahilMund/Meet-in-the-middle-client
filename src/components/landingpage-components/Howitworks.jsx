@@ -51,7 +51,7 @@ const Howitworks = () => {
             viewport={{ once: true }}
           >
             {/* Step Number */}
-            <div className="w-14 h-14 flex items-center justify-center bg-[#FF4C61] text-white rounded-full text-xl font-bold mb-4">
+            <div className="w-14 h-14 flex items-center justify-center bg-indigo-600 text-white rounded-full text-xl font-bold mb-4">
               {item.icon}
             </div>
             <h2 className="text-lg font-semibold">{item.step}</h2>
@@ -62,14 +62,14 @@ const Howitworks = () => {
       </div>
       {/* {card Section} */}
 
-      <div className=" max-w-5xl mx-auto bg-[#FF4C61] text-white rounded-2xl p-8 md:p-12 flex flex-col items-center text-center shadow-lg mt-12">
+      <div className=" max-w-5xl mx-auto bg-indigo-600 text-white rounded-2xl p-8 md:p-12 flex flex-col items-center text-center shadow-lg mt-12">
         <h1 className="text-2xl md:text-4xl font-bold mb-4">
           Ready To Start Planning Better Meetings?
         </h1>
         <h3 className="text-base md:text-lg mb-6">
           Join thousands of teams who have simplified their meeting coordination
         </h3>
-        <button className="flex items-center gap-2 bg-white cursor-pointer text-[#FF4C61] font-semibold px-6 py-3 rounded-full shadow-md hover:bg-gray-100 transition-all duration-300">
+        <button className="flex items-center gap-2 bg-white cursor-pointer text-indigo-600 font-semibold px-6 py-3 rounded-full shadow-md hover:bg-gray-100 transition-all duration-300">
           Get Started Free <FaArrowRight />
         </button>
       </div>

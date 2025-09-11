@@ -5,6 +5,8 @@ export const createMeeting = (data) =>
   axios.post(endPoints.CREATE_MEETING, data);
 export const getMeetingById = (id) =>
   axios.get(endPoints.GET_MEETING_BY_ID(id));
+export const deleteMeetingById = (id) =>
+  axios.delete(endPoints.DELETE_MEETING_BY_ID(id));
 export const dashBoardStats = () => axios.get(endPoints.GET_DASHBOARD_STATS);
 export const getMymeetings = (data) =>
   axios.get(endPoints.GET_ALL_MY_MEETINGS(data));

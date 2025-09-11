@@ -4,7 +4,7 @@ import { CiLock } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { deleteUserAccount } from "../services/userSettings";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 
 const SettingPageAccount = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const SettingPageAccount = () => {
     try {
       const res = await deleteUserAccount();
       toast.success(res.data.message);
-      navigate("/login");
+      navigate("/login", replace);
     } catch (error) {
       toast.error(error.response.data.message);
     }
