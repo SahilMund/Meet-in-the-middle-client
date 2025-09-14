@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { TfiImport } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { deleteUserAccount } from "../services/userSettings";
-import { replace, useNavigate } from "react-router-dom";
+import { replace, useNavigate, useParams } from "react-router-dom";
 
 const SettingPageAccount = () => {
   const navigate = useNavigate();
+
+  const [showConfirm, setShowConfirm] = useState(false);
+    // const { token } = useParams();
+    console.log(token)
+
+const handleChangePassword = () => {
+    navigate(`/reset-password/${token}`);
+  };
+
   const handleDeleteAccount = async () => {
     try {
       const res = await deleteUserAccount();
@@ -54,7 +63,9 @@ const SettingPageAccount = () => {
               </p>
             </div>
           </div>
-          <button className="px-4 py-2 bg-transparent border border-black text-black rounded-lg hover:bg-black hover:text-white transition">
+          <button 
+          onClick={handleChangePassword}
+          className="px-4 py-2 bg-transparent border border-black text-black rounded-lg hover:bg-black hover:text-white transition">
             Change
           </button>
         </div>
@@ -74,11 +85,49 @@ const SettingPageAccount = () => {
           </div>
           <button
             className="px-4 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-700 transition"
-            onClick={handleDeleteAccount}
+            onClick={() => setShowConfirm(true)}
           >
             Delete
           </button>
         </div>
+
+      {showConfirm && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-20 z-50">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-96">
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        Are you sure?
+      </h2>
+      <p className="text-gray-600 mb-6">
+        Do you really want to permanently delete your account? 
+        
+      </p>
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setShowConfirm(false)}
+          className="px-4 py-2 rounded border hover:bg-gray-100"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={async () => {
+            setShowConfirm(false);
+            await handleDeleteAccount();
+          }}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
       </div>
     </div>
   );

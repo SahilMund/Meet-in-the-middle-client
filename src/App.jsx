@@ -96,6 +96,8 @@ function App() {
             <Route path="/create-meeting" element={<MeetingForm />} />
             <Route path="/profileSettings" element={<ProfileSettingsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+        
+
             <Route path="/meeting/:id" element={<MeetingsInfoPage />} />
             <Route path="/subscription-success" element={<SuccessPage />} />
           </Route>

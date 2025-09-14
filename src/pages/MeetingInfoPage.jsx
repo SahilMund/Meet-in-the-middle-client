@@ -188,7 +188,7 @@ const MeetingsInfoPage = () => {
       )}
 
       {/* Header */}
-      <div className="mb-6 shadow-md p-6 flex justify-between bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl">
+      <div className="mb-6 shadow-md p-6 flex flex-col md:flex-row justify-between gap-6 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl">
         {/* Info */}
         <div className="flex flex-col gap-3">
           <div className="flex gap-2 items-end">
@@ -202,19 +202,27 @@ const MeetingsInfoPage = () => {
           <p className="text-indigo-100 max-w-lg">{meeting.description}</p>
 
           <div className="flex flex-col gap-6 text-indigo-100 font-medium">
-            <div className="flex gap-2">
+            <div className="flex flex-wrap  gap-2">
+              <div className="flex items-center gap-2">
               <p>Starts On:</p>
               <FaCalendarAlt className="text-yellow-300" />
               <span>{convertDate(new Date(meeting.scheduledAt))}</span>
+              </div>
+              <div className="flex items-center gap-2">
               <FaClock className="text-pink-300" />
               <span>{convertTime(new Date(meeting.scheduledAt))}</span>
+              </div>
             </div>
             <div className="flex gap-2">
+              <div className="flex items-center gap-2">
               <p>Ends On:</p>
               <FaCalendarAlt className="text-yellow-300" />
               <span>{convertDate(new Date(meeting.endsAt))}</span>
+              </div>
+              <div className="flex items-center gap-2">
               <FaClock className="text-pink-300" />
               <span>{convertTime(new Date(meeting.endsAt))}</span>
+              </div>
             </div>
             <div className="flex gap-2">
               <FaUsers className="text-green-300" />
@@ -224,8 +232,8 @@ const MeetingsInfoPage = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2">
-          <button className="flex items-center gap-1 border border-green-300 text-green-100 px-2 py-1 rounded-md text-sm"
+        <div className="flex flex-wrap gap-3 items-center">
+          <button className="flex items-center gap-2 border border-green-300 text-green-100 px-3 py-2 rounded-md text-sm"
             onClick={() => {
               navigator.share({
                 title: `Meeting Invite for ${meeting.title}`,
@@ -280,7 +288,7 @@ const MeetingsInfoPage = () => {
 
       {/* Tabs */}
       <div className="shadow bg-white rounded-2xl p-6">
-        <div className="flex gap-8 border-b-2 border-gray-200 pb-3 mb-6 text-lg">
+        <div className="flex flex-wrap gap-4 border-b-2 border-gray-200 pb-3 mb-6 text-base sm:text-lg">
           <div
             onClick={() => setcurrentWindow(0)}
             className={`flex items-center gap-2 cursor-pointer ${currentWindow === 0
@@ -346,7 +354,7 @@ const MeetingsInfoPage = () => {
               <p className="text-gray-700 mb-4 font-bold text-lg">
                 Participants ({meeting?.participants?.length})
               </p>
-              <div className="flex flex-col gap-4 h-[40vh] overflow-y-scroll pr-2">
+              <div className="flex flex-col gap-4 max-h-[40vh] overflow-y-auto pr-2">
                 {meeting.participants?.map((participant, i) => (
                   <div
                     key={i}
@@ -399,7 +407,7 @@ const MeetingsInfoPage = () => {
           {currentWindow === 2 && (
             <div>
               <h1 className="text-2xl font-bold mb-4">Vote for a Place</h1>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {locations.map((place) => (
                   <VotingCard
                     key={place.id}
@@ -426,7 +434,7 @@ const MeetingsInfoPage = () => {
               {/* End Voting Modal */}
               {endVotingOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-                  <div className="bg-white p-6 rounded-lg w-96">
+                  <div className="bg-white p-6 rounded-lg w-[90%] max-w-md">
                     <h2 className="text-xl font-bold mb-4">
                       As per the voting
                     </h2>
