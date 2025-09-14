@@ -15,6 +15,7 @@ import {
   uploadAvatar,
 } from "../services/userSettings";
 import { toast } from "react-toastify";
+import StripePaymentSection from "../components/StripePaymentSection";
 
 const ProfileSettingsPage = () => {
   const [currWindow, setCurrWindow] = useState(0);
@@ -33,7 +34,7 @@ const ProfileSettingsPage = () => {
 
   const [formDataUnderEdit, setFormDataUnderEdit] = useState(null);
   const fileInputRef = React.useRef(null);
-  
+
   const handleClick = () => {
     fileInputRef.current?.click();
   };
@@ -48,40 +49,40 @@ const ProfileSettingsPage = () => {
   };
 
   const handleFileUpload = async (e) => {
-      const image = e.target.files[0];
-      if (!image) return;
-      const reader = new FileReader();
-      reader.onloadend = () => void setPreview(reader);
-      reader.readAsDataURL(image);
-      formImageData.append("image", image);
-    };
-    
-    async function updateUserInfo() {
-      try {
-        setIsEditing(!isEditing);
-        setDpUploadLoading(true);
-        setPreview(null);
-        setFormData(formDataUnderEdit);
-        const res = await updateUserProfileInfo({
-          ...formDataUnderEdit,
-          name: formDataUnderEdit.fullName,
-          phone: formDataUnderEdit.phoneNumber,
-        });
-        const imageRes = await uploadAvatar(formImageData);
-        setFormDataUnderEdit((p) => ({
-          ...p,
-          avatar: imageRes.data.data.cloudinary.url,
-        }));
-        toast.success(imageRes.data.message);
-        toast.success(res.data.message);
-      
-      } catch (error) {
-        toast.error(error.response.data.message);
-      }finally{
-        setDpUploadLoading(false);
-        setPreview(null);
-      }
+    const image = e.target.files[0];
+    if (!image) return;
+    const reader = new FileReader();
+    reader.onloadend = () => void setPreview(reader);
+    reader.readAsDataURL(image);
+    formImageData.append("image", image);
+  };
+
+  async function updateUserInfo() {
+    try {
+      setIsEditing(!isEditing);
+      setDpUploadLoading(true);
+      setPreview(null);
+      setFormData(formDataUnderEdit);
+      const res = await updateUserProfileInfo({
+        ...formDataUnderEdit,
+        name: formDataUnderEdit.fullName,
+        phone: formDataUnderEdit.phoneNumber,
+      });
+      const imageRes = await uploadAvatar(formImageData);
+      setFormDataUnderEdit((p) => ({
+        ...p,
+        avatar: imageRes.data.data.cloudinary.url,
+      }));
+      toast.success(imageRes.data.message);
+      toast.success(res.data.message);
+
+    } catch (error) {
+      toast.error(error.response.data.message);
+    } finally {
+      setDpUploadLoading(false);
+      setPreview(null);
     }
+  }
   async function getUserInfo() {
     try {
       const res = await getUserProfileInfo();
@@ -179,10 +180,10 @@ const ProfileSettingsPage = () => {
                 <button
                   type="button"
                   className="bg-transparent text-black border border-gray-400 px-4 py-2 rounded hover:bg-gray-500 hover:text-white transition "
-                  onClick={() =>{
+                  onClick={() => {
                     void (setIsEditing(!isEditing),
-                    setFormDataUnderEdit(formData))
-                            setPreview(null);
+                      setFormDataUnderEdit(formData))
+                    setPreview(null);
 
                   }}
                 >
@@ -232,6 +233,15 @@ const ProfileSettingsPage = () => {
             <FaRegStar />
             Statistics
           </button>
+
+          <button
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 3 ? "text-rose-400 border-b-2" : "text-black"}`}
+            type="button"
+            onClick={() => setCurrWindow(3)}
+          >
+            <FaRegStar />
+            Stripe
+          </button>
         </div>
 
         {currWindow === 0 && (
@@ -244,6 +254,7 @@ const ProfileSettingsPage = () => {
         )}
         {currWindow === 1 && <MeetingHitoryCompnent />}
         {currWindow === 2 && <StatisticsComponent />}
+        {currWindow === 3 && <StripePaymentSection />}
       </div>
     </div>
   );

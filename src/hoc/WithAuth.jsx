@@ -27,15 +27,14 @@ const WithAuth = ({ children }) => {
         const user = await getUserData();
         if (isMounted && user) {
           dispatch(setAuthenticated(user.data.success));
-          // dispatch(setUserMail(user.data.data.email));
-          // dispatch(setuserId(user.data.data.id));
-          // dispatch(setName(user.data.data.name));
+     
           dispatch(
             setUser({
               email: user.data.data.email,
               id: user.data.data.id,
               name: user.data.data.name,
               avatar: user.data.data.avatar,
+              subscription: user.data.data.subscription,
             })
           );
         } else {
