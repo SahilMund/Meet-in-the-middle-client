@@ -18,12 +18,18 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+
+
 const Dashboard = () => {
   const { userId } = useSelector((store) => store.authSlice);
   const [upcomingMeetings, setUpcomingMeetings] = useState([]);
   const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+
+
+
+
 
   const navigate = useNavigate();
 
@@ -81,7 +87,9 @@ const Dashboard = () => {
   async function fetchUpcomingMeetings(page = 1) {
     try {
       setLoading(true);
-      const upRes = await getUpcomingMeetings({ items: 5, pageNo: page });
+      const upRes = await getUpcomingMeetings({ items: 5, pageNo: page});
+
+    
 
       const newMeetings = upRes.data.data.meetings.map((ele) => {
         const scheduleAt = new Date(ele.scheduledAt);
@@ -127,6 +135,8 @@ const Dashboard = () => {
       toast.error(error?.response?.data?.message || "Error Dash Board Fetch");
     }
   }
+
+ 
 
   useEffect(() => {
     fetchDashBoard();

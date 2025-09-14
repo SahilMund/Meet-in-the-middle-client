@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  GoogleMap,
-  useJsApiLoader,
-  MarkerF,
-  InfoWindow,
-  DirectionsRenderer,
-} from "@react-google-maps/api";
+// import {
+//   GoogleMap,
+//   useJsApiLoader,
+//   MarkerF,
+//   InfoWindow,
+//   DirectionsRenderer,
+// } from "@react-google-maps/api";
 import { useSelector } from "react-redux";
 
 const LIBRARIES = ["places"];

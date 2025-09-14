@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState,useEffect, useCallback } from "react";
 import MeetingInfo from "../components/meeting-components/MeetingInfo";
 import AddParticipant from "../components/meeting-components/AddParticipant";
 import MeetingSummary from "../components/meeting-components/MeetingSummary";
@@ -8,8 +8,41 @@ import { createMeeting } from "../services/meetings";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
+
+
+
+
 const MeetingForm = () => {
   const navigate = useNavigate();
+
+  const [showConfirm, setShowConfirm] = useState(false);
+
+
+ const handleBackButton = useCallback((event) => {
+    event.preventDefault();
+    setShowConfirm(true);
+  }, []);
+
+useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("popstate", handleBackButton);
+
+    // Push initial state
+    window.history.pushState(null, "", window.location.pathname);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", handleBackButton);
+    };
+  }, [handleBackButton]);
+
+
+
 
   const [meetingData, setMeetingData] = useState({
     info: { title: "", description: "", startDate: "", endDate: "" },
@@ -199,8 +232,8 @@ const MeetingForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="flex  items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-4xl bg-white rounded-2xl mt-5 overflow-hidden">
         {/* Header with Progress Bar */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6">
           <h1 className="text-2xl md:text-3xl font-bold mb-2">
@@ -374,6 +407,48 @@ const MeetingForm = () => {
           </div>
         </div>
       </div>
+
+
+ 
+        {showConfirm && (
+  <div className="fixed inset-0 flex justify-center items-center mt-10 bg-black/30 bg-opacity-20">
+    <div className="bg-white p-6 rounded-xl shadow-lg w-[300px]">
+      <p className="text-gray-800 font-medium">
+        Are you sure you want to return back?
+      </p>
+      <div className="mt-4 flex justify-end space-x-2">
+        <button
+          onClick={() => {
+            setShowConfirm(false);
+            window.removeEventListener("popstate", handleBackButton); // ✅ correct
+            window.history.back(); // go back for real
+          }}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Yes
+        </button>
+        <button
+          onClick={() => setShowConfirm(false)}
+          className="px-4 py-2 rounded border hover:bg-gray-100"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
   );
 };
