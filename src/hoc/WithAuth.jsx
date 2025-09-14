@@ -27,9 +27,7 @@ const WithAuth = ({ children }) => {
         const user = await getUserData();
         if (isMounted && user) {
           dispatch(setAuthenticated(user.data.success));
-          // dispatch(setUserMail(user.data.data.email));
-          // dispatch(setuserId(user.data.data.id));
-          // dispatch(setName(user.data.data.name));
+     
           dispatch(
             setUser({
               email: user.data.data.email,

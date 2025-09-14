@@ -14,6 +14,7 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 import { useNotification } from "./hooks/useNotification.js";
 import MagicLogin from "./components/MagicLogin.jsx";
 import SuccessPage from "./pages/SuccessPage.jsx";
+
 // Lazy Loading
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
 const Invitations = lazy(() => import("./pages/Invitations.jsx"));
@@ -92,7 +93,7 @@ function App() {
           <Route element={<ProtectedLayout />}>
             <Route path="/home" element={<Dashboard />} />
             <Route path="/invitations" element={<Invitations />} />
-            <Route path="/createmeeting" element={<MeetingForm />} />
+            <Route path="/create-meeting" element={<MeetingForm />} />
             <Route path="/profileSettings" element={<ProfileSettingsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/meeting/:id" element={<MeetingsInfoPage />} />
