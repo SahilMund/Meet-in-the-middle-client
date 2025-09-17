@@ -31,3 +31,6 @@ export const getNearByPlaces = (meetingId, types) => {
 export const populateSuggestedPlaces = (meetingId, data) => {
   return axios.post(endPoints.POPULATE_SUGGESTED_PLACES(meetingId), data);
 };
+export const getSuggestedPlaces = (meetingId) => {
+  return axios.get(endPoints.GET_SUGGESTED_PLACES(meetingId));
+};

@@ -20,6 +20,7 @@ import {
   deleteMeetingById,
   getMeetingById,
   getNearByPlaces,
+  populateSuggestedPlaces,
   // getNearByPlaces,
   rejectMeeting,
   updatemeetingDetails,
@@ -33,10 +34,6 @@ const ConfirmationModel = lazy(() => import("../components/ConfirmationModel"));
 const LocationModel = lazy(() => import("../components/LocationModel"));
 import MapContainer from "../components/MapContainer";
 import { useNavigate } from "react-router-dom";
-import {
-  populateSugestedPlaces,
-  suggestedPlaces,
-} from "../../../Meet-in-the-middle-server/src/controllers/meeting.controller";
 
 const MeetingsInfoPage = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
@@ -273,22 +270,25 @@ const MeetingsInfoPage = () => {
       setLoadingPlaces(false);
     }
   };
-  // const handlePopulatePlaces = async () => {
-  //   try {
-  //     const data = {
-  //       places: selectedPlaces.map((ele) => {
-  //         return {
-  //           lat: ele.location.lat,
-  //           lng: ele.location.lng,
-  //           address: ele.address,
-  //           placeName: ele.name,
-  //           rating: ele.rating,
-  //           photos:ele.photos,
-  //         };
-  //       }),
-  //     };
-    //   const response = await populateSugestedPlaces(meeting._id, data);
-    // } catch (error) {}
+  const handlePopulatePlaces = async () => {
+    console.log("object");
+    try {
+      const data = {
+        places: selectedPlaces.map((ele) => {
+          return {
+            lat: ele.location.lat,
+            lng: ele.location.lng,
+            address: ele.address,
+            placeName: ele.name,
+            rating: ele.rating,
+            photos: ele.photos,
+          };
+        }),
+      };
+      const response = await populateSuggestedPlaces(meeting._id, data);
+      // console.log(response, "populate");
+      toast.success(response.data.message);
+    } catch (error) {}
   };
   return (
     <div className="p-6 bg-[#f4f6f9] min-h-screen relative">

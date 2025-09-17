@@ -31,5 +31,6 @@ const endPoints = {
     `/meeting/getNearByPlaces/${meetingId}?type=${typeQuery}`,
   POPULATE_SUGGESTED_PLACES: (meetingId) =>
     `/meeting/populatedSugestedPlaces/${meetingId}`,
+  GET_SUGGESTED_PLACES: (meetingId) => `/meeting/suggestedPlaces/${meetingId}`,
 };
 export default endPoints;
