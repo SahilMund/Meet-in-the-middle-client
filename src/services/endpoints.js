@@ -27,5 +27,9 @@ const endPoints = {
   ACCEPT_MEETING: "/meeting/acceptMeeting",
   GET_DEFAULT_SETTINGS: "/user/getUserSettings",
   UPDATE_USER_SETTINGS: "/user/putUserSettings",
+  GET_NEARBYPLACES: (meetingId, typeQuery) =>
+    `/meeting/getNearByPlaces/${meetingId}?type=${typeQuery}`,
+  POPULATE_SUGGESTED_PLACES: (meetingId) =>
+    `/meeting/populatedSugestedPlaces/${meetingId}`,
 };
 export default endPoints;

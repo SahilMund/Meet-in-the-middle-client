@@ -21,3 +21,13 @@ export const acceptMeeting = (data) =>
   axios.put(endPoints.ACCEPT_MEETING, data);
 export const updatemeetingDetails = (meetingId, data) =>
   axios.put(endPoints.UPDATE_MEETING_DETAILS(meetingId), data);
+export const getNearByPlaces = (meetingId, types) => {
+  const typeQuery = types.join(",");
+  return axios.get(endPoints.GET_NEARBYPLACES(meetingId, typeQuery));
+};
+// // export const toggleLikePlace = (suggestedPlacesId) => {
+// //   return axios.put(`/suggestedLocations/${suggestedPlacesId}/toggleLike`);
+// // };
+export const populateSuggestedPlaces = (meetingId, data) => {
+  return axios.post(endPoints.POPULATE_SUGGESTED_PLACES(meetingId), data);
+};

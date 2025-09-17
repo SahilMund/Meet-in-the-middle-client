@@ -19,6 +19,8 @@ import getDuration from "../utils/getDuration";
 import {
   deleteMeetingById,
   getMeetingById,
+  getNearByPlaces,
+  // getNearByPlaces,
   rejectMeeting,
   updatemeetingDetails,
 } from "../services/meetings";
@@ -31,6 +33,10 @@ const ConfirmationModel = lazy(() => import("../components/ConfirmationModel"));
 const LocationModel = lazy(() => import("../components/LocationModel"));
 import MapContainer from "../components/MapContainer";
 import { useNavigate } from "react-router-dom";
+import {
+  populateSugestedPlaces,
+  suggestedPlaces,
+} from "../../../Meet-in-the-middle-server/src/controllers/meeting.controller";
 
 const MeetingsInfoPage = () => {
   const [showDeclineModal, setShowDeclineModal] = useState(false);
@@ -40,12 +46,69 @@ const MeetingsInfoPage = () => {
   const { id } = useParams();
   const { user } = useSelector((store) => store.authSlice);
 
+  const [selectedCategory, setSelectedCategory] = useState("restaurants"); //category filte
+  const [placesModalOpen, setPlacesModalOpen] = useState(false); //model
+  const [selectedPlaces, setSelectedPlaces] = useState([]); //stote api results
+  const [loadingPlaces, setLoadingPlaces] = useState(false);
+  const dummyPlaces = {
+    restaurants: ["Pizza Palace", "Spice Hub", "Burger Town", "Curry Corner"],
+    bars: ["Cheers Bar", "Night Owl", "The Whiskey Jar"],
+    hotels: ["Grand Palace", "Comfort Inn", "Ocean View Resort"],
+  };
+
   const [isOpen, setIsOpen] = useState(false);
 
   // Edit modal
   const [isOpenMadal, setIsOpenMadal] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [categoryPlaces, setCategoryPlaces] = useState([]);
+  // const categoryPlaces = {
+  //   restaurants: [
+  //     {
+  //       id: 1,
+  //       title: "Bryant Park Grills",
+  //       image: "https://wallpapercave.com/wp/wp1874184.jpg",
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "Central Park Picnic",
+  //       image:
+  //         "https://www.bing.com/th/id/OIP.ET_GDP6-6UtLgiNo3kpI8QHaE7?w=244&h=211",
+  //     },
+
+  //     {
+  //       id: 3,
+  //       title: "Rooftop Bar",
+  //       image:
+  //         "https://www.bing.com/th/id/OIP.LNcfkezrbzTJZUE1R5ibYQHaFj?w=236&h=211",
+  //     },
+  //   ],
+  //   bars: [
+  //     {
+  //       id: 4,
+  //       title: "Skyline Pub",
+  //       image: "https://images.unsplash.com/photo-1527960471264-932f39eb5846",
+  //     },
+  //     {
+  //       id: 5,
+  //       title: "Moonlight Bar",
+  //       image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
+  //     },
+  //   ],
+  //   hotels: [
+  //     {
+  //       id: 6,
+  //       title: "Grand Palace Hotel",
+  //       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+  //     },
+  //     {
+  //       id: 7,
+  //       title: "Ocean View Resort",
+  //       image: "https://images.unsplash.com/photo-1501117716987-c8e1ecb2100d",
+  //     },
+  //   ],
+  // };
 
   // Voting
   const [locations, setLocations] = useState([
@@ -157,6 +220,76 @@ const MeetingsInfoPage = () => {
     setShowDeclineModal(false);
   }, []);
 
+  // const handleSuggestedPlaces = async () => {
+  //   try {
+  //     const response = await getNearByPlaces(meeting._id, [selectedCategory]);
+  //     if (!response.data.success) {
+  //       toast.error(response.data.message);
+  //       return;
+  //     }
+  //     const meetingData = response.data.data.meetings[0]?.meeting;
+  //     if (!meetingData) {
+  //       toast.error("Meeting Not Found");
+  //       return;
+  //     }
+  //     const places = meetingData.suggestedLocation || [];
+  //     if (places.length === 0) {
+  //       toast.info("No Suggested Places Found");
+  //       return;
+  //     }
+  //     setLocations(places);
+  //     setPlacesModalOpen(true); //show model
+  //     console.log("near by places", places);
+  //   } catch (error) {
+  //     console.log("Error Fetching near by places", error);
+  //     toast.error("Failed to fetch near by places");
+  //   }
+  // };
+  const handleNearByPlaces = async () => {
+    try {
+      setLoadingPlaces(true);
+      const response = await getNearByPlaces(meeting._id, [selectedCategory]);
+      console.log(response, "res");
+      if (!response.data.success) {
+        toast.error(response.data.message);
+        return;
+      }
+      const places = response.data.data.places;
+      if (!places || places.length === 0) {
+        toast.info("No Suggested Places Found");
+        // setLocations([]);
+        setPlacesModalOpen(true);
+        return;
+      }
+      //setLocations(places);
+      // categoryPlaces.restaurants = places;
+      setCategoryPlaces(places);
+      setPlacesModalOpen(true);
+      console.log("Nearby places:", places);
+    } catch (error) {
+      console.error("Error fetching nearby places:", error);
+      toast.error(error.response.data.message);
+    } finally {
+      setLoadingPlaces(false);
+    }
+  };
+  // const handlePopulatePlaces = async () => {
+  //   try {
+  //     const data = {
+  //       places: selectedPlaces.map((ele) => {
+  //         return {
+  //           lat: ele.location.lat,
+  //           lng: ele.location.lng,
+  //           address: ele.address,
+  //           placeName: ele.name,
+  //           rating: ele.rating,
+  //           photos:ele.photos,
+  //         };
+  //       }),
+  //     };
+    //   const response = await populateSugestedPlaces(meeting._id, data);
+    // } catch (error) {}
+  };
   return (
     <div className="p-6 bg-[#f4f6f9] min-h-screen relative">
       {/* Delete Confirmation */}
@@ -225,14 +358,14 @@ const MeetingsInfoPage = () => {
 
         {/* Actions */}
         <div className="flex gap-2">
-          <button className="flex items-center gap-1 border border-green-300 text-green-100 px-2 py-1 rounded-md text-sm"
+          <button
+            className="flex items-center gap-1 border border-green-300 text-green-100 px-2 py-1 rounded-md text-sm"
             onClick={() => {
               navigator.share({
                 title: `Meeting Invite for ${meeting.title}`,
                 text: "Join our meeting",
                 url: meeting.meetingLink,
               });
-
             }}
           >
             <FaShareAlt className="text-base" /> Share
@@ -283,10 +416,11 @@ const MeetingsInfoPage = () => {
         <div className="flex gap-8 border-b-2 border-gray-200 pb-3 mb-6 text-lg">
           <div
             onClick={() => setcurrentWindow(0)}
-            className={`flex items-center gap-2 cursor-pointer ${currentWindow === 0
-              ? "text-indigo-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`flex items-center gap-2 cursor-pointer ${
+              currentWindow === 0
+                ? "text-indigo-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             <FaInfoCircle /> Overview
           </div>
@@ -302,19 +436,21 @@ const MeetingsInfoPage = () => {
           </div>
           <div
             onClick={() => setcurrentWindow(2)}
-            className={`cursor-pointer ${currentWindow === 2
-              ? "text-indigo-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`cursor-pointer ${
+              currentWindow === 2
+                ? "text-indigo-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             Voting
           </div>
           <div
             onClick={() => setcurrentWindow(3)}
-            className={`cursor-pointer ${currentWindow === 3
-              ? "text-indigo-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`cursor-pointer ${
+              currentWindow === 3
+                ? "text-indigo-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             Map View
           </div>
@@ -398,9 +534,22 @@ const MeetingsInfoPage = () => {
 
           {currentWindow === 2 && (
             <div>
-              <h1 className="text-2xl font-bold mb-4">Vote for a Place</h1>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {locations.map((place) => (
+              {/* Heading + End Voting Button */}
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">Vote for a Place</h1>
+                {meeting?.creator?.email === user.email && (
+                  <button
+                    onClick={() => setEndVotingOpen(true)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                  >
+                    End Voting
+                  </button>
+                )}
+              </div>
+
+              {/* First row: 3 places */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+                {locations.slice(0, 3).map((place) => (
                   <VotingCard
                     key={place.id}
                     place={place}
@@ -409,19 +558,23 @@ const MeetingsInfoPage = () => {
                   />
                 ))}
               </div>
-              <VotingResults locations={locations} />
-              {/* <VotingResultsChart locations={locations} /> */}
 
-              {meeting?.creator?.email === user.email && (
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setEndVotingOpen(true)}
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-                  >
-                    End Voting
-                  </button>
+              {/* Second row: 2 places + Voting Results */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {locations.slice(3, 5).map((place) => (
+                  <VotingCard
+                    key={place.id}
+                    place={place}
+                    onLike={handleLike}
+                    onDislike={handleDislike}
+                  />
+                ))}
+
+                {/* Voting Results box */}
+                <div className="bg-white shadow-lg rounded-2xl p-4">
+                  <VotingResults locations={locations} />
                 </div>
-              )}
+              </div>
 
               {/* End Voting Modal */}
               {endVotingOpen && (
@@ -481,11 +634,141 @@ const MeetingsInfoPage = () => {
                   </div>
                 </div>
               )}
+
+              {/* Keep VoteDistribution below */}
               <VoteDistribution locations={locations} />
             </div>
           )}
 
-          {currentWindow === 3 && <div>Map View (to be implemented)</div>}
+          {/* Places Modal */}
+          {/* Places Modal */}
+          {currentWindow === 3 && (
+            <div className="p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-gray-700">Map View</h2>
+
+                {/* Dropdown + Button aligned right */}
+                <div className="flex items-center gap-4">
+                  <select
+                    id="category"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-40 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
+                  >
+                    <option value="restaurants">Restaurants</option>
+                    <option value="bars">Bars</option>
+                    <option value="hotels">Hotels</option>
+                  </select>
+                  <button
+                    onClick={() => {
+                      handleNearByPlaces(); // fetch places
+                      setPlacesModalOpen(true); // open modal
+                    }}
+                    className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
+                    disabled={loadingPlaces}
+                  >
+                    {loadingPlaces ? (
+                      <span className="animate-spin mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+                    ) : null}
+                    View Places
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal for selecting places */}
+              {placesModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                  <div className="bg-white p-6 rounded-lg w-[600px] max-h-[80vh] overflow-y-auto">
+                    <h2 className="text-xl font-bold mb-4">
+                      {selectedCategory.charAt(0).toUpperCase() +
+                        selectedCategory.slice(1)}
+                    </h2>
+
+                    <ul className="space-y-4">
+                      {categoryPlaces.length > 0 ? (
+                        categoryPlaces.map((place) => (
+                          <li
+                            key={place.placeId}
+                            className="flex items-start space-x-4 border-b pb-4"
+                          >
+                            {/* Checkbox */}
+                            <input
+                              type="checkbox"
+                              id={`modal-place-${place.placeId}`}
+                              value={place.placeId}
+                              checked={selectedPlaces.some(
+                                (item) => item.placeId === place.placeId
+                              )}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedPlaces([...selectedPlaces, place]);
+                                } else {
+                                  setSelectedPlaces(
+                                    selectedPlaces.filter(
+                                      (ele) => ele.placeId !== place.placeId
+                                    )
+                                  );
+                                }
+                              }}
+                            />
+
+                            {/* Image */}
+                            <img
+                              src={
+                                place.photos?.[0] ||
+                                "https://via.placeholder.com/64"
+                              }
+                              alt={place.name}
+                              className="w-16 h-16 object-cover rounded"
+                            />
+
+                            {/* Details */}
+                            <div className="flex-1">
+                              <label
+                                htmlFor={`modal-place-${place.placeId}`}
+                                className="block font-semibold text-gray-800"
+                              >
+                                {place.name || "Unnamed Place"}
+                              </label>
+                              <p className="text-sm text-gray-600">
+                                {place.address || "No address available"}
+                              </p>
+                              <p className="text-sm text-yellow-600">
+                                ⭐ {place.rating ?? "N/A"} (
+                                {place.userRatingsTotal ?? 0} reviews)
+                              </p>
+                            </div>
+                          </li>
+                        ))
+                      ) : (
+                        <p className="text-gray-500">No places found</p>
+                      )}
+                    </ul>
+
+                    {/* Footer buttons */}
+                    <div className="flex justify-end space-x-3 mt-6">
+                      <button
+                        onClick={() => setPlacesModalOpen(false)}
+                        className="px-4 py-2 bg-gray-300 rounded"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          console.log("Selected places:", selectedPlaces);
+                          handlePopulatePlaces();
+                          setPlacesModalOpen(false);
+                        }}
+                        className="px-4 py-2 bg-blue-500 text-white rounded"
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
