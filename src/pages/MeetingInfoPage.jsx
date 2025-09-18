@@ -20,9 +20,11 @@ import {
   deleteMeetingById,
   getMeetingById,
   getNearByPlaces,
+  getSuggestedPlaces,
   populateSuggestedPlaces,
   // getNearByPlaces,
   rejectMeeting,
+  toggleLikeDislikeBySuggestedPlaceId,
   updatemeetingDetails,
 } from "../services/meetings";
 import Modal from "../components/Modal";
@@ -108,52 +110,22 @@ const MeetingsInfoPage = () => {
   // };
 
   // Voting
-  const [locations, setLocations] = useState([
-    {
-      id: 1,
-      title: "Bryant Park Grill",
-      image: "https://wallpapercave.com/wp/wp1874184.jpg",
-      likes: 0,
-      dislikes: 0,
-    },
-    {
-      id: 2,
-      title: "Central Park Picnic",
-      image:
-        "https://www.bing.com/th/id/OIP.ET_GDP6-6UtLgiNo3kpI8QHaE7?w=244&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2&ucfimg=1",
-      likes: 0,
-      dislikes: 0,
-    },
-    {
-      id: 3,
-      title: "Rooftop Bar",
-      image:
-        "https://www.bing.com/th/id/OIP.LNcfkezrbzTJZUE1R5ibYQHaFj?w=236&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2&ucfimg=1",
-      likes: 0,
-      dislikes: 0,
-    },
-  ]);
+  const [locations, setLocations] = useState([]);
   const [endVotingOpen, setEndVotingOpen] = useState(false);
   const [selectPlace, setSelectPlace] = useState(null);
 
-  const handleLike = (id) => {
+  const handleLike = async (id) => {
+    console.log({ id });
+    await toggleLikeDislikeBySuggestedPlaceId(id);
     setLocations((prev) =>
       prev.map((loc) =>
-        loc.id === id ? { ...loc, likes: loc.likes + 1 } : loc
-      )
-    );
-  };
-
-  const handleDislike = (id) => {
-    setLocations((prev) =>
-      prev.map((loc) =>
-        loc.id === id ? { ...loc, dislikes: loc.dislikes + 1 } : loc
+        loc.id === id ? { ...loc, likes: loc.likes ^ 1 } : loc
       )
     );
   };
 
   const ranked = [...locations].sort(
-    (a, b) => b.likes - b.dislikes - (a.likes - a.dislikes)
+    (a, b) => b.likes - b.likes - (a.likes - a.likes)
   );
 
   const myParticipation = meeting?.participants?.find(
@@ -177,7 +149,6 @@ const MeetingsInfoPage = () => {
     const fetchmeeting = async () => {
       const response = await getMeetingById(id);
       setMeeting(response.data.data.meeting);
-      console.log(response.data.data.meeting, "respon");
     };
     fetchmeeting();
   }, [id]);
@@ -217,31 +188,42 @@ const MeetingsInfoPage = () => {
     setShowDeclineModal(false);
   }, []);
 
-  // const handleSuggestedPlaces = async () => {
-  //   try {
-  //     const response = await getNearByPlaces(meeting._id, [selectedCategory]);
-  //     if (!response.data.success) {
-  //       toast.error(response.data.message);
-  //       return;
-  //     }
-  //     const meetingData = response.data.data.meetings[0]?.meeting;
-  //     if (!meetingData) {
-  //       toast.error("Meeting Not Found");
-  //       return;
-  //     }
-  //     const places = meetingData.suggestedLocation || [];
-  //     if (places.length === 0) {
-  //       toast.info("No Suggested Places Found");
-  //       return;
-  //     }
-  //     setLocations(places);
-  //     setPlacesModalOpen(true); //show model
-  //     console.log("near by places", places);
-  //   } catch (error) {
-  //     console.log("Error Fetching near by places", error);
-  //     toast.error("Failed to fetch near by places");
-  //   }
-  // };
+  const handleSuggestedPlaces = async () => {
+    try {
+      const response = await getSuggestedPlaces(id);
+      if (!response.data.success) {
+        toast.error(response.data.message);
+        return;
+      }
+
+      const places = response.data.data.suggestedPlaces || [];
+      if (places.length === 0) {
+        toast.info("No Suggested Places Found");
+        return;
+      }
+      console.log({ places });
+      // format backend response into frontend format
+      const formatted = places.map((p) => ({
+        id: p._id, // map _id to id
+        title: p.placeName || "Unnamed", // placeName → title
+        image: p.images?.[0] || "https://wallpapercave.com/wp/wp1874184.jpg", // first image or fallback
+        likes: p.voteCount || 0, // backend vote count
+        dislikes: 0, // backend doesn’t give dislikes → set default
+        lat: p.lat,
+        lng: p.lng,
+        address: p.address,
+        rating: p.rating,
+        voters: p.voters || [],
+      }));
+
+      setLocations(formatted);
+      console.log("Suggested places (formatted):", formatted);
+    } catch (error) {
+      console.error("Error fetching suggested places", error);
+      toast.error("Failed to fetch suggested places");
+    }
+  };
+
   const handleNearByPlaces = async () => {
     try {
       setLoadingPlaces(true);
@@ -254,7 +236,7 @@ const MeetingsInfoPage = () => {
       const places = response.data.data.places;
       if (!places || places.length === 0) {
         toast.info("No Suggested Places Found");
-        // setLocations([]);
+        setLocations([]);
         setPlacesModalOpen(true);
         return;
       }
@@ -271,7 +253,6 @@ const MeetingsInfoPage = () => {
     }
   };
   const handlePopulatePlaces = async () => {
-    console.log("object");
     try {
       const data = {
         places: selectedPlaces.map((ele) => {
@@ -281,15 +262,21 @@ const MeetingsInfoPage = () => {
             address: ele.address,
             placeName: ele.name,
             rating: ele.rating,
-            photos: ele.photos,
+            images: ele.photos,
           };
         }),
       };
       const response = await populateSuggestedPlaces(meeting._id, data);
       // console.log(response, "populate");
       toast.success(response.data.message);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error populating places:", error);
+      toast.error("Failed to populate places");
+    }
   };
+  useEffect(() => {
+    handleSuggestedPlaces();
+  }, []);
   return (
     <div className="p-6 bg-[#f4f6f9] min-h-screen relative">
       {/* Delete Confirmation */}
@@ -549,31 +536,35 @@ const MeetingsInfoPage = () => {
 
               {/* First row: 3 places */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
-                {locations.slice(0, 3).map((place) => (
-                  <VotingCard
-                    key={place.id}
-                    place={place}
-                    onLike={handleLike}
-                    onDislike={handleDislike}
-                  />
-                ))}
+                {locations.length === 0 ? (
+                  <div className="text-center text-xl font-bold">
+                    NO SUGGESTED PLACES
+                  </div>
+                ) : (
+                  locations.map((place) => (
+                    <VotingCard
+                      key={place.id}
+                      place={place}
+                      onLike={handleLike}
+                      totalParticipants={meeting?.participants?.length || 1}
+                    />
+                  ))
+                )}
               </div>
 
-              {/* Second row: 2 places + Voting Results */}
+              {/* Second row: 2 places + Voting Results
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {locations.slice(3, 5).map((place) => (
                   <VotingCard
                     key={place.id}
                     place={place}
                     onLike={handleLike}
-                    onDislike={handleDislike}
+                    totalParticipants={meeting?.participants?.length || 1}
                   />
                 ))}
-
-                {/* Voting Results box */}
-                <div className="bg-white shadow-lg rounded-2xl p-4">
-                  <VotingResults locations={locations} />
-                </div>
+              </div> */}
+              <div className="bg-white shadow-lg rounded-2xl p-4">
+                <VotingResults locations={locations} />
               </div>
 
               {/* End Voting Modal */}
@@ -634,9 +625,6 @@ const MeetingsInfoPage = () => {
                   </div>
                 </div>
               )}
-
-              {/* Keep VoteDistribution below */}
-              <VoteDistribution locations={locations} />
             </div>
           )}
 
@@ -648,31 +636,33 @@ const MeetingsInfoPage = () => {
                 <h2 className="text-xl font-bold text-gray-700">Map View</h2>
 
                 {/* Dropdown + Button aligned right */}
-                <div className="flex items-center gap-4">
-                  <select
-                    id="category"
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="w-40 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
-                  >
-                    <option value="restaurants">Restaurants</option>
-                    <option value="bars">Bars</option>
-                    <option value="hotels">Hotels</option>
-                  </select>
-                  <button
-                    onClick={() => {
-                      handleNearByPlaces(); // fetch places
-                      setPlacesModalOpen(true); // open modal
-                    }}
-                    className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
-                    disabled={loadingPlaces}
-                  >
-                    {loadingPlaces ? (
-                      <span className="animate-spin mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
-                    ) : null}
-                    View Places
-                  </button>
-                </div>
+                {user?.id === meeting?.creator?._id && (
+                  <div className="flex items-center gap-4">
+                    <select
+                      id="category"
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="w-40 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
+                    >
+                      <option value="restaurants">Restaurants</option>
+                      <option value="bars">Bars</option>
+                      <option value="hotels">Hotels</option>
+                    </select>
+                    <button
+                      onClick={() => {
+                        handleNearByPlaces(); // fetch places
+                        setPlacesModalOpen(true); // open modal
+                      }}
+                      className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
+                      disabled={loadingPlaces}
+                    >
+                      {loadingPlaces ? (
+                        <span className="animate-spin mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+                      ) : null}
+                      View Places
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Modal for selecting places */}
@@ -689,7 +679,22 @@ const MeetingsInfoPage = () => {
                         categoryPlaces.map((place) => (
                           <li
                             key={place.placeId}
-                            className="flex items-start space-x-4 border-b pb-4"
+                            className="flex items-center gap-4 p-2 border-b cursor-pointer hover:bg-gray-100"
+                            onClick={() => {
+                              if (
+                                selectedPlaces.some(
+                                  (item) => item.placeId === place.placeId
+                                )
+                              ) {
+                                setSelectedPlaces(
+                                  selectedPlaces.filter(
+                                    (ele) => ele.placeId !== place.placeId
+                                  )
+                                );
+                              } else {
+                                setSelectedPlaces([...selectedPlaces, place]);
+                              }
+                            }}
                           >
                             {/* Checkbox */}
                             <input
@@ -754,9 +759,10 @@ const MeetingsInfoPage = () => {
                         Cancel
                       </button>
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           console.log("Selected places:", selectedPlaces);
-                          handlePopulatePlaces();
+                          await handlePopulatePlaces();
+                          await handleSuggestedPlaces();
                           setPlacesModalOpen(false);
                         }}
                         className="px-4 py-2 bg-blue-500 text-white rounded"

@@ -32,5 +32,8 @@ const endPoints = {
   POPULATE_SUGGESTED_PLACES: (meetingId) =>
     `/meeting/populatedSugestedPlaces/${meetingId}`,
   GET_SUGGESTED_PLACES: (meetingId) => `/meeting/suggestedPlaces/${meetingId}`,
+  TOGGELE_LIKES_DISLIKES_BY_SUGGESTEDPLACEID: (id) => `/meeting/toggleLikes/${id}`,
+  GENERATE_USER_REPORT : "/meeting/userReport",
+  GENERATE_MEETING_REPORT : "/meeting/meetingReport",
 };
 export default endPoints;

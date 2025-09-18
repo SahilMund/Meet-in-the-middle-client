@@ -10,3 +10,6 @@ export const getUserDefaultSettings = () =>
   axios.get(endPoints.GET_DEFAULT_SETTINGS);
 export const updateUserDefaultSettings = (settings) =>
   axios.put(endPoints.UPDATE_USER_SETTINGS, settings);
+export const generateUserReport = () => {
+  return axios.get(endPoints.GENERATE_USER_REPORT);
+}

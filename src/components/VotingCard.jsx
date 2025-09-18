@@ -1,12 +1,15 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 // import { toggleLikePlace } from "../services/meetings";
 // import { suggestedPlaces } from "../../../Meet-in-the-middle-server/src/controllers/meeting.controller";
-const VotingCard = ({ place, onLike, onDislike }) => {
-  const totalVotes = place.likes + place.dislikes;
-  const likePercentage = 0 ? 0 : (place.likes / totalVotes) * 100;
-  const disLikePercentage = 0 ? 0 : (place.dislikes / totalVotes) * 100;
+const VotingCard = ({ place, onLike, totalParticipants }) => {
+  console.log({place})
+  const totalVotes = totalParticipants;
+  let likePercentage = 0 ? 0 : (place.likes / totalVotes) * 100;
+  useEffect(() => {
+    likePercentage = (place.likes / totalVotes) * 100;
+  }, [place.likes]);
   // const handleLike = async (placeId) => {
   //   try {
   //     await toggleLikePlace(placeId);
