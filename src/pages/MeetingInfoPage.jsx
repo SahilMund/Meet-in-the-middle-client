@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import getDuration from "../utils/getDuration";
 import {
   deleteMeetingById,
+  getFinalizedLocation,
   getMeetingById,
   getNearByPlaces,
   getSuggestedPlaces,
@@ -277,6 +278,19 @@ const MeetingsInfoPage = () => {
   useEffect(() => {
     handleSuggestedPlaces();
   }, []);
+  const handleFinalLocation = async (suggestedId) => {
+    try {
+      const data = {
+        suggestedId,
+      };
+      const finalLocation = await getFinalizedLocation(meeting._id, data);
+
+      toast.success(finalLocation.data.message);
+    } catch (error) {
+      console.error("Error populating places:", error);
+      toast.error("Failed To Set Final Location");
+    }
+  };
   return (
     <div className="p-6 bg-[#f4f6f9] min-h-screen relative">
       {/* Delete Confirmation */}
@@ -609,8 +623,9 @@ const MeetingsInfoPage = () => {
                       </button>
                       <button
                         disabled={!selectPlace}
-                        onClick={() => {
+                        onClick={async () => {
                           console.log("Final confirmed place:", selectPlace);
+                          await handleFinalLocation(selectPlace);
                           setEndVotingOpen(false);
                         }}
                         className={`px-4 py-2 text-white rounded ${

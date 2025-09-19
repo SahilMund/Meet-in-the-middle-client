@@ -34,9 +34,12 @@ export const populateSuggestedPlaces = (meetingId, data) => {
 export const getSuggestedPlaces = (meetingId) => {
   return axios.get(endPoints.GET_SUGGESTED_PLACES(meetingId));
 };
-export const generateMeetingsReport = () => {  
+export const generateMeetingsReport = () => {
   return axios.get(endPoints.GENERATE_MEETING_REPORT);
 };
 export const toggleLikeDislikeBySuggestedPlaceId = (id) => {
   return axios.put(endPoints.TOGGELE_LIKES_DISLIKES_BY_SUGGESTEDPLACEID(id));
-}
+};
+export const getFinalizedLocation = (meetingId,suggestedId) => {
+  return axios.put(endPoints.GET_FINALIZED_LOCATION(meetingId),suggestedId);
+};
