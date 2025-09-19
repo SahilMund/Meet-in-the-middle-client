@@ -1,7 +1,7 @@
 const endPoints = {
   LOGIN_USER: "/user/login",
   REFRESH_USER: "/user/refreshAccessToken",
-  // RESETPASSWORD:"/user/resetpassword",
+  SEND_RESET_PASSWORD_EMAIL:"/auth/forgot-password",
   MAGIC_LINK: "/user/sendMagicLink",
   UPLOAD_AVATAR: "/user/uploadAvatar",
   DELETE_USER: "/user/deleteUser",
@@ -27,5 +27,7 @@ const endPoints = {
   ACCEPT_MEETING: "/meeting/acceptMeeting",
   GET_DEFAULT_SETTINGS: "/user/getUserSettings",
   UPDATE_USER_SETTINGS: "/user/putUserSettings",
+  
+
 };
 export default endPoints;
