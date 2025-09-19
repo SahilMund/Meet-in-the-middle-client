@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+
 const VotingCard = ({ place, onLike, onDislike }) => {
   const totalVotes = place.likes + place.dislikes;
   const likePercentage = 0 ? 0 : (place.likes / totalVotes) * 100;

@@ -5,16 +5,23 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast } from "react-toastify";
 import { deleteUserAccount } from "../services/userSettings";
 import { replace, useNavigate, useParams } from "react-router-dom";
+import { sendChangePasswordMail } from "../services/authentication";
 
 const SettingPageAccount = () => {
   const navigate = useNavigate();
 
   const [showConfirm, setShowConfirm] = useState(false);
-    // const { token } = useParams();
-    console.log(token)
 
-const handleChangePassword = () => {
-    navigate(`/reset-password/${token}`);
+  const handleChangePassword = async() => {
+    console.log("handleChangePassword before")
+  let response=await sendChangePasswordMail();
+  console.log(response);
+  if (response.data.success) {
+    toast.success(response.data.message);
+  } else {
+    toast.error(response.data.message);
+  }  
+    console.log("handleChangePassword after")
   };
 
   const handleDeleteAccount = async () => {

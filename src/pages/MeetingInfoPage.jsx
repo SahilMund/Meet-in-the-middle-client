@@ -39,6 +39,7 @@ const MeetingsInfoPage = () => {
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const { id } = useParams();
   const { user } = useSelector((store) => store.authSlice);
+  const navigate=useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);
 
