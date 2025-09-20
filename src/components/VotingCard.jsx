@@ -1,6 +1,7 @@
 import React, { use, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+
 // import { toggleLikePlace } from "../services/meetings";
 // import { suggestedPlaces } from "../../../Meet-in-the-middle-server/src/controllers/meeting.controller";
 const VotingCard = ({ place, onLike, totalParticipants }) => {

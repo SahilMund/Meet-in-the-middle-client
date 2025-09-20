@@ -1,7 +1,7 @@
 const endPoints = {
   LOGIN_USER: "/user/login",
   REFRESH_USER: "/user/refreshAccessToken",
-  // RESETPASSWORD:"/user/resetpassword",
+  SEND_RESET_PASSWORD_EMAIL:"/auth/forgot-password",
   MAGIC_LINK: "/user/sendMagicLink",
   UPLOAD_AVATAR: "/user/uploadAvatar",
   DELETE_USER: "/user/deleteUser",
@@ -38,5 +38,7 @@ const endPoints = {
   GENERATE_MEETING_REPORT: "/meeting/meetingReport",
   GET_FINALIZED_LOCATION: (meetingId) =>
     `/meeting/finalizedLocation/${meetingId}`,
+  
+
 };
 export default endPoints;

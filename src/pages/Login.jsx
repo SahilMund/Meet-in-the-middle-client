@@ -51,6 +51,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await loginUser(data);
+      console.log(res)
       const userData = {
         email: res.data.data.user.email,
         id: res.data.data.user._id,

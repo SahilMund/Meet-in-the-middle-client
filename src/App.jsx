@@ -13,7 +13,7 @@ import ResetPassword from "./pages/ResetPassword.jsx";
 
 import { useNotification } from "./hooks/useNotification.js";
 import MagicLogin from "./components/MagicLogin.jsx";
-
+import SuccessPage from "./pages/SuccessPage.jsx";
 
 // Lazy Loading
 const Dashboard = lazy(() => import("./pages/Dashboard.jsx"));
@@ -85,19 +85,23 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/otp" element={<OtpVerificationPage />} />
           <Route path="/magicLogin" element={<MagicLogin />} />
-             <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/500" element={<ServerError />} />
 
           <Route element={<ProtectedLayout />}>
             <Route path="/home" element={<Dashboard />} />
             <Route path="/invitations" element={<Invitations />} />
-            <Route path="/createmeeting" element={<MeetingForm />} />
+            <Route path="/create-meeting" element={<MeetingForm />} />
             <Route path="/profileSettings" element={<ProfileSettingsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+        
+
             <Route path="/meeting/:id" element={<MeetingsInfoPage />} />
+            <Route path="/subscription-success" element={<SuccessPage />} />
           </Route>
+
         </Routes>
       </Suspense>
       {/* </NetworkWatcher> */}

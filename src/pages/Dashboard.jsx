@@ -18,12 +18,18 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+
+
 const Dashboard = () => {
   const { userId } = useSelector((store) => store.authSlice);
   const [upcomingMeetings, setUpcomingMeetings] = useState([]);
   const [pageNo, setPageNo] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+
+
+
+
 
   const navigate = useNavigate();
 
@@ -81,7 +87,9 @@ const Dashboard = () => {
   async function fetchUpcomingMeetings(page = 1) {
     try {
       setLoading(true);
-      const upRes = await getUpcomingMeetings({ items: 5, pageNo: page });
+      const upRes = await getUpcomingMeetings({ items: 5, pageNo: page});
+
+    
 
       const newMeetings = upRes.data.data.meetings.map((ele) => {
         const scheduleAt = new Date(ele.scheduledAt);
@@ -128,6 +136,8 @@ const Dashboard = () => {
     }
   }
 
+ 
+
   useEffect(() => {
     fetchDashBoard();
     fetchUpcomingMeetings(1);
@@ -162,7 +172,7 @@ const Dashboard = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="text-[#0b0626] bg-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-gray-100 transition"
-            onClick={() => navigate("/createmeeting")}
+            onClick={() => navigate("/create-meeting")}
           >
             + Create Meeting
           </motion.button>

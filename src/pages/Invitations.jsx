@@ -53,12 +53,15 @@ const Invitations = () => {
     <div>
       <div className="p-4 mt-4">
         <h2 className="text-xl font-bold mb-4">
-          Pending Invitations ({pendingInvitations.length})
+           {pendingInvitations.length > 0
+    ? `Pending Invitations (${pendingInvitations.length})`
+    : "Pending Invitations"}
         </h2>
 
         {/* Grid for responsiveness */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {pendingInvitations.map((invite, index) => (
+       {pendingInvitations.length>0?(
+         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+         {pendingInvitations.map((invite, index) => (
             <div
               key={index}
               className="relative bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition-all"
@@ -113,6 +116,21 @@ const Invitations = () => {
             </div>
           ))}
         </div>
+
+       ):(
+        <div className="flex flex-col items-center justify-center text-gray-500 py-16">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/4076/4076549.png"
+      alt="No Invitations"
+      className="w-28 h-28 mb-4 opacity-80"
+    />
+    <h3 className="text-lg font-semibold">No Pending Invitations</h3>
+    <p className="text-sm text-gray-400 mt-2">
+      You're all caught up for now 🎉
+    </p>
+  </div>
+
+       )}
       </div>
 
       {/* Decline Modal */}

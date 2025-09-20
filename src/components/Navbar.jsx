@@ -47,10 +47,9 @@ const Navbar = () => {
 
   // ✅ helper for active styling
   const getButtonClasses = (path) =>
-    `px-4 py-2 cursor-pointer rounded-md ${
-      location.pathname === path
-        ? "bg-indigo-600 text-white" // active
-        : "hover:bg-indigo-600 hover:text-white"
+    `px-4 py-2 cursor-pointer rounded-md ${location.pathname === path
+      ? "bg-indigo-600 text-white" // active
+      : "hover:bg-indigo-600 hover:text-white"
     }`;
   const handleSettingsClick = () => {
     setOpen(false);
@@ -110,8 +109,8 @@ const Navbar = () => {
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
-            className={getButtonClasses("/createmeeting")}
-            onClick={() => navigate("/createmeeting")}
+            className={getButtonClasses("/create-meeting")}
+            onClick={() => navigate("/create-meeting")}
           >
             Create Meeting
           </motion.button>
@@ -213,8 +212,8 @@ const Navbar = () => {
               Your Invitations
             </button>
             <button
-              className={getButtonClasses("/createmeeting")}
-              onClick={() => navigate("/createmeeting")}
+              className={getButtonClasses("/create-meeting")}
+              onClick={() => navigate("/create-meeting")}
             >
               Create Meeting
             </button>
