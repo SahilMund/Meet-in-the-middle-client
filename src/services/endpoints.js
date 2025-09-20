@@ -27,6 +27,17 @@ const endPoints = {
   ACCEPT_MEETING: "/meeting/acceptMeeting",
   GET_DEFAULT_SETTINGS: "/user/getUserSettings",
   UPDATE_USER_SETTINGS: "/user/putUserSettings",
+  GET_NEARBYPLACES: (meetingId, typeQuery) =>
+    `/meeting/getNearByPlaces/${meetingId}?type=${typeQuery}`,
+  POPULATE_SUGGESTED_PLACES: (meetingId) =>
+    `/meeting/populatedSugestedPlaces/${meetingId}`,
+  GET_SUGGESTED_PLACES: (meetingId) => `/meeting/suggestedPlaces/${meetingId}`,
+  TOGGELE_LIKES_DISLIKES_BY_SUGGESTEDPLACEID: (id) =>
+    `/meeting/toggleLikes/${id}`,
+  GENERATE_USER_REPORT: "/meeting/userReport",
+  GENERATE_MEETING_REPORT: "/meeting/meetingReport",
+  GET_FINALIZED_LOCATION: (meetingId) =>
+    `/meeting/finalizedLocation/${meetingId}`,
   
 
 };

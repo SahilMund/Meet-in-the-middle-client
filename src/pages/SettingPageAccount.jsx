@@ -3,9 +3,13 @@ import { TfiImport } from "react-icons/tfi";
 import { CiLock } from "react-icons/ci";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { toast } from "react-toastify";
-import { deleteUserAccount } from "../services/userSettings";
+import {
+  deleteUserAccount,
+  generateUserReport,
+} from "../services/userSettings";
 import { replace, useNavigate, useParams } from "react-router-dom";
 import { sendChangePasswordMail } from "../services/authentication";
+import { generateMeetingsReport } from "../services/meetings";
 
 const SettingPageAccount = () => {
   const navigate = useNavigate();
@@ -46,14 +50,57 @@ const SettingPageAccount = () => {
           <div className="flex items-center gap-3">
             <TfiImport className="text-2xl text-gray-600 flex-shrink-0 self-center" />
             <div className="flex flex-col justify-center">
-              <h2 className="text-lg font-medium text-gray-700">Export Data</h2>
+              <h2 className="text-lg font-medium text-gray-700">
+                Export User Data
+              </h2>
               <p className="text-sm text-gray-500">
                 Download a copy of your account data
               </p>
             </div>
           </div>
-          <button className="px-4 py-2 bg-transparent border border-black text-black rounded-lg hover:bg-black hover:text-white transition">
-            Export
+          <button
+            className="px-4 py-2 bg-transparent border border-black text-black rounded-lg hover:bg-black hover:text-white transition"
+            onClick={() => {
+              generateUserReport()
+                .then((res) => {
+                  console.log(res);
+                  toast.success(res.data.message+". You will receive an email shortly.");
+                })
+                .catch((err) => {
+                  console.log(err);
+                  toast.error(err.response.data.message);
+                });
+            }}
+          >
+            Export User
+          </button>
+        </div>
+
+        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+          <div className="flex items-center gap-3">
+            <TfiImport className="text-2xl text-gray-600 flex-shrink-0 self-center" />
+            <div className="flex flex-col justify-center">
+              <h2 className="text-lg font-medium text-gray-700">
+                Export Meeting Data
+              </h2>
+              <p className="text-sm text-gray-500">
+                Download a copy of all your meetings
+              </p>
+            </div>
+          </div>
+          <button
+            className="px-4 py-2 bg-transparent border border-black text-black rounded-lg hover:bg-black hover:text-white transition"
+            onClick={() => {
+              generateMeetingsReport().then((res) => {
+                console.log(res);
+                toast.success(res.data.message+". You will receive an email shortly.");
+              }).catch((err) => {
+                console.log(err);
+                toast.error(err.response.data.message);
+              });
+            }}
+          >
+            Export Meetings
           </button>
         </div>
 
