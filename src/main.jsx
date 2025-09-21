@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import registerServiceWorker from "./registerServiceWorker.js";
-
+import "react-big-calendar/lib/css/react-big-calendar.css"
 
 createRoot(document.getElementById("root")).render(
   <>

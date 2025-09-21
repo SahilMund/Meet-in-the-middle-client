@@ -4,7 +4,7 @@ import { MdOutlineLocationOn } from "react-icons/md";
 import ProfileUpdateForm from "../components/profileSettings-components/ProfileUpdateForm";
 import MeetingHitoryCompnent from "../components/profileSettings-components/MeetingHitoryCompnent";
 import StatisticsComponent from "../components/profileSettings-components/StatisticsComponent";
-import { FaRegUser, FaTrash, FaTrashAlt } from "react-icons/fa";
+import { FaCalendar, FaRegUser, FaTrash, FaTrashAlt } from "react-icons/fa";
 import { CiCalendar } from "react-icons/ci";
 import { FaRegStar } from "react-icons/fa";
 import { IoCameraSharp } from "react-icons/io5";
@@ -16,6 +16,7 @@ import {
 } from "../services/userSettings";
 import { toast } from "react-toastify";
 import StripePaymentSection from "../components/StripePaymentSection";
+import CalendarComponent from "../components/profileSettings-components/CalendarComponent";
 
 const ProfileSettingsPage = () => {
   const [currWindow, setCurrWindow] = useState(0);
@@ -242,6 +243,14 @@ const ProfileSettingsPage = () => {
             <FaRegStar />
             Stripe
           </button>
+          <button
+            className={`cursor-pointer p-2 text-lg flex items-center gap-2 ${currWindow === 4 ? "text-rose-400 border-b-2" : "text-black"}`}
+            type="button"
+            onClick={() => setCurrWindow(4)}
+          >
+            <FaCalendar />
+            Calendar
+          </button>
         </div>
 
         {currWindow === 0 && (
@@ -255,6 +264,8 @@ const ProfileSettingsPage = () => {
         {currWindow === 1 && <MeetingHitoryCompnent />}
         {currWindow === 2 && <StatisticsComponent />}
         {currWindow === 3 && <StripePaymentSection />}
+        {currWindow === 4 && <CalendarComponent />}
+
       </div>
     </div>
   );
