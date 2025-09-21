@@ -18,8 +18,14 @@ import { toast } from "react-toastify";
 import getDuration from "../utils/getDuration";
 import {
   deleteMeetingById,
+  getFinalizedLocation,
   getMeetingById,
+  getNearByPlaces,
+  getSuggestedPlaces,
+  populateSuggestedPlaces,
+  // getNearByPlaces,
   rejectMeeting,
+  toggleLikeDislikeBySuggestedPlaceId,
   updatemeetingDetails,
 } from "../services/meetings";
 import Modal from "../components/Modal";
@@ -40,60 +46,88 @@ const MeetingsInfoPage = () => {
   const { id } = useParams();
   const { user } = useSelector((store) => store.authSlice);
 
+  const [selectedCategory, setSelectedCategory] = useState("restaurants"); //category filte
+  const [placesModalOpen, setPlacesModalOpen] = useState(false); //model
+  const [selectedPlaces, setSelectedPlaces] = useState([]); //stote api results
+  const [loadingPlaces, setLoadingPlaces] = useState(false);
+  const dummyPlaces = {
+    restaurants: ["Pizza Palace", "Spice Hub", "Burger Town", "Curry Corner"],
+    bars: ["Cheers Bar", "Night Owl", "The Whiskey Jar"],
+    hotels: ["Grand Palace", "Comfort Inn", "Ocean View Resort"],
+  };
+  const navigate=useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
 
   // Edit modal
   const [isOpenMadal, setIsOpenMadal] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [categoryPlaces, setCategoryPlaces] = useState([]);
+  // const categoryPlaces = {
+  //   restaurants: [
+  //     {
+  //       id: 1,
+  //       title: "Bryant Park Grills",
+  //       image: "https://wallpapercave.com/wp/wp1874184.jpg",
+  //     },
+  //     {
+  //       id: 2,
+  //       title: "Central Park Picnic",
+  //       image:
+  //         "https://www.bing.com/th/id/OIP.ET_GDP6-6UtLgiNo3kpI8QHaE7?w=244&h=211",
+  //     },
+
+  //     {
+  //       id: 3,
+  //       title: "Rooftop Bar",
+  //       image:
+  //         "https://www.bing.com/th/id/OIP.LNcfkezrbzTJZUE1R5ibYQHaFj?w=236&h=211",
+  //     },
+  //   ],
+  //   bars: [
+  //     {
+  //       id: 4,
+  //       title: "Skyline Pub",
+  //       image: "https://images.unsplash.com/photo-1527960471264-932f39eb5846",
+  //     },
+  //     {
+  //       id: 5,
+  //       title: "Moonlight Bar",
+  //       image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
+  //     },
+  //   ],
+  //   hotels: [
+  //     {
+  //       id: 6,
+  //       title: "Grand Palace Hotel",
+  //       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945",
+  //     },
+  //     {
+  //       id: 7,
+  //       title: "Ocean View Resort",
+  //       image: "https://images.unsplash.com/photo-1501117716987-c8e1ecb2100d",
+  //     },
+  //   ],
+  // };
 
   // Voting
-  const [locations, setLocations] = useState([
-    {
-      id: 1,
-      title: "Bryant Park Grill",
-      image: "https://wallpapercave.com/wp/wp1874184.jpg",
-      likes: 0,
-      dislikes: 0,
-    },
-    {
-      id: 2,
-      title: "Central Park Picnic",
-      image:
-        "https://www.bing.com/th/id/OIP.ET_GDP6-6UtLgiNo3kpI8QHaE7?w=244&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2&ucfimg=1",
-      likes: 0,
-      dislikes: 0,
-    },
-    {
-      id: 3,
-      title: "Rooftop Bar",
-      image:
-        "https://www.bing.com/th/id/OIP.LNcfkezrbzTJZUE1R5ibYQHaFj?w=236&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2&ucfimg=1",
-      likes: 0,
-      dislikes: 0,
-    },
-  ]);
+  const [locations, setLocations] = useState([]);
   const [endVotingOpen, setEndVotingOpen] = useState(false);
   const [selectPlace, setSelectPlace] = useState(null);
 
-  const handleLike = (id) => {
+  const handleLike = async (id) => {
+    console.log({ id });
+    await toggleLikeDislikeBySuggestedPlaceId(id);
     setLocations((prev) =>
       prev.map((loc) =>
-        loc.id === id ? { ...loc, likes: loc.likes + 1 } : loc
-      )
-    );
-  };
-
-  const handleDislike = (id) => {
-    setLocations((prev) =>
-      prev.map((loc) =>
-        loc.id === id ? { ...loc, dislikes: loc.dislikes + 1 } : loc
+        loc.id === id ? { ...loc, likes: loc.likes ^ 1 } : loc
       )
     );
   };
 
   const ranked = [...locations].sort(
-    (a, b) => b.likes - b.dislikes - (a.likes - a.dislikes)
+    (a, b) => b.likes - b.likes - (a.likes - a.likes)
   );
 
   const myParticipation = meeting?.participants?.find(
@@ -117,7 +151,6 @@ const MeetingsInfoPage = () => {
     const fetchmeeting = async () => {
       const response = await getMeetingById(id);
       setMeeting(response.data.data.meeting);
-      console.log(response.data.data.meeting, "respon");
     };
     fetchmeeting();
   }, [id]);
@@ -157,6 +190,108 @@ const MeetingsInfoPage = () => {
     setShowDeclineModal(false);
   }, []);
 
+  const handleSuggestedPlaces = async () => {
+    try {
+      const response = await getSuggestedPlaces(id);
+      if (!response.data.success) {
+        toast.error(response.data.message);
+        return;
+      }
+
+      const places = response.data.data.suggestedPlaces || [];
+      if (places.length === 0) {
+        toast.info("No Suggested Places Found");
+        return;
+      }
+      console.log({ places });
+      // format backend response into frontend format
+      const formatted = places.map((p) => ({
+        id: p._id, // map _id to id
+        title: p.placeName || "Unnamed", // placeName → title
+        image: p.images?.[0] || "https://wallpapercave.com/wp/wp1874184.jpg", // first image or fallback
+        likes: p.voteCount || 0, // backend vote count
+        dislikes: 0, // backend doesn’t give dislikes → set default
+        lat: p.lat,
+        lng: p.lng,
+        address: p.address,
+        rating: p.rating,
+        voters: p.voters || [],
+      }));
+
+      setLocations(formatted);
+      console.log("Suggested places (formatted):", formatted);
+    } catch (error) {
+      console.error("Error fetching suggested places", error);
+      toast.error("Failed to fetch suggested places");
+    }
+  };
+
+  const handleNearByPlaces = async () => {
+    try {
+      setLoadingPlaces(true);
+      const response = await getNearByPlaces(meeting._id, [selectedCategory]);
+      console.log(response, "res");
+      if (!response.data.success) {
+        toast.error(response.data.message);
+        return;
+      }
+      const places = response.data.data.places;
+      if (!places || places.length === 0) {
+        toast.info("No Suggested Places Found");
+        setLocations([]);
+        setPlacesModalOpen(true);
+        return;
+      }
+      //setLocations(places);
+      // categoryPlaces.restaurants = places;
+      setCategoryPlaces(places);
+      setPlacesModalOpen(true);
+      console.log("Nearby places:", places);
+    } catch (error) {
+      console.error("Error fetching nearby places:", error);
+      toast.error(error.response.data.message);
+    } finally {
+      setLoadingPlaces(false);
+    }
+  };
+  const handlePopulatePlaces = async () => {
+    try {
+      const data = {
+        places: selectedPlaces.map((ele) => {
+          return {
+            lat: ele.location.lat,
+            lng: ele.location.lng,
+            address: ele.address,
+            placeName: ele.name,
+            rating: ele.rating,
+            images: ele.photos,
+          };
+        }),
+      };
+      const response = await populateSuggestedPlaces(meeting._id, data);
+      // console.log(response, "populate");
+      toast.success(response.data.message);
+    } catch (error) {
+      console.error("Error populating places:", error);
+      toast.error("Failed to populate places");
+    }
+  };
+  useEffect(() => {
+    handleSuggestedPlaces();
+  }, []);
+  const handleFinalLocation = async (suggestedId) => {
+    try {
+      const data = {
+        suggestedId,
+      };
+      const finalLocation = await getFinalizedLocation(meeting._id, data);
+
+      toast.success(finalLocation.data.message);
+    } catch (error) {
+      console.error("Error populating places:", error);
+      toast.error("Failed To Set Final Location");
+    }
+  };
   return (
     <div className="p-6 bg-[#f4f6f9] min-h-screen relative">
       {/* Delete Confirmation */}
@@ -233,14 +368,14 @@ const MeetingsInfoPage = () => {
 
         {/* Actions */}
         <div className="flex flex-wrap gap-3 items-center">
-          <button className="flex items-center gap-2 border border-green-300 text-green-100 px-3 py-2 rounded-md text-sm"
+          <button
+            className="flex items-center gap-2 border border-green-300 text-green-100 px-3 py-2 rounded-md text-sm"
             onClick={() => {
               navigator.share({
                 title: `Meeting Invite for ${meeting.title}`,
                 text: "Join our meeting",
                 url: meeting.meetingLink,
               });
-
             }}
           >
             <FaShareAlt className="text-base" /> Share
@@ -291,10 +426,11 @@ const MeetingsInfoPage = () => {
         <div className="flex flex-wrap gap-4 border-b-2 border-gray-200 pb-3 mb-6 text-base sm:text-lg">
           <div
             onClick={() => setcurrentWindow(0)}
-            className={`flex items-center gap-2 cursor-pointer ${currentWindow === 0
-              ? "text-indigo-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`flex items-center gap-2 cursor-pointer ${
+              currentWindow === 0
+                ? "text-indigo-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             <FaInfoCircle /> Overview
           </div>
@@ -310,19 +446,21 @@ const MeetingsInfoPage = () => {
           </div>
           <div
             onClick={() => setcurrentWindow(2)}
-            className={`cursor-pointer ${currentWindow === 2
-              ? "text-indigo-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`cursor-pointer ${
+              currentWindow === 2
+                ? "text-indigo-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             Voting
           </div>
           <div
             onClick={() => setcurrentWindow(3)}
-            className={`cursor-pointer ${currentWindow === 3
-              ? "text-indigo-600 font-semibold"
-              : "text-gray-500"
-              }`}
+            className={`cursor-pointer ${
+              currentWindow === 3
+                ? "text-indigo-600 font-semibold"
+                : "text-gray-500"
+            }`}
           >
             Map View
           </div>
@@ -406,30 +544,51 @@ const MeetingsInfoPage = () => {
 
           {currentWindow === 2 && (
             <div>
-              <h1 className="text-2xl font-bold mb-4">Vote for a Place</h1>
+              {/* Heading + End Voting Button */}
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">Vote for a Place</h1>
+                {meeting?.creator?.email === user.email && (
+                  <button
+                    onClick={() => setEndVotingOpen(true)}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                  >
+                    End Voting
+                  </button>
+                )}
+              </div>
+
+              {/* First row: 3 places */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
+                {locations.length === 0 ? (
+                  <div className="text-center text-xl font-bold">
+                    NO SUGGESTED PLACES
+                  </div>
+                ) : (
+                  locations.map((place) => (
+                    <VotingCard
+                      key={place.id}
+                      place={place}
+                      onLike={handleLike}
+                      totalParticipants={meeting?.participants?.length || 1}
+                    />
+                  ))
+                )}
+              </div>
+
+              {/* Second row: 2 places + Voting Results
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {locations.map((place) => (
+                {locations.slice(3, 5).map((place) => (
                   <VotingCard
                     key={place.id}
                     place={place}
                     onLike={handleLike}
-                    onDislike={handleDislike}
+                    totalParticipants={meeting?.participants?.length || 1}
                   />
                 ))}
+              </div> */}
+              <div className="bg-white shadow-lg rounded-2xl p-4">
+                <VotingResults locations={locations} />
               </div>
-              <VotingResults locations={locations} />
-              {/* <VotingResultsChart locations={locations} /> */}
-
-              {meeting?.creator?.email === user.email && (
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => setEndVotingOpen(true)}
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-                  >
-                    End Voting
-                  </button>
-                </div>
-              )}
 
               {/* End Voting Modal */}
               {endVotingOpen && (
@@ -473,8 +632,9 @@ const MeetingsInfoPage = () => {
                       </button>
                       <button
                         disabled={!selectPlace}
-                        onClick={() => {
+                        onClick={async () => {
                           console.log("Final confirmed place:", selectPlace);
+                          await handleFinalLocation(selectPlace);
                           setEndVotingOpen(false);
                         }}
                         className={`px-4 py-2 text-white rounded ${
@@ -489,11 +649,156 @@ const MeetingsInfoPage = () => {
                   </div>
                 </div>
               )}
-              <VoteDistribution locations={locations} />
             </div>
           )}
 
-          {currentWindow === 3 && <div>Map View (to be implemented)</div>}
+          {/* Places Modal */}
+          {/* Places Modal */}
+          {currentWindow === 3 && (
+            <div className="p-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold text-gray-700">Map View</h2>
+
+                {/* Dropdown + Button aligned right */}
+                {user?.id === meeting?.creator?._id && (
+                  <div className="flex items-center gap-4">
+                    <select
+                      id="category"
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="w-40 border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
+                    >
+                      <option value="restaurants">Restaurants</option>
+                      <option value="bars">Bars</option>
+                      <option value="hotels">Hotels</option>
+                    </select>
+                    <button
+                      onClick={() => {
+                        handleNearByPlaces(); // fetch places
+                        setPlacesModalOpen(true); // open modal
+                      }}
+                      className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 flex items-center"
+                      disabled={loadingPlaces}
+                    >
+                      {loadingPlaces ? (
+                        <span className="animate-spin mr-2 border-2 border-white border-t-transparent rounded-full w-5 h-5"></span>
+                      ) : null}
+                      View Places
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal for selecting places */}
+              {placesModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                  <div className="bg-white p-6 rounded-lg w-[600px] max-h-[80vh] overflow-y-auto">
+                    <h2 className="text-xl font-bold mb-4">
+                      {selectedCategory.charAt(0).toUpperCase() +
+                        selectedCategory.slice(1)}
+                    </h2>
+
+                    <ul className="space-y-4">
+                      {categoryPlaces.length > 0 ? (
+                        categoryPlaces.map((place) => (
+                          <li
+                            key={place.placeId}
+                            className="flex items-center gap-4 p-2 border-b cursor-pointer hover:bg-gray-100"
+                            onClick={() => {
+                              if (
+                                selectedPlaces.some(
+                                  (item) => item.placeId === place.placeId
+                                )
+                              ) {
+                                setSelectedPlaces(
+                                  selectedPlaces.filter(
+                                    (ele) => ele.placeId !== place.placeId
+                                  )
+                                );
+                              } else {
+                                setSelectedPlaces([...selectedPlaces, place]);
+                              }
+                            }}
+                          >
+                            {/* Checkbox */}
+                            <input
+                              type="checkbox"
+                              id={`modal-place-${place.placeId}`}
+                              value={place.placeId}
+                              checked={selectedPlaces.some(
+                                (item) => item.placeId === place.placeId
+                              )}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedPlaces([...selectedPlaces, place]);
+                                } else {
+                                  setSelectedPlaces(
+                                    selectedPlaces.filter(
+                                      (ele) => ele.placeId !== place.placeId
+                                    )
+                                  );
+                                }
+                              }}
+                            />
+
+                            {/* Image */}
+                            <img
+                              src={
+                                place.photos?.[0] ||
+                                "https://via.placeholder.com/64"
+                              }
+                              alt={place.name}
+                              className="w-16 h-16 object-cover rounded"
+                            />
+
+                            {/* Details */}
+                            <div className="flex-1">
+                              <label
+                                htmlFor={`modal-place-${place.placeId}`}
+                                className="block font-semibold text-gray-800"
+                              >
+                                {place.name || "Unnamed Place"}
+                              </label>
+                              <p className="text-sm text-gray-600">
+                                {place.address || "No address available"}
+                              </p>
+                              <p className="text-sm text-yellow-600">
+                                ⭐ {place.rating ?? "N/A"} (
+                                {place.userRatingsTotal ?? 0} reviews)
+                              </p>
+                            </div>
+                          </li>
+                        ))
+                      ) : (
+                        <p className="text-gray-500">No places found</p>
+                      )}
+                    </ul>
+
+                    {/* Footer buttons */}
+                    <div className="flex justify-end space-x-3 mt-6">
+                      <button
+                        onClick={() => setPlacesModalOpen(false)}
+                        className="px-4 py-2 bg-gray-300 rounded"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={async () => {
+                          console.log("Selected places:", selectedPlaces);
+                          await handlePopulatePlaces();
+                          await handleSuggestedPlaces();
+                          setPlacesModalOpen(false);
+                        }}
+                        className="px-4 py-2 bg-blue-500 text-white rounded"
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
