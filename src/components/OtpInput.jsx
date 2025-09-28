@@ -6,7 +6,7 @@ const OtpBox = React.memo(({ id, value, onKeyUp, inputRef }) => {
       id={id}
       ref={inputRef}
       value={value}
-      className="w-[50px] h-[50px] text-2xl text-center rounded-lg border-2 border-gray-400 focus:outline-none focus:border-blue-500"
+      className="w-[50px] h-[50px] text-2xl text-center rounded-lg border-2 border-gray-400 focus:outline-none focus:border-red-500"
       onKeyUp={onKeyUp}
       maxLength={1}
     />
@@ -100,11 +100,15 @@ const OtpInput = ({ size, onSubmit }) => {
 
   useEffect(() => {
     if (inputValues.includes("")) return;
-    onSubmit(Number(inputValues.join("")));
+    onSubmit(inputValues.join(""));
   }, [inputValues, onSubmit]);
 
+  useEffect(() => {
+    inputRefs.current[0].focus();
+  }, []);
+
   return (
-    <div className="flex justify-center border-2 border-red-500 gap-2.5 p-5">
+    <div className="flex justify-center  gap-2.5 p-5">
       {inputValues.map((val, idx) => (
         <OtpBox
           key={idx}
