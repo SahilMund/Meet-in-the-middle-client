@@ -58,15 +58,6 @@ cd MeetInTheMiddle-Frontend
 - session cookie expires ,when you close the browser,But the persistant cookie is expires only after the expires time is completed
 - In cookieOptions,if we give maxAge then it becomes persistant cookie
 
-### Worker(child process)
-
-- In normal js __dirname gives the current folder path and __filename gives the current file path
-- But node.js does not give directly
-- There is fileURLToPath(import.meta.url) gives  file path
-- There is dirname(filepath) it gives folder path
-- **await fse.ensureDir(REPORTS_DIR);**what is does is,if the folder is not created Yet then it creates suppose the folder is already created do nothing
-- 
-
 ### Frontend Login Functionality;
 
 - It is a cookie based authentication
